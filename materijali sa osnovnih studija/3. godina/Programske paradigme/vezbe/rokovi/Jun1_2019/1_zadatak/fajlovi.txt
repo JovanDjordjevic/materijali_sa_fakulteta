@@ -1,0 +1,4 @@
+fajl1.txt
+fajl2.txt
+fajl3.txt
+fajl4.txt

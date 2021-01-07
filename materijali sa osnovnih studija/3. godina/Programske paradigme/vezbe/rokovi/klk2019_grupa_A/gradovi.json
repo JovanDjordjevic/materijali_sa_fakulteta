@@ -1,0 +1,8 @@
+[ {"grad": "Beograd", "temp" : 13 ,"vlaznost" : 70},
+  {"grad": "Rio", "temp" : 13 ,"vlaznost" : 72},
+  {"grad": "Berlin", "temp" : 17 ,"vlaznost" : 85},
+  {"grad": "Pariz", "temp" : 12 ,"vlaznost" : 82},
+  {"grad": "Moskva", "temp" : 7 ,"vlaznost" : 82},
+  {"grad": "Rim", "temp" : 13.3 ,"vlaznost" : 79},
+  {"grad": "Riga", "temp" : 11 ,"vlaznost" : 80}
+]

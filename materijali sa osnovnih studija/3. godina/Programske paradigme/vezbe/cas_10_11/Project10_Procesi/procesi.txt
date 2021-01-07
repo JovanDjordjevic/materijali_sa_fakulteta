@@ -1,0 +1,3 @@
+google chrome   , 123,  10
+intellij idea community     ,   10000, 25
+task scheduler,         10,       1, sys
