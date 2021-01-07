@@ -1,0 +1,89 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program naredba ';'
+    2        | naredba ';'
+
+    3 naredba: DATE
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+';' (59) 1 2
+error (256)
+DATE (258) 3
+
+
+Nonterminals, with rules where they appear
+
+$accept (5)
+    on left: 0
+program (6)
+    on left: 1 2, on right: 0 1
+naredba (7)
+    on left: 3, on right: 1 2
+
+
+State 0
+
+    0 $accept: . program $end
+
+    DATE  shift, and go to state 1
+
+    program  go to state 2
+    naredba  go to state 3
+
+
+State 1
+
+    3 naredba: DATE .
+
+    $default  reduce using rule 3 (naredba)
+
+
+State 2
+
+    0 $accept: program . $end
+    1 program: program . naredba ';'
+
+    $end  shift, and go to state 4
+    DATE  shift, and go to state 1
+
+    naredba  go to state 5
+
+
+State 3
+
+    2 program: naredba . ';'
+
+    ';'  shift, and go to state 6
+
+
+State 4
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 5
+
+    1 program: program naredba . ';'
+
+    ';'  shift, and go to state 7
+
+
+State 6
+
+    2 program: naredba ';' .
+
+    $default  reduce using rule 2 (program)
+
+
+State 7
+
+    1 program: program naredba ';' .
+
+    $default  reduce using rule 1 (program)

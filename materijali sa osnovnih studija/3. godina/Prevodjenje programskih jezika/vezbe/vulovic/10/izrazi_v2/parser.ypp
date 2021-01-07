@@ -1,0 +1,69 @@
+/* deklaracije */
+/* navode se tokeni, startni neterminal, asocijativnost i prioritet operatora, deklarisanje tipa atributa simbola date gramatike*/
+%{
+/* C++ kod koji se direktno prepisuje na pocetak datoteke parser.tab.cpp */
+/* zaglavlja koja su nam potrebna zbog leksickog analizatora i funkcije za obradu greske */
+
+#include <iostream>
+#include <cstdlib>
+#include <string>
+
+#define YYDEBUG 1
+
+using namespace std;
+
+
+/* Leksicki analizator - lex ce nam ga izgraditi */
+extern int yylex();
+/* Funkcija koja ispisuje poruku o gresci i prekida program  */
+void yyerror(string s) ;
+%}
+
+/* 	Sa %union redefinisemo tip vrednosti koje atributi simbola gramatike mogu imati. 
+ 	Podrazumevani tip je int. Ako zelimo neki drugi tip, ovo je nacin da postignemo, 
+	potrebno je jos da navedemo polja odgovarajucih tipova unutar unije. */
+%union{
+	/* 	i dalje prepoznajemo celobrojne izraze. Svi simboli ce imati celobrojni atribut 
+		tako da je unutar unije potrebno da imamo samo celobrojno polje. */ 
+	int vrednost;
+}
+
+/* unutar definicije tokena BROJ navodimo i u kom polju unije ce biti sacuvana vrednost njegovog atributa. Pridruzivanjem polja unije simbolu se zapravo zadaje i tip atributa.  */
+%token <vrednost> BROJ
+/* Isto se mora uraditi i sa neterminalima, na sledeci nacin:*/
+%type <vrednost> e t f	
+/* Neterminali koji imaju atribut istog tipa navode se u istom redu */
+
+/* Definisemo aksiomu gramatike*/
+%start pocetak
+
+
+%%
+/* Pravila KSG sa pridruzenim semantickim akcijama 
+ Dobra praksa je da se prvo svim pravilima pridruze prazne akcije, a da se potom zamenjuju sa konkretnim akcijama.
+ Tako smo sigurni da se nigde nece izvrsavati podrazumevana akcija, a da tako nismo hteli. 
+*/
+pocetak: e 		{ cout << "Vrednost izraza je " << $1 << endl; }
+	;
+e : e '+' t  	{ $$  = $1 +$3; }
+	| t			{ $$ = $1; /* podrazumevana akcija */ }
+	;	
+t : t '*' f		{  $$ = $1 * $3;}
+	| f			    { $$ = $1; }     
+	;
+f : '(' e ')' 	{ $$ = $2;}
+	| BROJ		{ $$ = $1;}
+	; 
+%%
+
+int main(){
+	if(yyparse() == 0)
+		cout << "Uparen je aritmeticki izraz!" << endl;
+	return 0;
+}
+
+void yyerror(string s) {
+   cerr << s << endl;
+   exit(EXIT_FAILURE);
+ }
+

@@ -1,0 +1,71 @@
+%{
+#include<iostream>
+#include<cstdlib>
+#include<string>
+#include<map>
+#include<vector>
+#include"MojVektor.hpp"
+
+#define YYDEBUG 1
+
+using namespace std;
+
+extern int yylex();
+
+void yyerror(string s){
+    cerr<<s<<endl;
+    exit(EXIT_FAILURE);
+}
+
+map<char,MojVektor*> promenljive;
+
+%}
+
+%union{
+    float vr_br;
+    char vr_id;
+    MojVektor* vr_vek;
+}
+
+%token PRINT DODELA
+%token<vr_br> BROJ  
+%token<vr_id> ID 
+
+%type<vr_vek> izraz elementi
+
+%%
+
+program : program naredba ';'           {}
+        | naredba         ';'           {}
+        ;
+        
+naredba: ID DODELA izraz                {auto it=promenljive.find($1);
+                                         if(it!=promenljive.end())
+                                            delete it->second;
+                                        promenljive[$1]=$3;
+                                            
+                                        }
+       | PRINT '(' izraz ')'            {$3->print(); delete $3;}
+       | izraz '.' izraz                 {cout<<$1->skalarni($3)<<endl;}
+       ;
+
+izraz : ID                              {auto it=promenljive.find($1);
+                                         if(it==promenljive.end()) cout<<"nije def\n";
+                                         $$=promenljive[$1];
+                                        }
+      | '<' elementi '>'                {$$=$2;}
+      | izraz '+' izraz                 //{$$=operacija($1,$3,1);}
+      | izraz '-' izraz                 {}
+      | BROJ '*' izraz                  //{$$=mnoz(*$3,$1);}
+      ;
+      
+elementi : elementi ',' BROJ            {$1->dodaj($3); $$=$1;}
+         | BROJ                         {$$=new MojVektor(); $$->dodaj($1);} 
+         ;
+       
+%%
+
+int main(){
+    yydebug=0;
+    yyparse();
+}

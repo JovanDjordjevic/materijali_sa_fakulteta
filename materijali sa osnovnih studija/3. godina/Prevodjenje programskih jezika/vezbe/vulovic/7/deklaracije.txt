@@ -1,0 +1,77 @@
+int a;
+String s,v;
+Point p,q,r;
+double[] niz;
+
+nizdeklaracija -> nizdeklaracija deklaracija 
+              | deklaracija
+
+deklaracija -> tip nizpromenljivih TZ
+
+tip -> elementarni_tip 
+      | ime_klase 
+      | tip[]
+
+elementarni_tip -> INT | STRING | DOUBLE
+ime_klase -> ID
+
+nizpromenljivih -> nizpromenljivih , promenljiva
+      | promenljiva
+
+promenljiva -> ID
+=============================
+
+nizdeklaracija -> nizdeklaracija tip nizpromenljivih TZ 
+              | tip nizpromenljivih TZ
+
+tip -> elementarni_tip 
+      | ID 
+      | tip[]
+
+elementarni_tip -> INT | STRING | DOUBLE
+
+nizpromenljivih -> nizpromenljivih , ID
+      | ID
+
+int a;
+String s,v;
+Point p,q,r;
+double[] niz;
+
+nizdeklaracija => nizdeklaracija tip nizpromenljivih TZ 
+  => nizdeklaracija tip nizpromenljivih TZ tip nizpromenljivih TZ 
+  => nizdeklaracija tip nizpromenljivih TZ tip nizpromenljivih TZ tip nizpromenljivih TZ 
+  => tip nizpromenljivih TZ tip nizpromenljivih TZ tip nizpromenljivih TZ tip nizpromenljivih TZ 
+  => elementarni_tip nizpromenljivih TZ tip nizpromenljivih TZ tip nizpromenljivih TZ tip nizpromenljivih TZ  
+  => INT nizpromenljivih TZ tip nizpromenljivih TZ tip nizpromenljivih TZ tip nizpromenljivih TZ  
+  => INT ID TZ tip nizpromenljivih TZ tip nizpromenljivih TZ tip nizpromenljivih TZ  
+  => INT ID TZ elementarni_tip nizpromenljivih TZ tip nizpromenljivih TZ tip nizpromenljivih TZ
+  => INT ID TZ STRING nizpromenljivih TZ tip nizpromenljivih TZ tip nizpromenljivih TZ
+  => INT ID TZ STRING nizpromenljivih , ID TZ tip nizpromenljivih TZ tip nizpromenljivih TZ
+  => INT ID TZ STRING ID , ID TZ tip nizpromenljivih TZ tip nizpromenljivih TZ
+  => INT ID TZ STRING ID , ID TZ ID nizpromenljivih TZ tip nizpromenljivih TZ
+  => INT ID TZ STRING ID , ID TZ ID nizpromenljivih , ID TZ tip nizpromenljivih TZ
+  => INT ID TZ STRING ID , ID TZ ID nizpromenljivih , ID , ID TZ tip nizpromenljivih TZ
+  => INT ID TZ STRING ID , ID TZ ID ID , ID , ID TZ tip nizpromenljivih TZ
+  => INT ID TZ STRING ID , ID TZ ID ID , ID , ID TZ tip[] nizpromenljivih TZ
+  => INT ID TZ STRING ID , ID TZ ID ID , ID , ID TZ elementarni_tip[] nizpromenljivih TZ
+  => INT ID TZ STRING ID , ID TZ ID ID , ID , ID TZ DOUBLE [] nizpromenljivih TZ
+  => INT ID TZ STRING ID , ID TZ ID ID , ID , ID TZ DOUBLE [] ID TZ
+
+
+gramatika logickih izraza \/ /\ <=> =>
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+  

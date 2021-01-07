@@ -1,0 +1,36 @@
+%{
+#include<iostream>
+#include<cstdlib>
+#include<string>
+
+#define YYDEBUG 1
+
+using namespace std;
+
+extern int yylex();
+
+void yyerror(string s){
+    cerr<<s<<endl;
+    exit(EXIT_FAILURE);
+}
+
+%}
+
+
+%%
+
+program : program naredba ';'
+        | naredba ';'
+        ;
+        
+naredba : 
+%%
+
+
+int main(){
+ yydebug=0;
+ 
+ yyparse();
+
+ return 0;
+}

@@ -1,0 +1,12 @@
+i := 5;
+
+while( a>5) do
+begin
+  if( b < 3) then
+    i := a;
+  z:=3.4;
+  
+end
+
+
+

@@ -1,0 +1,99 @@
+Sintaksna analiza 
+
+Leksicki analizator daje tokene 
+
+O(n)
+
+Analiza nanize 
+generise se izvodjenje nalevo  
+
+LL(1)
+
+citamo ulazni tok tokena sa leva na desno, generisemo izvodjenje nalevo
+i potreban nam je 1 token sa ulaza da bismo jednoznacno izabrali pravilo 
+za naredni korak izvodjenja
+
+e -> e + t                  e -> t e'
+  | t                       e'-> + t e'
+                                | eps
+  
+t -> t * f                  t -> f t'
+  | f                       t'-> * f t'
+                                | eps
+  
+f -> ( e )                  f -> ( e )
+  | BROJ                        | BROJ
+
+2*5 + 3
+
+izvodjenje nalevo
+e => t e' => f t' e' => BROJ t' e' => BROJ * f t' e'
+  => BROJ * BROJ  t' e' => BROJ * BROJ e' => BROJ * BROJ + t e'
+  => BROJ * BROJ + f t' e' => BROJ * BROJ + BROJ t' e'
+  => BROJ * BROJ + BROJ e' => BROj * BROJ + BROJ
+  
+
+ Za svaki neterminal
+Prvi , Sledi    ( First, Follow)
+
+N   Anul  Prvi          Sledi
+e         {(, BROJ}     { ) , EOI }    
+e'   T    {+}           { ) , EOI }  
+t         {(, BROJ}     { +, ) , EOI }    
+t'   T    {*}           { +, ) , EOI }    
+f         {(, BROJ}     { *, +, ) , EOI }    
+
+
+Skupovi izbora
+e -> t e'         {(, BROJ}
+
+e'-> + t e'       { + }
+  | eps           { ) , EOI }  
+  
+t -> f t'         {(, BROJ}
+t'-> * f t'       {*}
+  | eps           { +, ) , EOI }
+  
+f -> ( e )        { ( }            
+  | BROJ          { BROJ }
+  
+2+3
+e=> t e' => f t' e' => BROJ t' e' => BROJ e' => BROj  + t e' 
+  => BROJ + f t' e' => BROJ + BROJ t' e' => BROj + BROJ e'
+  => BROJ + BROJ 
+  
+
+  
+  
+  
+deklarija -> tip nizpromenljivih TZ
+
+tip -> tip []
+    | EL_TIP
+    | ID
+    
+nizpromenljivih -> nizpromenljivih , ID
+                | ID
+    
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+

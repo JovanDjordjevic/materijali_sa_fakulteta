@@ -1,0 +1,49 @@
+%{
+#include <map>
+#include <cstdlib>
+#include <iostream>
+
+extern int yylex();
+
+void yyerror(std::string msg)
+{
+    std::cerr << "Syntax error: " << msg << std::endl;
+    exit(EXIT_FAILURE);
+}
+%}
+
+%token and_tok or_tok imp_tok eq_tok true_tok false_tok
+%token id_tok
+
+%left '!'
+%left and_tok
+%left or_tok
+%left imp_tok
+%left eq_tok
+
+%%
+Program
+    : Program Naredba
+    | Naredba
+    ;
+
+Naredba
+    : E '\n'
+    ;
+
+E
+    : id_tok
+    | E and_tok E
+    | E or_tok E
+    | E imp_tok E
+    | E eq_tok E
+    | '!' E
+    | true_tok
+    | false_tok
+    ;
+%%
+int main()
+{
+    yyparse();
+    return 0;
+}

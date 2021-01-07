@@ -1,0 +1,102 @@
+Nekakav tekst koji
+ je imao slova 
+ i brojeve i specijalne karaktere
+
+ | * + ( ) [] 
+
+dan
+bab
+som
+dgtrabrst
+eprt 
+print
+end
+begin
+
+[^aeiou]*[aeiou][^aeiou]*
+
+a
+aa
+aaaa
+aaaaaa 
+     
+
+bbb	 
+[^aeoiu]
+[0-9]
+[az-] [-az]
+[\^0\-9]
+[a\]0-9]
+[]a0-9]
+_
+
+\d <=> [0-9]
+\D <=> [^0-9]
+\s <=> [ \t\r\n]
+\S <=>
+\w <=> 
+\W
+
+\b pozicija kraj reci
+
+0123456789
+12345 123 56
+[^aeiou]*[aeiou][^aeiou]*
+
+.
+
+
+31.02.2016.
+13.11.1997.
+32.01.2011.
+28.14.1993.
+02.04.2020.
+31*12.2015.
+12.03.1897.
+
+01-31 za dane
+
+0[1-9]|[12][0-9]|3[01]\.0[1-9]|1[0-2]\.
+
+1990-2016
+
+(0[1-9]|[12][0-9]|3[01])
+\.(0[1-9]|1[0-2])
+\.(199[0-9]|20(0[0-9]|1[0-6]))
+
+"Citat" na pocetku
+Cas iz "P2",
+a "P2" oznacava "Programiranje 2" 
+"Ovaj je odgovarajuci"
+ispiti ispit
+
+j  -> \1
+
+baba
+mama
+tata
+deda
+sosa
+
+cao cao
+
+cao  -> \1
+
+cao 111-cao 111-cao-111
+
+Test teSTiRAnje tESt tesTiranje
+te(?i)st(?-i)iranje
+
+
+/*
+ imaju nekakav tekst
+ u vise linija
+ * i * sto da ne
+*/ /* i ovo je komentar*/
+
+/*****/
+/\*(?s)([^*/]|\*[^/]?)*\*/
+
+[a]
+[]
+a[[[]

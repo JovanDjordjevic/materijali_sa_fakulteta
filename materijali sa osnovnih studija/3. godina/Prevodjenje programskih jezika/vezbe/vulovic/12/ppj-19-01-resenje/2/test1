@@ -1,0 +1,5 @@
+_a = 0xFF;
+print(_a);
+_a = 7;
+_b = ~_a;
+_a = _a | 0x0 & 0xFFFFFFFF;

@@ -1,0 +1,469 @@
+State 32 conflicts: 3 shift/reduce
+State 33 conflicts: 3 shift/reduce
+State 34 conflicts: 3 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program naredba ';'
+    2        | naredba ';'
+
+    3 naredba: PRINT izraz
+    4        | ID '=' izraz
+    5        | CARD izraz
+    6        | CHECK BROJ ':' izraz
+    7        | CHECK izraz '<' izraz
+
+    8 izraz: skup
+    9      | ID
+   10      | izraz ILI izraz
+   11      | izraz I izraz
+   12      | izraz RAZLIKA izraz
+
+   13 skup: '{' elementi '}'
+   14     | BROJ TT BROJ
+
+   15 elementi: elementi ',' BROJ
+   16         | BROJ
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+',' (44) 15
+':' (58) 6
+';' (59) 1 2
+'<' (60) 7
+'=' (61) 4
+'{' (123) 13
+'}' (125) 13
+error (256)
+PRINT (258) 3
+TT (259) 14
+I (260) 11
+ILI (261) 10
+RAZLIKA (262) 12
+CARD (263) 5
+CHECK (264) 6 7
+BROJ (265) 6 14 15 16
+ID (266) 4 9
+
+
+Nonterminals, with rules where they appear
+
+$accept (19)
+    on left: 0
+program (20)
+    on left: 1 2, on right: 0 1
+naredba (21)
+    on left: 3 4 5 6 7, on right: 1 2
+izraz (22)
+    on left: 8 9 10 11 12, on right: 3 4 5 6 7 10 11 12
+skup (23)
+    on left: 13 14, on right: 8
+elementi (24)
+    on left: 15 16, on right: 13 15
+
+
+State 0
+
+    0 $accept: . program $end
+
+    PRINT  shift, and go to state 1
+    CARD   shift, and go to state 2
+    CHECK  shift, and go to state 3
+    ID     shift, and go to state 4
+
+    program  go to state 5
+    naredba  go to state 6
+
+
+State 1
+
+    3 naredba: PRINT . izraz
+
+    BROJ  shift, and go to state 7
+    ID    shift, and go to state 8
+    '{'   shift, and go to state 9
+
+    izraz  go to state 10
+    skup   go to state 11
+
+
+State 2
+
+    5 naredba: CARD . izraz
+
+    BROJ  shift, and go to state 7
+    ID    shift, and go to state 8
+    '{'   shift, and go to state 9
+
+    izraz  go to state 12
+    skup   go to state 11
+
+
+State 3
+
+    6 naredba: CHECK . BROJ ':' izraz
+    7        | CHECK . izraz '<' izraz
+
+    BROJ  shift, and go to state 13
+    ID    shift, and go to state 8
+    '{'   shift, and go to state 9
+
+    izraz  go to state 14
+    skup   go to state 11
+
+
+State 4
+
+    4 naredba: ID . '=' izraz
+
+    '='  shift, and go to state 15
+
+
+State 5
+
+    0 $accept: program . $end
+    1 program: program . naredba ';'
+
+    $end   shift, and go to state 16
+    PRINT  shift, and go to state 1
+    CARD   shift, and go to state 2
+    CHECK  shift, and go to state 3
+    ID     shift, and go to state 4
+
+    naredba  go to state 17
+
+
+State 6
+
+    2 program: naredba . ';'
+
+    ';'  shift, and go to state 18
+
+
+State 7
+
+   14 skup: BROJ . TT BROJ
+
+    TT  shift, and go to state 19
+
+
+State 8
+
+    9 izraz: ID .
+
+    $default  reduce using rule 9 (izraz)
+
+
+State 9
+
+   13 skup: '{' . elementi '}'
+
+    BROJ  shift, and go to state 20
+
+    elementi  go to state 21
+
+
+State 10
+
+    3 naredba: PRINT izraz .
+   10 izraz: izraz . ILI izraz
+   11      | izraz . I izraz
+   12      | izraz . RAZLIKA izraz
+
+    I        shift, and go to state 22
+    ILI      shift, and go to state 23
+    RAZLIKA  shift, and go to state 24
+
+    $default  reduce using rule 3 (naredba)
+
+
+State 11
+
+    8 izraz: skup .
+
+    $default  reduce using rule 8 (izraz)
+
+
+State 12
+
+    5 naredba: CARD izraz .
+   10 izraz: izraz . ILI izraz
+   11      | izraz . I izraz
+   12      | izraz . RAZLIKA izraz
+
+    I        shift, and go to state 22
+    ILI      shift, and go to state 23
+    RAZLIKA  shift, and go to state 24
+
+    $default  reduce using rule 5 (naredba)
+
+
+State 13
+
+    6 naredba: CHECK BROJ . ':' izraz
+   14 skup: BROJ . TT BROJ
+
+    TT   shift, and go to state 19
+    ':'  shift, and go to state 25
+
+
+State 14
+
+    7 naredba: CHECK izraz . '<' izraz
+   10 izraz: izraz . ILI izraz
+   11      | izraz . I izraz
+   12      | izraz . RAZLIKA izraz
+
+    I        shift, and go to state 22
+    ILI      shift, and go to state 23
+    RAZLIKA  shift, and go to state 24
+    '<'      shift, and go to state 26
+
+
+State 15
+
+    4 naredba: ID '=' . izraz
+
+    BROJ  shift, and go to state 7
+    ID    shift, and go to state 8
+    '{'   shift, and go to state 9
+
+    izraz  go to state 27
+    skup   go to state 11
+
+
+State 16
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 17
+
+    1 program: program naredba . ';'
+
+    ';'  shift, and go to state 28
+
+
+State 18
+
+    2 program: naredba ';' .
+
+    $default  reduce using rule 2 (program)
+
+
+State 19
+
+   14 skup: BROJ TT . BROJ
+
+    BROJ  shift, and go to state 29
+
+
+State 20
+
+   16 elementi: BROJ .
+
+    $default  reduce using rule 16 (elementi)
+
+
+State 21
+
+   13 skup: '{' elementi . '}'
+   15 elementi: elementi . ',' BROJ
+
+    '}'  shift, and go to state 30
+    ','  shift, and go to state 31
+
+
+State 22
+
+   11 izraz: izraz I . izraz
+
+    BROJ  shift, and go to state 7
+    ID    shift, and go to state 8
+    '{'   shift, and go to state 9
+
+    izraz  go to state 32
+    skup   go to state 11
+
+
+State 23
+
+   10 izraz: izraz ILI . izraz
+
+    BROJ  shift, and go to state 7
+    ID    shift, and go to state 8
+    '{'   shift, and go to state 9
+
+    izraz  go to state 33
+    skup   go to state 11
+
+
+State 24
+
+   12 izraz: izraz RAZLIKA . izraz
+
+    BROJ  shift, and go to state 7
+    ID    shift, and go to state 8
+    '{'   shift, and go to state 9
+
+    izraz  go to state 34
+    skup   go to state 11
+
+
+State 25
+
+    6 naredba: CHECK BROJ ':' . izraz
+
+    BROJ  shift, and go to state 7
+    ID    shift, and go to state 8
+    '{'   shift, and go to state 9
+
+    izraz  go to state 35
+    skup   go to state 11
+
+
+State 26
+
+    7 naredba: CHECK izraz '<' . izraz
+
+    BROJ  shift, and go to state 7
+    ID    shift, and go to state 8
+    '{'   shift, and go to state 9
+
+    izraz  go to state 36
+    skup   go to state 11
+
+
+State 27
+
+    4 naredba: ID '=' izraz .
+   10 izraz: izraz . ILI izraz
+   11      | izraz . I izraz
+   12      | izraz . RAZLIKA izraz
+
+    I        shift, and go to state 22
+    ILI      shift, and go to state 23
+    RAZLIKA  shift, and go to state 24
+
+    $default  reduce using rule 4 (naredba)
+
+
+State 28
+
+    1 program: program naredba ';' .
+
+    $default  reduce using rule 1 (program)
+
+
+State 29
+
+   14 skup: BROJ TT BROJ .
+
+    $default  reduce using rule 14 (skup)
+
+
+State 30
+
+   13 skup: '{' elementi '}' .
+
+    $default  reduce using rule 13 (skup)
+
+
+State 31
+
+   15 elementi: elementi ',' . BROJ
+
+    BROJ  shift, and go to state 37
+
+
+State 32
+
+   10 izraz: izraz . ILI izraz
+   11      | izraz . I izraz
+   11      | izraz I izraz .
+   12      | izraz . RAZLIKA izraz
+
+    I        shift, and go to state 22
+    ILI      shift, and go to state 23
+    RAZLIKA  shift, and go to state 24
+
+    I         [reduce using rule 11 (izraz)]
+    ILI       [reduce using rule 11 (izraz)]
+    RAZLIKA   [reduce using rule 11 (izraz)]
+    $default  reduce using rule 11 (izraz)
+
+
+State 33
+
+   10 izraz: izraz . ILI izraz
+   10      | izraz ILI izraz .
+   11      | izraz . I izraz
+   12      | izraz . RAZLIKA izraz
+
+    I        shift, and go to state 22
+    ILI      shift, and go to state 23
+    RAZLIKA  shift, and go to state 24
+
+    I         [reduce using rule 10 (izraz)]
+    ILI       [reduce using rule 10 (izraz)]
+    RAZLIKA   [reduce using rule 10 (izraz)]
+    $default  reduce using rule 10 (izraz)
+
+
+State 34
+
+   10 izraz: izraz . ILI izraz
+   11      | izraz . I izraz
+   12      | izraz . RAZLIKA izraz
+   12      | izraz RAZLIKA izraz .
+
+    I        shift, and go to state 22
+    ILI      shift, and go to state 23
+    RAZLIKA  shift, and go to state 24
+
+    I         [reduce using rule 12 (izraz)]
+    ILI       [reduce using rule 12 (izraz)]
+    RAZLIKA   [reduce using rule 12 (izraz)]
+    $default  reduce using rule 12 (izraz)
+
+
+State 35
+
+    6 naredba: CHECK BROJ ':' izraz .
+   10 izraz: izraz . ILI izraz
+   11      | izraz . I izraz
+   12      | izraz . RAZLIKA izraz
+
+    I        shift, and go to state 22
+    ILI      shift, and go to state 23
+    RAZLIKA  shift, and go to state 24
+
+    $default  reduce using rule 6 (naredba)
+
+
+State 36
+
+    7 naredba: CHECK izraz '<' izraz .
+   10 izraz: izraz . ILI izraz
+   11      | izraz . I izraz
+   12      | izraz . RAZLIKA izraz
+
+    I        shift, and go to state 22
+    ILI      shift, and go to state 23
+    RAZLIKA  shift, and go to state 24
+
+    $default  reduce using rule 7 (naredba)
+
+
+State 37
+
+   15 elementi: elementi ',' BROJ .
+
+    $default  reduce using rule 15 (elementi)

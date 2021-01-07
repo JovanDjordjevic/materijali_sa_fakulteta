@@ -1,0 +1,360 @@
+State 21 conflicts: 2 shift/reduce
+State 27 conflicts: 2 shift/reduce
+State 28 conflicts: 2 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program naredba ';'
+    2        | naredba ';'
+
+    3 naredba: ID DODELA izraz
+    4        | PRINT '(' izraz ')'
+    5        | izraz '.' izraz
+
+    6 izraz: ID
+    7      | '<' elementi '>'
+    8      | izraz '+' izraz
+    9      | izraz '-' izraz
+   10      | BROJ '*' izraz
+
+   11 elementi: elementi ',' BROJ
+   12         | BROJ
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 4
+')' (41) 4
+'*' (42) 10
+'+' (43) 8
+',' (44) 11
+'-' (45) 9
+'.' (46) 5
+';' (59) 1 2
+'<' (60) 7
+'>' (62) 7
+error (256)
+PRINT (258) 4
+DODELA (259) 3
+BROJ (260) 10 11 12
+ID (261) 3 6
+
+
+Nonterminals, with rules where they appear
+
+$accept (17)
+    on left: 0
+program (18)
+    on left: 1 2, on right: 0 1
+naredba (19)
+    on left: 3 4 5, on right: 1 2
+izraz (20)
+    on left: 6 7 8 9 10, on right: 3 4 5 8 9 10
+elementi (21)
+    on left: 11 12, on right: 7 11
+
+
+State 0
+
+    0 $accept: . program $end
+
+    PRINT  shift, and go to state 1
+    BROJ   shift, and go to state 2
+    ID     shift, and go to state 3
+    '<'    shift, and go to state 4
+
+    program  go to state 5
+    naredba  go to state 6
+    izraz    go to state 7
+
+
+State 1
+
+    4 naredba: PRINT . '(' izraz ')'
+
+    '('  shift, and go to state 8
+
+
+State 2
+
+   10 izraz: BROJ . '*' izraz
+
+    '*'  shift, and go to state 9
+
+
+State 3
+
+    3 naredba: ID . DODELA izraz
+    6 izraz: ID .
+
+    DODELA  shift, and go to state 10
+
+    $default  reduce using rule 6 (izraz)
+
+
+State 4
+
+    7 izraz: '<' . elementi '>'
+
+    BROJ  shift, and go to state 11
+
+    elementi  go to state 12
+
+
+State 5
+
+    0 $accept: program . $end
+    1 program: program . naredba ';'
+
+    $end   shift, and go to state 13
+    PRINT  shift, and go to state 1
+    BROJ   shift, and go to state 2
+    ID     shift, and go to state 3
+    '<'    shift, and go to state 4
+
+    naredba  go to state 14
+    izraz    go to state 7
+
+
+State 6
+
+    2 program: naredba . ';'
+
+    ';'  shift, and go to state 15
+
+
+State 7
+
+    5 naredba: izraz . '.' izraz
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+
+    '.'  shift, and go to state 16
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+
+
+State 8
+
+    4 naredba: PRINT '(' . izraz ')'
+
+    BROJ  shift, and go to state 2
+    ID    shift, and go to state 19
+    '<'   shift, and go to state 4
+
+    izraz  go to state 20
+
+
+State 9
+
+   10 izraz: BROJ '*' . izraz
+
+    BROJ  shift, and go to state 2
+    ID    shift, and go to state 19
+    '<'   shift, and go to state 4
+
+    izraz  go to state 21
+
+
+State 10
+
+    3 naredba: ID DODELA . izraz
+
+    BROJ  shift, and go to state 2
+    ID    shift, and go to state 19
+    '<'   shift, and go to state 4
+
+    izraz  go to state 22
+
+
+State 11
+
+   12 elementi: BROJ .
+
+    $default  reduce using rule 12 (elementi)
+
+
+State 12
+
+    7 izraz: '<' elementi . '>'
+   11 elementi: elementi . ',' BROJ
+
+    '>'  shift, and go to state 23
+    ','  shift, and go to state 24
+
+
+State 13
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 14
+
+    1 program: program naredba . ';'
+
+    ';'  shift, and go to state 25
+
+
+State 15
+
+    2 program: naredba ';' .
+
+    $default  reduce using rule 2 (program)
+
+
+State 16
+
+    5 naredba: izraz '.' . izraz
+
+    BROJ  shift, and go to state 2
+    ID    shift, and go to state 19
+    '<'   shift, and go to state 4
+
+    izraz  go to state 26
+
+
+State 17
+
+    8 izraz: izraz '+' . izraz
+
+    BROJ  shift, and go to state 2
+    ID    shift, and go to state 19
+    '<'   shift, and go to state 4
+
+    izraz  go to state 27
+
+
+State 18
+
+    9 izraz: izraz '-' . izraz
+
+    BROJ  shift, and go to state 2
+    ID    shift, and go to state 19
+    '<'   shift, and go to state 4
+
+    izraz  go to state 28
+
+
+State 19
+
+    6 izraz: ID .
+
+    $default  reduce using rule 6 (izraz)
+
+
+State 20
+
+    4 naredba: PRINT '(' izraz . ')'
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+
+    ')'  shift, and go to state 29
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+
+
+State 21
+
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+   10      | BROJ '*' izraz .
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+
+    '+'       [reduce using rule 10 (izraz)]
+    '-'       [reduce using rule 10 (izraz)]
+    $default  reduce using rule 10 (izraz)
+
+
+State 22
+
+    3 naredba: ID DODELA izraz .
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+
+    $default  reduce using rule 3 (naredba)
+
+
+State 23
+
+    7 izraz: '<' elementi '>' .
+
+    $default  reduce using rule 7 (izraz)
+
+
+State 24
+
+   11 elementi: elementi ',' . BROJ
+
+    BROJ  shift, and go to state 30
+
+
+State 25
+
+    1 program: program naredba ';' .
+
+    $default  reduce using rule 1 (program)
+
+
+State 26
+
+    5 naredba: izraz '.' izraz .
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+
+    $default  reduce using rule 5 (naredba)
+
+
+State 27
+
+    8 izraz: izraz . '+' izraz
+    8      | izraz '+' izraz .
+    9      | izraz . '-' izraz
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+
+    '+'       [reduce using rule 8 (izraz)]
+    '-'       [reduce using rule 8 (izraz)]
+    $default  reduce using rule 8 (izraz)
+
+
+State 28
+
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+    9      | izraz '-' izraz .
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+
+    '+'       [reduce using rule 9 (izraz)]
+    '-'       [reduce using rule 9 (izraz)]
+    $default  reduce using rule 9 (izraz)
+
+
+State 29
+
+    4 naredba: PRINT '(' izraz ')' .
+
+    $default  reduce using rule 4 (naredba)
+
+
+State 30
+
+   11 elementi: elementi ',' BROJ .
+
+    $default  reduce using rule 11 (elementi)

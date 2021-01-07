@@ -1,0 +1,98 @@
+%{
+#include <iostream>
+#include <string>
+#include <map>
+#include <cstdlib>
+#include "the_set.hpp"
+
+#define YYDEBUG 1
+
+extern int yylex();
+
+std::map<std::string, the_set*> tablica;
+
+void yyerror(std::string msg)
+{
+    std::cerr << "Syntax error: " << msg << std::endl;
+    exit(EXIT_FAILURE);
+}
+%}
+
+%union {
+    std::string* str_type;
+    int int_type;
+    the_set* set_type;
+}
+
+%token <str_type> id_token
+%token print_token fromto_token
+%token <int_type> num_token
+%type <set_type> Skup Niz E
+
+%%
+Program
+    : Program Naredba
+    | Naredba
+    ;
+
+Naredba
+    : id_token '=' E ';' {
+        tablica[*$1] = $3;
+        delete $1;
+    }
+    | print_token E ';' {
+        std::cout << *$2 << std::endl;
+        delete $2;
+    }
+    ;
+
+Skup
+    /* Inicijalizacija {1, 2, 3} */
+    : '{' Niz '}' {
+        $$ = $2;
+    }
+    /* Inicijalizacija {} */
+    | '{' '}' {
+        $$ = new the_set();
+    }
+    /* Inicijalizacija 7..10 */
+    | num_token fromto_token num_token {
+        $$ = new the_set();
+        $$->init($1, $3);
+    }
+    ;
+
+Niz
+    : Niz ',' num_token {
+        $$ = $1;
+        $$->add($3);
+    }
+    | num_token {
+        $$ = new the_set();
+        $$->add($1);
+    }
+    ;
+
+E
+    : Skup {
+        $$ = $1;
+    }
+    | id_token {
+        auto finder = tablica.find(*$1);
+        if (finder != tablica.end()) {
+            // Pozivamo konstruktor kopije
+            // Nismo ga implementirali, ali ga C++ generise za nas.
+            $$ = new the_set(*finder->second);
+        } else {
+            std::cout << *$1 << " nije definisana!" << std::endl;
+            $$ = new the_set();
+        }
+        delete $1;
+    }
+    ;
+%%
+int main()
+{
+    yyparse();
+    return 0;
+}

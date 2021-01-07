@@ -1,0 +1,6 @@
+pocetak
+	ispisi("Vrednost izraza je: ");
+	ispisi(3 + 0xA mod 5);
+	i := 3 * (4 + 2);
+	ispisi(i)
+kraj.

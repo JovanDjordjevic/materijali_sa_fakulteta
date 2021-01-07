@@ -1,0 +1,177 @@
+aspasic@matf.bg.ac.rs
+
+int x = 5;
+x = x*2;
+
+ab|as
+aeiou
+
+{a,b,c}
+
+a  => L(a) = {a}
+ab => L(ab) = L(a)L(b) ={ab}
+a|b => L(a|b) = L(a) union L(b)
+
+a* => L(a*) = {eps,a, aa, aaa, ...}
+
+0123456789 7
+12345 67 15 56 233 98734 9000
+
+[1-9][0-9][0-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9]
+
+a{0,}   a*
+a{1,}   a+   aa* 
+
+a(na)*s
+as
+anas
+ananas
+anaaaaas
+
+[^ \t\r\n]
+[0-9^]
+
+() * + [ 
+
+a]
+[a]]
+[]a]
+
+\d  => [0-9]
+\D  => [^0-9]
+\s  => [ \t\r\n\v]
+\S  => [^ \t\r\n\v] 
+\w  => [a-zA-Z0-9_]
+\W  => [^a-zA-Z0-9_]
+
+
+dan
+som 
+print
+end
+a
+prsti
+
+.
+
+01-31
+01-12 
+1990 -2016
+
+32.02.2016
+00.03.2011
+04.14.1992
+03.05.1997
+31.02.2016
+23.11.2020
+30.04.2013
+31.12.2016
+13.09.1787
+
+01-31
+01-12
+1990-2016
+
+199[0-9]|20(0[0-9]|1[0-6])
+
+(0[1-9]|[12][0-9]|3[01])
+\.(0[1-9]|1[0-2])
+\.(199[0-9]|20(0[0-9]|1[0-6]))
+
+" ovaj
+"
+Neki pisu "P2",
+ali "P2" oznacava "Programiranje 2".
+
+.*
+* 0,
++ 1,
+? 0,1
+
+prispi
+ispi ispiti
+ispit
+ispiti
+
+\b
+
+([a-z]+)
+
+ba    -> \1
+
+cao cao
+cao -> \1
+zdravo zdravo
+
+cao o
+o->\1
+C++ C++ -> \1
+
+teStiranje
+testiRanje
+Test
+(?s) single line mode
+
+.
+
+/* Ovo jedan komentar
+ * u C-u koji 
+ je u vise linija
+ teksta ****
+*/   /*i jos jedan*/
+
+/***/
+/* / */
+/*/*/
+
+/\*  ([^*]|\**[^/])*  \*/
+
+/\* (( /\*)|.*?)[^(\*/)]*  \*/
+
+jezik
+jezika
+jeziku
+jezice
+jezikom
+
+=-
+\b 
+\B
+\bjezi(k(a|u|om)?|ce)\B
+
+jezikaaaaaa
+
+mr12012
+mi15235
+ml10321
+af09034
+mv16086
+mn13045
+aa12450
+mm10098
+
+
+mr02012
+mi18235
+ml15000
+af09399
+mv16086
+mn13045
+aa12450
+mm10098
+
+
+2009 2016 
+001 450
+
+
+
+re
+
+
+
+
+//////       /
+
+
+

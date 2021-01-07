@@ -1,0 +1,129 @@
+Transformacije gramatika 
+
+Eliminacija nedostiznih simbola
+
+a -> Ab| C
+b -> Bb | B
+c -> D
+
+S = {a}
+D_0 = {a}
+
+a => Ab => ABb => ABB 
+
+D_1 = {a, b}
+
+N = {a,b,c}\{a,b} = {c}
+
+a -> Ab| C
+b -> Bb | B
+========================================
+Eliminacija neproduktivnih simbola
+
+a -> baA | B
+b -> bc | c
+c -> cc
+d -> aD | Ba
+
+P_1 = { a}   a -> B
+P_2 = {a,d}
+d => aD => BD
+
+X -> daa
+
+a -> B
+d -> aD | Ba
+===============
+
+Eliminacija anulirajucih simbola
+
+N je anulirajuci
+N =>* eps
+                        s -> a
+                            | eps
+
+a -> bc                 a -> bc | c | b  
+  | dA                      | dA | A 
+
+b -> cc                 b -> cc | c
+  | B                       | B
+
+c -> bC                 c -> bC | C
+  | eps                     
+  
+d -> ad                 d -> ad | a | d 
+  | eps                       
+
+
+A_1 = {c, d}              c=>eps, d=>eps
+A_2 = {b, c, d}
+
+
+b => cccdcdc => c => eps       b=>* eps jeste anulirajuci
+b -> g in A_1*   -> b in A_2
+
+
+a -> bc in A_2*
+
+A_3 = {a,b,c,d} 
+
+aksioma a je anulirajuca => eps in L(G)
+
+a => b => c => 
+
+
+=====================================
+Eliminacija leve rekurzije
+
+x -> x A
+  | B
+
+x => x A => x A A => x A A A => B A A A
+
+
+x -> B x'
+x' -> A x'
+  | eps
+
+x => B x' => B A x' => B A A
+  
+x => B x' => B
+
+
+-----------------
+a -> aA | aB | C | D
+
+a => aA => aAA => aBAA => aBBAA => DBBAA
+
+
+a -> Ca' | Da'
+
+a' -> Aa' | Ba'
+    |eps
+
+a => Da' => DBa' =>DBBa' => DBBAa' => DBBAAa' => DBBAA
+
+======================================
+
+Eliminacija leve faktorizacije
+
+x -> AbcD
+    | AbxD
+
+x -> Aby
+y -> cD |xD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

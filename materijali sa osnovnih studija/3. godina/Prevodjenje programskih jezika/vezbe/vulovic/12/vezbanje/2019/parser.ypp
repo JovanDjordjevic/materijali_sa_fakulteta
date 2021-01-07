@@ -1,0 +1,113 @@
+%{
+#include<iostream>
+#include<cstdlib>
+#include<string>
+#include<map>
+
+#define YYDEBUG 1
+
+using namespace std;
+
+extern int yylex();
+
+map<string,int> promenljive;
+
+void yyerror(string s){
+    cerr<<s<<endl;
+    exit(EXIT_FAILURE);
+}
+
+void stampaj(int broj, int osnova){
+    if (osnova==10) printf("%d\n",broj);
+    else if (osnova==8) printf("%o\n",broj);
+    else if (osnova==16) printf("%x\n",broj);
+    else {
+        printf("Nepoznata osnova\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+%}
+
+%union{
+    int vr_br;
+    string* vr_id;    
+    string* li_id;
+}
+
+%type<vr_br> izraz
+
+%token PRINT EQU SHR SHL INT LIST 
+%token<vr_br> BROJ
+%token<vr_id> ID
+%token<li_id> LISTID
+
+%left '+' '-' '/' '*' '&' '|' '^' SHR SHL
+%right '~' UMINUS
+%%
+program : program naredba ';'           {}
+        | naredba ';'                   {}
+        ;
+        
+naredba : INT ID '=' izraz              {auto it =promenljive.find(*$2);
+                                        if(it!=promenljive.end())
+                                            yyerror("vec dekl");
+                                        promenljive[*$2]=$4;
+                                        delete $2;
+                                        }
+        | INT ID                        {auto it =promenljive.find(*$2);
+                                        if(it!=promenljive.end())
+                                            yyerror("vec deklarisana");
+                                        promenljive[*$2]=0;
+                                        delete $2;
+                                        }
+        | ID '=' izraz                  {auto it =promenljive.find(*$1);
+                                        if(it==promenljive.end())
+                                            yyerror("ne postoji id");
+                                        promenljive[*$1]=$3;
+                                        delete $1;
+                                        }
+        | PRINT '(' izraz ',' izraz ')' { stampaj($3,$5); }
+        | PRINT '(' izraz ')'           { stampaj($3,10); }
+        | izraz EQU izraz               { if($1 == $3) cout<<"True!"<<endl; else cout<<"False!"<<endl;}
+        | LIST LISTID                   {}
+        | LIST LISTID '=' izraz         {}
+        ;
+        
+izraz : BROJ                            {$$ = $1;}
+        | ID                            {auto it=promenljive.find(*$1);
+                                         if(it==promenljive.end())
+                                            yyerror("ne postoji ovaj id");
+                                        $$=promenljive[*$1];
+                                        delete $1;    
+                                        }
+        | LISTID                        {}
+        | '(' izraz ')'                 {$$=$2; }
+        | '[' elementi ']'
+        | izraz '+' izraz               {$$=$1 + $3;}
+        | izraz '-' izraz               {$$=$1 - $3;}
+        | izraz '*' izraz               {$$=$1 * $3;}
+        | izraz '/' izraz               { if($3!=0) $$=$1 / $3; else yyerror("deljenje nulom");}
+        | izraz '&' izraz               {$$=$1 & $3;}
+        | izraz '|' izraz               {$$=$1 | $3;}
+        | izraz '^' izraz               {$$=$1 ^ $3;}
+        | izraz SHR izraz               { if($3>0) $$=$1>>$3; else yyerror("drugi op");}
+        | izraz SHL izraz               { if($3>0) $$=$1<<$3; else yyerror("drugi op");}
+        | '~' izraz                      {$$=~$2;}
+        | '-' izraz %prec UMINUS         {$$=-$2;}
+        
+        ;
+        
+elementi : elementi BROJ
+         | BROJ
+         ;
+        
+        
+%%
+
+int main(){
+    yydebug=0;
+
+    yyparse();
+
+}

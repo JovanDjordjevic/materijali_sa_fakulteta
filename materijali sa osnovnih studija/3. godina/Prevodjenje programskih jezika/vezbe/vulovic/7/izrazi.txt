@@ -1,0 +1,57 @@
+3 + 4*5 + 2*3*4
+
+e -> e + t
+  |   t
+
+t -> t * BROJ
+  | BROJ
+
+(,)
+
+(3+4)*5 + 2*(3+2*7)+3
+
+e -> e + t
+  |t
+
+t -> t * f
+  | f
+
+f -> BROJ
+  | ( e )
+
+2*(3+2*7) + 3   -> BROJ * (BROJ + BROJ * BROJ) + BROJ
+
+leftmost = izvodjene nalevo
+e => e + t => t + t => t * f + t => f * f + t
+  => BROJ * f + t => BROJ * ( e ) + t
+  => BROJ * (e+t) +t
+  => BROJ * ( t + t ) + t => BROJ * ( f + t ) + t
+  => BROJ * ( BROJ + t ) + t
+  => BROJ * ( BROJ + t * f ) + t
+  => BROJ * ( BROJ + f * f ) + t
+  => BROJ * ( BROJ + BROJ * f ) + t
+  => BROJ * ( BROJ + BROJ * BROJ ) + t
+  => BROJ * ( BROJ + BROJ * BROJ ) + f
+  => BROJ * ( BROJ + BROJ * BROJ ) + BROJ
+
+rightmost = izvodjenje nadesno
+e => e + t =>  e + f => e + BROJ => t + BROJ
+  => t * f + BROJ => t * ( e ) + BROJ
+  => t * ( e + t ) + BROJ
+  => t * ( e + t * f ) + BROJ
+  => t * ( e + t * BROJ ) + BROJ
+  => t * ( e + f * BROJ ) + BROJ
+  => t * ( e + BROJ * BROJ ) + BROJ
+  => t * ( t + BROJ * BROJ ) + BROJ
+  => t * ( f + BROJ * BROJ ) + BROJ
+  => t * (BROJ + BROJ * BROJ ) + BROJ
+  => f * (BROJ + BROJ * BROJ ) + BROJ
+  => BROJ * (BROJ + BROJ * BROJ ) + BROJ
+
+
+
+
+
+  
+
+

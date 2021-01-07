@@ -1,0 +1,99 @@
+%{
+#include<iostream>
+#include<cstdlib>
+#include<string>
+#include<map>
+#include"vektor.hpp"
+
+#define YYDEBUG 1
+
+using namespace std;
+
+extern int yylex();
+
+void yyerror(string s){
+    cerr<<s<<endl;
+    exit(EXIT_FAILURE);
+}
+
+map<string,Vektor*> promenljive;
+%}
+
+%union{
+    float vr_br;
+    std::string* vr_id;
+    Vektor* vr_vek;
+}
+
+%type<vr_vek> izraz elementi
+
+%token VEKTOR PRINT
+%token<vr_br> BROJ
+%token<vr_id> ID
+
+%left '+' '-'
+%left '*'
+
+%%
+program : program  naredba ';'      {}
+        | naredba          ';'      {}
+        ;
+        
+naredba : PRINT izraz                  { $2->stampaj(); }
+        | VEKTOR naredba               {}
+        | ID '=' izraz ',' naredba     {auto it=promenljive.find(*$1);
+                                        if(it!=promenljive.end())
+                                            yyerror("vec def1");
+                                        else
+                                            promenljive[*$1]=$3;
+                                        delete $1;
+                                       }
+        | ID ',' naredba               {auto it=promenljive.find(*$1);
+                                        if(it!=promenljive.end())
+                                            yyerror("vec def2");
+                                        else
+                                            promenljive[*$1]=new Vektor();
+                                        delete $1;
+                                       }
+        | ID '=' izraz                 {auto it=promenljive.find(*$1);
+                                        if(it!=promenljive.end()){
+                                            promenljive[*$1]=$3;
+                                            delete $1; }
+                                        else
+                                            yyerror("nije def1");
+                                       }
+        | ID                           {auto it=promenljive.find(*$1);
+                                        if(it!=promenljive.end())
+                                            yyerror("vec def4");
+                                        else
+                                            promenljive[*$1]=new Vektor();
+                                        delete $1;
+                                       }
+        | izraz '[' BROJ ']'           { cout<<$1->getkoord(int($3))<<endl;}
+        ;
+        
+izraz : ID                              { auto it=promenljive.find(*$1);
+                                          if(it==promenljive.end())
+                                            yyerror("nije def2");
+                                          else 
+                                            $$=promenljive[*$1];
+                                        delete $1;
+                                        }
+      |  '[' elementi ']'               {$$=$2;}
+      |  '(' izraz ')'                  {$$=$2;}
+      | izraz '+' izraz                 {$$=operacija($1,$3,1);}
+      | izraz '-' izraz                 {$$=operacija($1,$3,2);}
+      | BROJ '*' izraz                  {$$=mnoz($3,$1);}
+      ;
+      
+elementi : elementi ',' BROJ            {$1->dodaj($3); $$=$1;}
+        | BROJ                          {$$=new Vektor(); $$->dodaj($1);}
+        ;
+
+%%
+
+int main(){
+    yydebug=0;
+    yyparse();
+
+}

@@ -1,0 +1,73 @@
+%{
+#include<iostream>
+#include<cstdlib>
+#include<string>
+#include<map>
+#include"skup.hpp"
+
+#define YYDEBUG 1
+
+extern int yylex();
+
+using namespace std;
+
+void yyerror(string s){
+    cerr<<s<<endl;
+    exit(EXIT_FAILURE);
+}
+
+map<string,Skup*> promenljive;
+%}
+
+%union{
+    int vr_broja;
+    string* vr_id;
+    Skup* vr_skup;
+}
+
+%type<vr_skup>izraz skup elementi
+
+%token PRINT TT I ILI RAZLIKA CARD CHECK
+%token<vr_broja> BROJ
+%token<vr_id> ID
+
+%%
+program : program naredba ';'  {}
+        | naredba ';'          {}
+        ;
+        
+naredba : PRINT izraz           {$2->print(); delete $2;}
+        | ID '=' izraz          {auto it=promenljive.find(*$1);
+                                if(it!=promenljive.end())
+                                   delete it->second;
+                                promenljive[*$1]=$3;
+                                }
+        | CARD izraz        {}
+        | CHECK BROJ ':' izraz   {}
+        | CHECK izraz '<' izraz {}
+        ;
+izraz  : skup               {$$=$1;}
+       | ID                 { auto it=promenljive.find(*$1);
+                              if(it==promenljive.end())
+                                yyerror("promenljiva nije definisana");
+                            $$=promenljive[*$1];}
+       | izraz ILI izraz      {}
+       | izraz I izraz        {}
+       | izraz RAZLIKA izraz  {}
+       ;
+        
+skup : '{' elementi '}'         { $$=$2; }
+        | BROJ TT BROJ          { $$=new Skup($1,$3);}
+        ;
+        
+elementi : elementi ',' BROJ      { $1->ubaci($3); $$=$1;}
+         | BROJ                   { $$ = new Skup(); $$->ubaci($1);}
+         ;
+%%
+
+int main(){
+    yydebug=1;
+    yyparse();
+    
+    return 0;
+}

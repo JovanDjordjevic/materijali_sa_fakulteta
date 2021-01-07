@@ -1,0 +1,129 @@
+%{
+#include <iostream>
+#include <string>
+#include "polinomial.hpp"
+#include <map>
+
+extern int yylex();
+
+void yyerror(std::string s)
+{
+    std::cerr << "Sintaksna greska: " << s << std::endl;
+    exit(EXIT_FAILURE);
+}
+
+std::map<std::string, polinomial*> tablica;
+%}
+
+%union {
+    polinomial* poly_type;
+    float float_type;
+    std::string* str_type;
+}
+
+%type <poly_type> E Niz_koef
+%token <float_type> num_token
+%token <str_type> id_token
+
+%left '+' '-'
+%left '*'
+%left '\''
+%left UMINUS
+
+%%
+Program
+    : Program Naredba
+    | Naredba
+    ;
+
+Naredba
+    : E '\n' {
+        std::cout << *$1 << std::endl;
+        delete $1;
+    } | id_token ':' '=' E '\n' {
+        // Posto cuvamo pokazivac na objekat u mapi
+        // ne vrsimo dealokaciju objekta.
+        tablica[*$1] = $4;
+        delete $1;
+    } | E '=' '=' E '\n' {
+        std::cout << (*$1 == *$4 ? "True" : "False") << std::endl;
+        delete $1;
+        delete $4;
+    } | E '!' '=' E '\n' {
+        std::cout << (*$1 != *$4 ? "True" : "False") << std::endl;
+        delete $1;
+        delete $4;
+    }
+    ;
+
+E
+    : E '+' E {
+        // -------------------------------------------------------------------------
+        // | BITAN DETALJ
+        // -------------------------------------------------------------------------
+        // | $$ = *$1 + *$3 nije dobro jer je rezultat izracunavanja
+        // | *$1 + *$3 lokalna promenljiva na steku dok je tip od $$
+        // | pokazivac na polinom. Odnosno, neophodno je da dinamicki alociramo
+        // | polinom. Koristimo podrazumevani konstruktor kopije koji poziva
+        // | konstruktore kopije za podatke unutar klase, sto je u nasem slucaju
+        // | konstruktor kopije za vektor.
+        // -------------------------------------------------------------------------
+        $$ = new polinomial(*$1 + *$3);
+        delete $1;
+        delete $3;
+    } | E '-' E {
+        $$ = new polinomial(*$1 - *$3);
+        delete $1;
+        delete $3;
+    } | E '*' E {
+        $$ = new polinomial(*$1 * *$3);
+        delete $1;
+        delete $3;
+    } | '<' Niz_koef '>' {
+        $$ = $2;
+    }
+    | '-' E %prec UMINUS {
+        $$ = new polinomial($2->uminus());
+    }
+    | id_token {
+        // Trazimo promenljivu
+        auto finder = tablica.find(*$1);
+        if (finder != tablica.end()) {
+            // Kopiramo vrednost iz mape (jer dealociramo objekte pri njihovom ispisu).
+            // Pozivamo konstruktor kojem prosledjujemo koeficijente polinoma u mapi.
+            $$ = new polinomial(finder->second->coefs());
+        } else {
+            std::cout << "Nije pronadjena promenljiva " << *$1;
+            $$ = new polinomial();
+        }
+        delete $1;
+    }
+    | '(' E ')' {
+        $$ = $2;
+    } | E '\'' {
+        $$ = $1->izvod();
+        delete $1;
+    } | '$' E '|' num_token {
+        $$ = $2->integral($4);
+        delete $2;
+    }
+    ;
+
+Niz_koef
+    : Niz_koef ',' num_token {
+        $1->add_coef($3);
+        $$ = $1;
+    }
+    | num_token {
+        // $$ -> Niz_koef -> polinom*
+        // $1 -> num_token -> float
+        $$ = new polinomial();
+        $$->add_coef($1);
+    }
+    ;
+%%
+int main()
+{
+    yyparse();
+    return 0;
+}

@@ -1,0 +1,12 @@
+Tekst u ovoj datoteci sadrzi ponovljene reci
+
+Kao sto su: 
+the the
+i za kojom slede
+pozdravi
+Zdravo zdravo!
+Cao cao!
+
+I podrska svim programerima!
+Ledja pravo!
+Bravo bravo!
