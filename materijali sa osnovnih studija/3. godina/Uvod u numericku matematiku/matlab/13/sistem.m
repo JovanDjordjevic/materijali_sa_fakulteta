@@ -1,0 +1,1 @@
+function sistem(d,t,n)
