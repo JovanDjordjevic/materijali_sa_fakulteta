@@ -16,6 +16,7 @@ Moji materijali sa fakulteta
 		- Programske paradigme
 		- Racunarska grafika
 		- Relacione baze podataka
+		- Uvod u numericku matematiku
 	* ### Cetvrta godina godina<br>
 		- Funkcionalno programiranje
 		- Primena projektivne geometrije u racunarstvu
