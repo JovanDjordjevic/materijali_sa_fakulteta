@@ -1,0 +1,9 @@
+http://www.matf.bg.ac.rs/
+https://outlook.live.com/
+https://crackwatch.com/#all-games
+ftp://test.com/some/file/path.txt
+/home/ispit/Desktop/tests/404.txt
+FILE://localhost/1.txt
+FILE://localhost/1.txt
+FILE://localhost/beans/1.txt
+FILE://localhost/1.txt

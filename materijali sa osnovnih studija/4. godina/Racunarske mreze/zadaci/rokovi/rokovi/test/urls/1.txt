@@ -1,0 +1,3 @@
+ftp://localhost
+https://www.google.com
+file:///home/student/Desktop/rokovi/src/RM_4R_2020_JUN1/zadatak_1.java

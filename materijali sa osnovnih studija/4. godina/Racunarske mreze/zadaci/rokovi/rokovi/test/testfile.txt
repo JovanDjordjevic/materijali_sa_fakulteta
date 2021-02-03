@@ -1,0 +1,9 @@
+[12.12.2020]:123.123.123:http://www.matf.bg.ac.rs/
+[12.12.2020]:123.123.123:https://outlook.live.com/
+[12.12.2020]:123.123.123:https://crackwatch.com/#all-games
+[12.3.2020]:123.123.123:ftp://test.com/some/file/path.txt
+[2.12.2020]:123.123.123:/home/ispit/Desktop/tests/404.txt
+[2.12.2020]:1111:1111:1111:1111:FILE://localhost/1.txt
+[12.12.2020]:123.123.123:FILE://localhost/1.txt
+[4.12.2020]:123.123.123:FILE://localhost/beans/1.txt
+[11.12.2020]:123.123.123:FILE://localhost/1.txt
