@@ -1,0 +1,6 @@
+putStr "test/Spec.hs:prop_toList_fromList_conv\t"
+quickCheck prop_toList_fromList_conv
+putStr "test/Spec.hs:prop_focusNext_focusPrev\t"
+quickCheck prop_focusNext_focusPrev
+putStr "test/Spec.hs:prop_focusPrev_focusNext\t"
+quickCheck prop_focusPrev_focusNext

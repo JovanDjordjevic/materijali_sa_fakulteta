@@ -1,0 +1,62 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 6eac3c80524979065d7933232b3c562c23b4dadc063f219c269090f8cb202a7c
+
+name:           my-list
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/my-list#readme>
+homepage:       https://github.com/githubuser/my-list#readme
+bug-reports:    https://github.com/githubuser/my-list/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2020 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/my-list
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_my_list
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010
+
+executable my-list-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_my_list
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , my-list
+  default-language: Haskell2010
+
+test-suite my-list-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_my_list
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , my-list
+  default-language: Haskell2010
