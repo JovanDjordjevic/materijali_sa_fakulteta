@@ -19,6 +19,7 @@ Moji materijali sa fakulteta
 		- Uvod u numericku matematiku
 	* ### Cetvrta godina godina<br>
 		- Funkcionalno programiranje
+		- Osnove matematickog modeliranja
 		- Primena projektivne geometrije u racunarstvu
 		- Racunarske mreze
 		- Razvoj softvera
