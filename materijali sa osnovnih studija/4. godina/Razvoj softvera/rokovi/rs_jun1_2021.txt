@@ -1,0 +1,33 @@
+Jun1 2021
+
+Teorijska pitanja:
+1) navesti 7 obrazaca (za projektovanje) ponasanja
+2) koncept slotova u QT-u
+3) sta su konflikti i kako se razresavaju (u kontekstu sistema za kontrolu verzija)
+4) sta je nepozeljna bliskost (refaktorisanje)
+5) koje okolnosti smanjuju verovatnocu nastanka bagova. objasniti 2
+6) sta su alati za unutrasnje dokumentovanje programskog koda? zasto su potrebni i po cemu se razlikuju od 
+   odrzavanja spoljasnje dokumentacije
+7) objasniti async i future sablone u c++
+8) koincidentna kohezija
+9) metod ekstremnog programiranja neprekidna integracija
+10) ne secam se tacno, ali da se nacrta 3 neka grafika neke metrike za pracenje razvoja softvera i da se objasne
+
+Prakticni zadaci:
+1)TDD-om se razvija klasa Lavirint. Pravimo njen javni interfejs koji se sastoji iz:
+-konstruktor prima string koji sme da se sastoji od karaktera 'w', 's', 'a', 'd', '.' koji predstavljaju put (w je gore, a je levo, d je desno i s je dole, tacka je odmoriste). 
+Prosledjen put mora da se zavrsava sa tackom, mora da se sastoji samo od validnih karaktera i ne sme biti prazna niska. Ako se desi neki od ova tri slucaja, treba da se izbaci izuzetak
+- public metod size_t length() koji vraca duzinu puta bez tacaka
+- int operator(string). string koji prima je kao neki novi put koji korisnik prosledjuje koji se sastoji samo od wasd bez tacaka. Zadatak je da se taj novi put uporedjuje sa putem koji cuvamo kao atribut klase i da se proveri da li je korisnik stigao do poslednjeg odmorista, tj do nekog od odmorista i da se pritom dodeljuju poeni (na osnovu duzine puta koju je uspesno presao. Primer:
+konstruisali smo klasu sa putem: awsd.ddwssa.dwwaaaa.awwwd.
+	- korisnik prosledji nisku awsdda :Ovaj put stize do prvog odmorista (jer se prva cetiri slova poklapaju) i dobija 4 poena. ostatak puta 'da' se ne poklapa skroz sa 'dd' sacuvanog u klasi tako da tu dobija 0 poena (bez obzira sto se deo puta poklapa)
+	- korisnik prosledji nisku awsdddwssa   :Ovaj put dobija 4+6 = 10 poena, stize uspesno do drugog odmorista
+	- korisnik prosledi nisku awsdddwssadwwaaaaawwwd  :Ovde stize do poslednjeg odmorista i dobija 4+6+7+5 poena
+
+
+2)QT gui aplikacija:
+Gui se sastoji iz 2 dugmeta ('ucitaj ucesnike' i 'zapocni glasanje') i jednog QListWidgeta. Simuliramo evroviziju. 
+-Klikom na dugme 'ucitaj ucesnike' iz txt fajla citamo drzave koje ucestvuju. Svaka od njih je u zasebnom redu.  Na pocetku svaka drzava treba da ima 0 bodova. Nakon ucitavanja, ispisujemo sve drzave u obliku: "ime  br_bodova"  u QListWidgetu.
+-Klikom na dugme 'zapocni glasanje' za svaku ucitanu drzavu pokrecemo nit u kojoj simuliramo kako ta drzava glassa. Drzava treba da ide redom od 1 do 12 poena (12 iteracija) i da te poene dodeli po jednoj nasumicnoj drzavi u svakoj iteraciji. Posle svake iteracije treba da se zaustavi thread na jednu sekundu. Voditi racuna da se nekoj drzavi kojoj je vec dodelila poene ne sme dodeliti opet, kao ni da drzava ne sme samoj sebi da dodeli poene. Nakon svake dodele poena potrebno je poslati signal koji obavestava o promeni, i da se tim signalom updateuje sadrzaj u QListWidgetu
+U QListWidgetu sve drzave treba da budu sortirane opadajuce po broju poena
+Zabranjeno je kopiranje podataka medju nitima vec sve moraju da rade nad istim podatkom

@@ -1,0 +1,265 @@
+v01
+----------------------
+ - jednostavan primer klase
+ - ne postoje nikakve provere
+
+ 
+v02
+----------------------
+ - jednostavne provere u kodu koriscenjem assert
+ - menjano:
+	main.cpp:
+	---------
+		void testVektor()
+		{
+			Vektor v(1,2,3);
+			assert( v.getX() == 1 );
+			assert( v.getY() == 2 );
+			assert( v.getZ() == 3 );
+			assert( v.getX() == 3 );
+			cout << "OK" << endl;
+		}
+
+		
+v03
+----------------------
+ - jednostavne provere u kodu koriscenjem makroa CPPUNIT
+ - menjano:
+	main.cpp
+	---------
+		void testVektor()
+		{
+			try {
+				Vektor v(1,2,3);
+				CPPUNIT_ASSERT( v.getX() == 1 );
+				CPPUNIT_ASSERT( v.getY() == 2 );
+				CPPUNIT_ASSERT( v.getZ() == 3 );
+				CPPUNIT_ASSERT( v.getZ() == 4 );
+
+				cout << "OK" << endl;
+			}catch( exception& e ){
+				cerr << "ERROR: " << e.what() << endl;
+			}
+		}
+ 
+ 
+v04
+----------------------
+ - malo slozenijih vrsta makroa
+ - menjano:
+	main.cpp
+	---------
+		void testVektor()
+		{
+			...
+				CPPUNIT_ASSERT_MESSAGE( "Neispravno X!", v.getX() == 1 );
+				CPPUNIT_ASSERT_EQUAL( 2.0, v.getY() );
+				CPPUNIT_ASSERT_EQUAL_MESSAGE( "Neispravno Z!", 3.0, v.getZ() );
+				CPPUNIT_ASSERT_DOUBLES_EQUAL( 1, v.getX(), 0.0001 );
+				//CPPUNIT_FAIL( "Nije implementiran test!" );
+			...
+		}
+ 
+ 
+v05
+----------------------
+ - klasa TestCase
+ - Runner
+ - menjano:
+	main.cpp
+	---------
+		class VektorTest : public CppUnit::TestCase
+		{
+		public:
+			VektorTest()
+				: CppUnit::TestCase( "VektorTest" )
+				{}
+			
+			void runTest() 
+			{
+			...
+			}
+		};
+
+		int main()
+		{
+			CppUnit::TextTestRunner runner;
+			runner.addTest(new VektorTest);
+			runner.run();
+
+			return 0;
+		}
+
+		
+v06
+----------------------
+ - Suite
+ - menjano:
+	main.cpp
+	---------
+		class VektorTest : public CppUnit::TestCase
+		{
+			CPPUNIT_TEST_SUITE( VektorTest );
+			CPPUNIT_TEST( constructorTest );
+			CPPUNIT_TEST_SUITE_END();
+
+			void constructorTest();
+		};
+
+		void VektorTest::constructorTest() 
+		{
+			...
+		}
+
+		int main()
+		{
+			CppUnit::TextTestRunner runner;
+			runner.addTest( VektorTest::suite() );
+			runner.run();
+			return 0;
+		}
+
+ 
+v07
+----------------------
+ - posebne datoteke
+ - novi testovi
+ - novi metod
+ - menjano:
+	main.cpp
+	---------
+		#include "Vektor.test.h"
+
+	Vektor.test.h:
+	--------------
+		...
+	Vektor.test.cpp:
+	----------------
+		...
+
+v08
+----------------------
+ - registry
+ - brisemo test.h
+ - menjano:
+	main.cpp
+	---------
+		#include <cppunit/extensions/TestFactoryRegistry.h>
+		main...
+			runner.addTest( CppUnit::TestFactoryRegistry::getRegistry().makeTest() );
+	Vektor.test.cpp:
+	----------------
+		...
+		CPPUNIT_TEST_SUITE_REGISTRATION( VektorTest );
+
+v09
+----------------------
+ - dodajemo poredjenje i testove
+ - menjano:
+	Vektor.h
+	---------
+		...	
+		bool operator==( const Vektor& v ) const
+		{
+			return getX() == v.getX()
+				&& getY() == v.getY()
+				&& getZ() == v.getZ();			
+		}
+		
+		bool operator!=( const Vektor& v ) const
+			{ return !(*this == v); }
+		...	
+
+	Vektor.test.cpp
+	---------------
+		class VektorTest : public CppUnit::TestCase
+		{
+			...
+			  CPPUNIT_TEST( eqTest );
+			...
+			  void eqTest();
+		};
+		
+		void VektorTest::eqTest() 
+		...
+	
+v10
+----------------------
+ - dodajemo ispis i citanje i testove
+ - menjano:
+	Vektor.h
+	--------
+		...
+		Vektor()
+			{}
+		friend istream& operator>>( istream& ostr, Vektor& v );
+		...
+		ostream& operator<<( ostream& ostr, const Vektor& v );
+		istream& operator>>( istream& istr, Vektor& v );
+
+	Vektor.cpp
+	----------
+	...
+	
+	Vektor.test.cpp
+	---------------
+		...
+		void VektorTest::streamTest()
+		{
+			ostringstream ostr;
+			Vektor v1(1.1,2.2,3.3);
+			ostr << v1;
+			
+			istringstream istr(ostr.str());
+			Vektor v2;
+			istr >> v2;
+
+			CPPUNIT_ASSERT( ostr.str() == "(1.1,2.2,3.3)" );
+			CPPUNIT_ASSERT( v1 == v2 );
+		}
+
+ 
+v11
+----------------------
+ - fixture
+ - menjano:
+	Vektor.test.cpp
+	---------------
+		class VektorTest : public CppUnit::TestFixture
+		{
+			CPPUNIT_TEST_SUITE( VektorTest );
+			CPPUNIT_TEST( constructorTest );
+			CPPUNIT_TEST( eqTest );
+			CPPUNIT_TEST( streamTest );
+			CPPUNIT_TEST_SUITE_END();
+
+			Vektor v,v1,v2,v3;
+			
+		public:
+			void setUp() {
+				// ovo se izvrsava pre svakog testa
+				v = Vektor(1,2,3);
+				v1 = Vektor(2,2,3);
+				v2 = Vektor(1,3,3);
+				v3 = Vektor(1,2,2);
+			//		cerr << "Neka inicijalizacija, tako da svi testovi rade isto...\n";
+			}
+
+			void tearDown() { 
+				// ovo se izvrsava posle svakog testa
+			//		cerr << "Eventualna deinicijalizacija...\n";
+			}
+			
+			void constructorTest()...
+			void eqTest() ...
+			void streamTest() ...
+		};
+
+		CPPUNIT_TEST_SUITE_REGISTRATION( VektorTest );
+			
+ 
+v12
+----------------------
+ - sabiranje i oduzimanje
+ 
+

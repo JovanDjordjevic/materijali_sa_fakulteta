@@ -1,0 +1,10 @@
+{
+    "n": 20,
+    "m": 10,
+    "sources": [
+    { "i": 4, "j": 5, "sourcePower": 10 },
+    { "i": 8, "j": 2, "sourcePower": 4 },
+    { "i": 15, "j": 8, "sourcePower": 2 },
+    { "i": 5, "j": 1, "sourcePower": 9 }
+    ]
+}

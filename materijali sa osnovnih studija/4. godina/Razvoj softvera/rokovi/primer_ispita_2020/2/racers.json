@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Ghost",
+        "percentage": 0,
+        "speed": 7
+    },
+    {
+        "name": "Blitz",
+        "percentage": 0,
+        "speed": 8
+    },
+    {
+        "name": "Athene",
+        "percentage": 0,
+        "speed": 7
+    },
+    {
+        "name": "Quicksilver",
+        "percentage": 0,
+        "speed": 9
+    }
+]

@@ -1,0 +1,34 @@
+------------
+Cas 2
+-------------
+Ako je potreban jedan od ovih:  konstruktor kopije, desteuktor, predefinisan operstor dodele. Sigurni su potrebna i istala dva (?)
+
+Ako imammo:
+tacka t;
+tacka t2 = t;     ova linija je isto kao da pise tacka t2{t}  tj isto je jao kao tacka t2(t), dakle ako pri definisannu objekata vrsimo dodelu to je inicijalizacija, to je konstrukcija, a ako vrednost dodeljujemo kasnije, to je onda dodeljivanje sa operatorom = 
+
+--------
+Cas3
+-------
+U cpp, sve metode definisane u okviru klase se automatski prevode kao inline, tj ne bas sve ali one jednostavnije tioa geteri i seteri sigurno. Tako da nije sporije korititi geter unesto direktnog pristupa promenljivoj
+Ako hocemo npr konstantu Pi, morsmo da ukljucimo <cmath>  i onds je njen makro M_PI, ali to na nekim prevodiocima nije dovoljno i zalice se kako M_PI nije vidljiv, vec pre(?) tog includa mora da se doda #define _USE_MATH_DEFINES
+
+Virtual kljucna rec u baznoj klasi kaze zapravo da ce se taj metod vezivati dinamicki. Po defaultu je svo vezivanje u cpp staticko zbog efikasnosi, za razliku od npr jave gde je dinamicko, tj po defsultu u cpp nece se desavati onaj polimorfizam na koji smo navikli u javi
+Override sluzi samo za nas da slucajno ne predefinisemo pogresnu funkciju, ako ga izistavimo  a dobar metod smo predefinisali, i dslje ce sve raditi kako treba
+Kada radimo dinamicko vezivanje, to mozemo samo i iskljucivo preko referenci i pokazivaca, tj ne smemo objekte za koje hocemo ovo da radimo prenositi po vrednosti u funkcije jer se onda kopira samo deo koji pripads tom konkretnom tipu objekta a ne i dodatne stvari koje on npr nasledjuje
+
+Konstruktor kopije ne moze biti virtualan(?) 
+
+U cpp nemamo abstract kljucnu rec, ali ako zelimo da sprecimo da se klasa instancira, dovoljno je da za njene metode navedemo da tu nemaju definiciju. To radimo sa = 0
+
+Moramo da obrstimo oaznju na to da se i destruktori vezuju staticki, tj mozda delete nekada nece raditi ono sto ocekujemo
+Mozemo destruktor bazne klase staviti ds bude virtual
+----------------
+Cas4
+--------------
+= delete za funkciju kaze da mi ne zelimo da se taj metod igde koristi niti da se igde implementira
+
+------
+Cas 7
+--------
+<iomanip> zaglavlje gde su manipulatori za tokove podataka, tipa setw(n) koji naredni podatak ispisuje u sirini od n karaktera itd

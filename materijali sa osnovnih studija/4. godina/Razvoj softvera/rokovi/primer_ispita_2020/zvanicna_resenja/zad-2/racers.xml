@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<racers type="QVariantList">
+    <racer type="QVariantMap">
+        <name type="QString">Ghost</name>
+        <speed type="uint">7</speed>
+        <percent type="double">0.0</percent>
+    </racer>
+    <racer type="QVariantMap">
+        <name type="QString">Blitz</name>
+        <speed type="uint">8</speed>
+        <percent type="double">0.0</percent>
+    </racer>
+    <racer type="QVariantMap">
+        <name type="QString">Athene</name>
+        <speed type="uint">7</speed>
+        <percent type="double">0.0</percent>
+    </racer>
+    <racer type="QVariantMap">
+        <name type="QString">Quicksilver</name>
+        <speed type="uint">9</speed>
+        <percent type="double">0.0</percent>
+    </racer>
+</racers>

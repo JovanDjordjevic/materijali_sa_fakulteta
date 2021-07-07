@@ -1,0 +1,45 @@
+- complex
+    - std::complex<> tip (upotreba npr std::complex<double>)
+
+- utility
+    - std::pair
+
+- numeric
+    - std::accumulate
+
+- functional
+    - std::bind()
+
+- stdexcept
+    - definisani neki exceptioni npr"
+    - std::invalid_arguemnt
+
+- memory
+    - ovde su shared i unique pointer
+    - std::make_shared<tip>( arg konstruktora za tip )
+    - std::make_unique<tip>( arg konstruktora za tip)
+    - p.use_cout()   - ako je p shared pointer
+
+- algorithm
+    ugradjeni algoritmi: 
+    - std::copy
+    - std::equal
+    - std::sort
+    - std::transform
+    - std::find_if_not
+    - std::find_if
+    - std::stable_partition
+    - std::rotate
+    - std::inner_product
+
+- ierator
+    - std::istream_iterator<tip_koji_se_ucitava>(tok)
+    - std::ostream_iterator<tip_koji_se_ucitava>(tok, "separator")
+    - std::back_inserter(gde)  -> vidi u 7_vezbe/01_iteratori zasto se koristi 
+
+- catch2 provere
+    - za TDD:
+        - REQUIRE(), REQUIRE_FALSE(), REQUIRE_NONTHROW(), REQUIRE_THROWS(), REQUIRE_THROWS_AS( , koji_izuzetak)    
+        - CHECK(), CHECK_FALSE(), CHECK_NONTHROW(), CHECK_THROWS(), CHECK_THROWS_AS( , koji_izuzetak)
+    - za BDD:
+        - SCENARIO, GIVEN, WHEN, THEN, AND_GIVEN, AND_WHEN и AND_THEN

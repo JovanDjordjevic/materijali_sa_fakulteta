@@ -1,0 +1,180 @@
+---------------------------------------------------------------------
+1. PRIMER:
+---------------------------------------------------------------------
+Pokusavamo da napravimo staticku biblioteku od list.cpp, list.hpp, fraction.cpp i fraction.hpp
+Mana statickih biblioteka je sto su bukvalno samo ubacene u nas kod, samim tim, ako se biblioteka nekako izmeni, to ve zahtevati ponovno prevodjenje programa
+Prvo treba napravtiti objektne fajlove:  (opcija -c za g++ je da se stane sa prevodjenjem kada se dobiju .o fajlovi)
+    g++ -std=c++17 -c fraction.cpp 
+    g++ -std=c++17 -c list.cpp 
+
+Na linuxu, imamo alat 'ar', za pravljenje biblioteke (zovu se i arhive). (konvecija je da se biblioteke na linuksu
+nazivaju ovako:  lib____.a) Koristi se ovako:
+    ar -argumenti ime_nase_biblioteke [lista_.o_fajlova_koji_ucestvuju_u_biblioteci]
+    npr:
+    ar -crs libmatf.a fraction.o fraction.cpp  
+
+-crs je zapravo -c -r -s,
+    -c kaze da zelimo da napravimo arhivu
+    -r kaze da se objektni fajlovi koje prosledimo ubace u tu biblioteku
+    -s kaze da se naprave neki indeksi/metainformacije o arhivi, npr kojim redosledom se nasi fajlovi nalaze u biliboteci itd
+
+Ovim smo dobili libmatf.a biblioteku, a objektni fajlovi nam vise nusu potrebni (on je u primeru napravio folder lib u koji je smestio tu biblioteku)
+
+Da bismo ovu biblioteku povezali sa nasim programom programom, treba prvo napraviti i od main fajla .o fajl
+    g++ -std=c++17 -c main.cpp
+Sada je potrebno linkovati sa nasom bibliotekom. Pozivamo linker (ovaj put je to isto g++):
+(-o je da se promeni naziv izvrsnog fajla. Ranije, na P1 videli smo da nam je potrebno da dodamo flag -lm ako hocemo da koristimo math.h.
+To je zapravo -lime_biblioteke koju linkujemo sa nasim .o fajlom. Posto se nasa nova biblioteka zove libmatf.a, mi u poziv linkera dodajemo -lmatf
+Po defaultu, vec postoje neke putanje koje linker pretrazuje za dodavanje biblioteka, npr na linuxu usr/lib... ,ali posto je nasa  biblioteka u ./lib, potrebno je
+da navedemo da se pretarazi i ta putanja. za to se koristi flag -L)
+    g++ -o static_app main.o -lmatf -L./lib
+
+NOTE: g++ zapravo nije komapjler u uzem smislu kao sto smo rekli na P1. On je zapravo program koji poziva razne druge programe
+koji sluze u prevodjenju i kontrolise njihov rad. Neki od njih su:
+cpp-E, cc1plus, as, ld. ld je zapravo linker. Ako bismo umesto linije iznad pisali: ld -o static_app main.o -lmatf -L./lib tj direktno pokusali
+da pozovemo linker, izbacio bi neke greske (?)
+
+Ovim smo dobili izvrsni program u koji smo ubacili nasu novu staticku biblioteku
+
+Na linuxu imamo i jedan koristan alat, 'nm'. On sluzi za izlistavanje svih simbola kojis e koriste za linkovanje za .o fajl koji mu prosledimo
+    nm fraction.o
+Prva kolona je adresa simbola (gde se on nalazi u .o fajlu)
+Druga kolona je tip simbola:
+    u - taj simbol nije definisan u ovom .o fajlu, vec je to neki eksterniu simbol  
+    t - ovaj simbol jeste definisan u okviru ovog .o fajla
+    U - isto kao u samo sto je globalno vidljiv simbol (malo slovo je privatno vidljiv simbol)
+    T - isto kao t samo sto je globalno vidljiv simbol (malo slovo je privatno vidljiv simbol)
+Treca kolona je ime konkretnog simbola (ova imena kompilator sam generise). Primetimo da ova imena mogu biti razlicita u zavisnosti od toga koji 
+kompajler koristimo. Ako zelimo imena u citljivom formatu, mozemo dodati argument -C:
+    nm -C fraction.o
+Imamo jos neke flagove:
+    -g - priakzuje samo globalne simbole
+    -A - izlistace i naziv objketne datoteke kao dodatnu kolonu
+    -l - dodatna kolona gde pise u kom fajlu i liniji se neki simbol nalazi (primetimo da za neke simbole nemamo ovu informaciju, To  je zato sto
+         tokom prevodjena fraction.cpp nismo naveli flag -g (g++ -c fraction.cpp -g). Taj flag sluzi za debagovanje, tj upisuju se neke dodatne informacije u .o fajl, izmedju ostalog i 
+         ovo za -l flag)
+
+
+---------------------------------------------------------------------
+2. PRIMER:
+---------------------------------------------------------------------
+Hoceom da napravimo dinamicku biblioteku od list.cpp, list.hpp, fraction.cpp, fraction.hpp(ovde konkretno deljena bilioteka). 
+Konvecija za imenovanje ovakvih biblioteka na linuxu je lib____.so, na windosu su to .dll (ali ima i par finesa, pogledaj 
+linkove koje su dali za literaturu za ovaj cas)
+Kada se dinamicka biblioteka ubaci u nas program, njen izvorni kod zapravo nije tu, vec se kada se program ucita u memoriju, pretrazuje sistem
+da bi se nasli simboli iz te biblioteke (?)
+Prednost u odnosu na staticke biblioteke je sto ne zahtevaju ponovno prevodjenje, ali obavezno moramo imati tu .so biblioteku na sistemu
+da bi mogla da se pretrazi tokok izrsavanja (sto nismo morali da imamo u statickom slucaju)
+
+Proces prevodjenja je slican kao za staticku. Prvo pravimo objektne fajlove, ali moramo dodatno da kompajleru prosledimo 
+argument -fPIC (PIC skraceno od Position Independant Code) zato sto zbog nacina rada dinamickih biblioteka, se sve do trenutka izvrsavanja
+(tj do pozivanja dinamickog linkera) ne zna gde ce kod iz biblioteke biti ucitan, tj radice se sa relativnim putanjama a ne apsolutnim
+    g++ -std=c++17 -fPIC -c fraction.cpp 
+    g++ -std=c++17 -fPIC -c list.cpp 
+
+Ovaj put ne pravimo arhivu kao prosli put vec pozivamo g++ sa opcijom -shared da bi on znao da pravimo dinamicku biblioteku i prosledimo 
+-o naziv nase biblioteke i listu objektnih fajlova od kojih se ona pravi:
+    g++ -shared -o libmatf.so list.o fraction.o
+
+Nadalje nam vise nisu potrebni list.o i fraction.o pa mozemo da ih izbrisemo. (U primeru je opet napravio lib folder u koji je stavio nasu biblioteku)
+Treba nam main.o:
+    g++ -std=c++17 -c main.cpp
+
+I sada povezujemo to sa nasom dinamickom bibliotekom (isti poziv kao sto smo imali za staticku biblioteku)
+    g++ -o shared_app main.o -L./lib -lmatf
+
+Primetimo da ako sada probamo da pokrenemo ./shared_app, dobicemo gresku da loader (loader je program koji se prvo poziva kada
+pokrecemo program koji ucitava sve potrebne stvati u memoriju) nije uspeo da pronadje nasu deljenu biblioteku.
+Na linuxu imamo alat 'ldd' koji ce za nasu aplikaciju ispisati od kojih dinamickih aplikacija zavisi:
+    ldd shared_app
+U ovoj listi videcemo da pise: libmatf.so => not found iako smo u prevodjenju prosledili -L./lib -lmatf. To je zato jer linuks (?) 
+trazi da se i pri pokretanju navede putanja. Jedan ancin da pretrazimo fajl je da koristimo 'ldconfig' alat.
+Na specijalnoj putanji na linuksu: /etc/ld.so.conf.d/ videcemo neke .conf fajlove, oni definisu putanje do razlicitih .so datoteka. 
+Npr ako uradimo: cat /etc/ld.so.conf.d/libc.conf   ispisace nam se:
+    #libc default configuration
+    /usr/local/lib
+Dakle ovde su neke putanje koje se automatski pretraze kada je potrebna neka dinamicka biblioteka
+Ako mi sada npr smestimo nas libmatf.so u /usr/local/lib   i onda nakon toga uradimo komandu:
+    sudo ldconfig      (mora sudo jer su nam za ovo ptorebna admin prava, sito mora i sudo kopiranje nase biblioteke u onaj folder)
+
+I onda opet uradimo:  ldd shared_app   sada cemo videti putanju do libmatf.so    i nas program ce moci da se pokreneme normalno
+
+Alternativno, umesto ubacivanja u onaj folder, mogli smo i da napravimo mi novu neku .conf datoteku u kojoj ce biti 
+sadrzana putanja do fodlera sa nasim bibliotekama 
+
+Jos jedan nacin da se ovo uradi je da se u promenljivu okruzenja(to su specijalne promenljive koje moze da cita i postavlja
+bilo koji proces na sistemu ) LD_LIBRARY_PATH doda putanja do nase biblioteke. To se radi ovako:
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./lib
+NOTE: kada radimo sa promenljivama okruzenja, ne treba da stavljamo samo = da slucajno nebi pregazili onos to se u njima vec nalazi, vec
+treba uzeti trenutnu vrednosti (sa $) i nadovezati ono sto hocemo (sa :)
+preko export moze i da se napravi nova promenljiva okruzenja, npr:   export TEST="test"
+
+Dakle ideja je da nase dinamicke biblioteke ne budu u nekom lokalnom folderu, vec da budu isntalirane na sistemu
+
+U materijalima koji su okaceni, nas program se ne pokrece direktno sa sa ./shared_ap vec imamo shell script run.sh koji prvo postavi promenljivu
+okruzenja sa konandom iznad a onda taj script pokrene nas program. script pokrecemo sa ./run.sh
+
+---------------------------------------------------------------------
+3. PRIMER:
+---------------------------------------------------------------------
+pravimo dinamicku plug-in biblioteku. Primetimo da se nas izvorni kod ovde dosta razlikuje od proslih primera
+Komplilacija pluginova je potpuno identicna kao za deljenu biblioteku, sa sve ovim -fPIC i -shared
+Razlika je samo u linkovanu. Necemo pisati: g++ -o nas_plugin main.o -L./lib -lmatf   nego:
+    g++ -o nas_plugin main.o -ldl
+
+Linkujemo sa ovom dl bibliotekom (?) zato sto su tu implementirani oni sistemski pozivi dlopen, dlerror, dlclose itd.
+Pri kompilaciji i linkovanju, nas_plugin nema pojam o nasoj dinamickoj biblioteci, vec tek kada se ucita u memoriju i kada se pozove dlopen
+onda ce ona od dinamickog loadera da trazi da se biblitoeka ucita u memoriju
+
+---------------------------------------------------------------------
+4. PRIMER:
+---------------------------------------------------------------------
+demonstriramo rad cmake buuild alata. Ideja ovakvih alata je da se nekim njemu poznatim jezikom apstraktno opise proces prevodjenja
+i da on onda to prevodjenje odradi za nas, tako da moze da se prevede i na drugim OS itd
+cmake koristi CMakeLists.txt datoeke, i one moraju bas tako da se zovu i u njih se pise opis. 
+NOTE: za sve sto treba da se prevede posebno, moramo da imamo posevban CMakeLists.txt, npr ako hocemo da napravimo dve biblitoeke, treba nam 
+dva cmake fajla (?)
+Prvodimo program sa:
+    cmake pitanja_do_CMakeLists.txt
+a build ce se napraviti u folderu u kom smo bili pozicionirani kada samo pokrenuli cmake. Rezutlat cmake-a je makefile 
+
+---------primer CMakeLists.txt is 04-cmake/thirdparty kojim poravimo bibioteku (ovaj je pojednostavljen i nije u zvanicnim materijalima)------------
+
+cmake_minimum_required(VERSION 3.10)    - Prvo mora da se navede verzija koja se koristi, kompilacija ce puci ako je nasa verzija cmake manja od navedene
+project(stb_image)                      - postavlja se naziv naseg projekta (ovo ce automatski azurirati neku specijalnu promenljivu ${PROJECT_NAME})
+include_directories(include/)           - psotavljamo direktorijume sa zaglavljima koja treba da se ucitaju
+add_library(${PROJECT_NAME} STATIC source/stb_image.cpp source/stv_image_write.cpp)   -ovako rpavimo biblioteku.Navodimo ime projekta, tip biblioteke
+                                                                                      (za ans staticka npr, moze i SHARED)  list falova od kojih ona zavisi. Ovo je cmake-u dovoljno da 
+                                                                                      zna kako da napravi biblioteku
+
+
+-----------CMakeLists.txt iz zvcanicnih  materijala:-------------
+
+cmake_minimum_required(VERSION 3.10)          - Prvo mora da se navede verzija koja se koristi, kompilacija ce puci ako je nasa verzija cmake manja od navedene
+project(app)                                  - postavlja se naziv naseg projekta (ovo ce automatski azurirati neku specijalnu promenljivu ${PROJECT_NAME})
+
+include_directories(thirdparty/include/)      - psotavljamo direktorijume sa zaglavljima koja treba da se ucitaju
+include_directories(include/)
+
+add_subdirectory(resources/)       - posto hocmeo da se prvo napravi nasa biblitoeka stb_imag da bismo je linkovali, tj prvo ce se izvrsiti CMakeLists.txt iz ovog direktorijuma 
+add_subdirectory(thirdparty/)
+
+set(APP_INCLUDES include/FileNotFoundException.h    - cmake nam daje da napravimo promenljive koje ce sadrzati odredjene fajlove, APP_INCLUDES ce biti ime nase promenljive, e
+                 include/Image.h)                     a ostalo navedeno je lista fajlova koji ce biti u toj promneljivoj
+
+set(APP_SOURCES  src/app.cpp
+                 src/FileNotFoundException.cpp
+                 src/Image.cpp)
+
+add_executable(${PROJECT_NAME} ${APP_SOURCES} ${APP_INCLUDES})  - generisemo aplikaciju (naziv_projekta, svi fajlovi od kojih projekat zavisi, posto smo ih stavili u promenljive
+                                                                  sadrzaj tih promenljivih ce se samo upisati ovde (mogli smo i bez promenljivih))
+
+target_link_libraries(${PROJECT_NAME} stb_image)                - kazemo da nasa apliakcija zavisi od biblioteke stb_image koju smo napravili
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)   - navodimo da za nas projekat hocemo da koristimo c++17
+
+if (UNIX AND NOT APPLE)
+	set(CMAKE_CXX_STANDARD_LIBRARIES "-std=c++17 -lstdc++fs")
+endif()
+
+install (TARGETS ${PROJECT_NAME} DESTINATION bin)

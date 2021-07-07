@@ -1,0 +1,22 @@
+#note: da bi cl kompilator i nmake radili iz bilo kog cmd-a a ne samo iz developer cmd, potrebno je 
+putanje u kojima se nalaze cl.exe i nmake.exe dodati u PATH 
+
+Makefile i kako se sta tu koristi vidi u 01_cisti_pokazivaci/makefile
+Na trecim vezbama imamo primere kako da pravimo makefile-ove sa vise cpp/hpp fajlova
+
+CL:
+usage: cl [ option... ] filename... [ /link linkoption... ]  
+
+kompilator cl ima par dodatnih opcija:
+/EHsc   -to je flag koji dodaje podrsku za c++ izuzetke i bilo bi dobro da svakiput ukljucimo (?)   (usage cl /EHsc ...)
+/std:c++17   -ovako na windowsu zadajemo verziju
+/out:ime.exe  -ovako zadajemo ime exe fajla koji se napravi
+
+NMAKE:
+koristi se tako sto se pozicioniramo u folder u kome  se nalazimo i samo iz
+terminala pozovemo komandu:
+nmake
+
+.PHONY funkcije pozivamo konandom:
+nmake ime_funkcije
+

@@ -1,0 +1,63 @@
+
+1. CppUnit se preuzme sa neke od lokacija:
+	- verzija 1.13.2 sa:
+		http://www.freedesktop.org/wiki/Software/cppunit
+		
+2. Raspakuje se
+
+3. Na WIN platformi:
+	- u datoteci cppunit/include/TestAssert.h se kod:
+			#ifdef __STDC_SECURE_LIB__ // Use secure version with visual studio 2005 to avoid warning.
+				sprintf_s(buffer, sizeof(buffer), "%.*g", precision, x); 
+			#else	
+				sprintf(buffer, "%.*g", precision, x); 
+			#endif
+
+	  zameni sa:
+			sprintf(buffer, "%.*g", precision, x); 
+	  
+	- otvori se MSYS i prevodjenje se izvodi odatle
+
+4. Prevede se sa:
+	Unix:
+		cd cppunit
+		./autogen.sh
+		./configure
+		make
+		make install
+		
+	Windows:
+		cd cppunit
+		./configure
+		make
+
+5. Instalacija za MINGW
+	- direktorijum cppunit/include/cppunit
+		se iskopira u mingw/include/c++/v.../cppunit
+	- izgradjena biblioteka cppunit/src/cppunit/.libs/libcppunit.a
+		se iskopira u mingw/lib
+
+6. Proba:
+		#include <iostream>
+		#include <cppunit/ui/text/TestRunner.h>
+		#include <cppunit/CompilerOutputter.h>
+		#include <cppunit/TestFixture.h>
+		#include <cppunit/extensions/HelperMacros.h>
+
+		int main() {
+			CppUnit::Test* suite = CppUnit::TestFactoryRegistry::getRegistry().makeTest();
+
+			CppUnit::TextUi::TestRunner runner;
+			runner.addTest(suite);
+			runner.setOutputter(new CppUnit::CompilerOutputter(&runner.result(), std::cerr));
+
+			return runner.run() ? 0 : 1;
+		}
+
+	pri prevodjenju se navodi biblioteka:
+		g++ test.cpp -lcppunit
+		
+		
+NETBEANS:
+
+	http://programmersforum.ru/showthread.php?t=225824

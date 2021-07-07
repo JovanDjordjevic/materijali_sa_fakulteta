@@ -1,0 +1,13 @@
+{
+    "name" : "Pera",
+    "surname" : "Peric",
+    "index" : "123/2017",
+    "pno" : "1234567890",
+    "enrolled" : true,
+    "courseItems" :
+    [
+        { "name" : "P1", "espb" : 8},
+        { "name" : "P2", "espb" : 6},
+        { "name" : "AiSP", "espb" : 8}
+    ]
+}

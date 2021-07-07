@@ -1,0 +1,26 @@
+[
+    {
+    "name": "SuperHorsey",
+    "numberOfRaces": 10,
+    "numberOfVictories": 5,
+    "averageTime": 1000
+    },
+    {
+    "name": "LucyInTheSky",
+    "numberOfRaces": 20,
+    "numberOfVictories": 2,
+    "averageTime": 4500
+    },
+    {
+    "name": "SuperMoose",
+    "numberOfRaces": 10,
+    "numberOfVictories": 9,
+    "averageTime": 1500
+    },
+    {
+    "name": "TimTheEnchanter",
+    "numberOfRaces": 50,
+    "numberOfVictories": 40,
+    "averageTime": 2000
+    },
+]

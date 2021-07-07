@@ -1,0 +1,1 @@
+Nije uradjen ovaj zadatak do kraja - nedostaju testovi za kodiranje jednog velikog slova i jedne cifre. O tome smo pricali na konsultacijama, pa pogledajte video za vise detalja (mada je implementacija identicna kao za kodiranje jednog malog slova) i pokusajte da uradite samostalno. 

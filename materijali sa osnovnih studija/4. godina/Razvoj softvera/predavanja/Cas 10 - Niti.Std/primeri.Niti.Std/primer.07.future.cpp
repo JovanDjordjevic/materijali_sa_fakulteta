@@ -1,0 +1,1 @@
+#include <iostream>#include <thread>#include <future>using namespace std;int nestoBezveze( int n ){	this_thread::sleep_for( chrono::seconds(5));	return n+100;}int main(int argc, char **argv){	future<int> rezultat = async( nestoBezveze,5 );	cout << "cekamo..." << endl;	cout << rezultat.get() << endl;	    return 0;}
