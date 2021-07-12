@@ -1,0 +1,18 @@
+ideja je sledece: nas program(agent) se nalazi u nekom okruzenju. On posmatrajuci okruzenje vidi da moze da uradi odredjene
+korake/poteze/i slicno (skup stvari koje moze da uradi je ogranicen okruzenjem). Nakon toga se svaki moguci potez 
+evaluira i ako je dobar dobija neku nagradu. Agent se trudi da tu nagradu maksimizuje. I tako u krug
+
+polisa - nacin/politika na koji agnet donosi sledeci izbor (moze biti nesto hardcodirano, moze biti neuronska mreza itd..)
+stohasticka polisa - polisa koja ima elemente nasumicnosti( dakle ne moraju sve polise biti deterministicke)
+
+jedan od izazova je da se agent stavi u neko reprezentativno okruzenje. Na ovom kursu drzacemo se nekih jednostavnih
+Neka ta okruzenja imamo vec gotova u biblioteci OpenAI Gym  (gym.openai.com)  (pip install -upgrade gym)
+
+mi cemo koristiti okrzenje CartPole-v1, gde nas agent ima izbor da neko postolje pomera levo ili desno sa ciljem
+da balansira neku sipku koja se na njemu nalazi
+
+za renderovanje stanja trebace nam pomocna biblioteka libglu1-mesa (ovo izgleda nema za windows da se instalira lakao kao 
+on na vezbama za linux: sudo apt-get install libglu1-mesa)
+(nisam razumeo najbolje da li je ova biblioteka potrebna da bi gym radio ili sta vec, mozda je kod mene libglu vec bio
+instaliran posto uspevam bez problema da importujem gym)
+

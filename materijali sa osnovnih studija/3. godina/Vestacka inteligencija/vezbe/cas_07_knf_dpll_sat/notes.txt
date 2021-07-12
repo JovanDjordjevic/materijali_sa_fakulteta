@@ -1,0 +1,39 @@
+IMPORTANT: ne mogu da nateram minisat da proradi na windowsu tako da koristim online verziju:
+http://logicrunch.it.uu.se:4096/~wv/minisat/
+
+danas radimo sledece:
+    uzmemo neki problem
+    napravimo CNF (konjuktivnu normalnu formu)
+    pretvorimo to u ulaz koji odgovara minisat solveru (dimacs format)
+    pokrecemo minisat
+    izracunamo i prikazemo rezultat
+
+dimacs format je ovakav:
+
+P F X Y           # ovo je prvi red. P je problem, F je forma u kojo se problem nalazi, X je broj promenljivih, Y je broj klauzula
+    npr: p cnf 3 2  #problem p u CNF, 3 promenljive 2 klauzule
+
+u dimacs formatu promenljive se oznacavaju sa 1,2,3... (npr ako imamo 5 vice 1,2,3,4,5)
+u dimacs fromatu negirane promenljive samo imaju minus ispred, npr -3
+
+primer formule (za p cnf 3 2):
+2 -3 0
+-1 2 -3 0
+
+svaki red je po jedna klauzula i svaka klauzula se zavrsava sa 0, ova dva reda odgovaraju ovom cnf:
+(p2 | ~p3) & (~p1 | p2 | ~p3)
+
+
+znaci kompletan primer programa bi bio:
+p cnf 3 2
+2 -3 0
+-1 2 -3 0
+
+minisat ovo resava DPLL procedurom
+
+Ako treba minisat da pokrenemo iz terminala, prvo u neki fajl napisemo nas problem(u obliku iznad)
+iz terminala pokrecemo komandu:
+
+    minisat input_file.cnf result_file
+
+input file je onaj koji smo napravili sa ekstenzijom cnf, a u result file ce biti upisan rezultat

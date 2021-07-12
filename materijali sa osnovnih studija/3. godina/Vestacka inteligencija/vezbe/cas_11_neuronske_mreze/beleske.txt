@@ -1,0 +1,10 @@
+Generalno proces kojim se neuronska mreza trenira:
+
+1) imamo neke podatke
+2) podatke prosledimo u model i onda model azurira koeficijente
+3) trazimo da model predvidi vrednost
+4) izracunamo tacnost na skupu za testiranje
+5) ovi koraci se vrte u krug dok ili ne svedemo loss na onoliko koliko zelimo ili dok ne prodje broj epoha koje smo zadali
+
+
+Na vezbama je radio preko google colab

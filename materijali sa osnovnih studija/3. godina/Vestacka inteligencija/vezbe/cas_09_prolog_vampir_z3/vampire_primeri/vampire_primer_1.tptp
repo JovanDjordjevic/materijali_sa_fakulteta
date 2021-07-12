@@ -1,0 +1,19 @@
+% Dve nemimoilazne prave se seku ili su paralelene.
+% Prave koje se seku leže u istoj ravni.
+% Prave koje su paralelene leže u istoj ravni.
+% Dve nemimoilazne prave leže u istoj ravni.
+
+% prve tri recenice ce nam biti aksiome, a poslednja ce biti conjecture, tj nju proveravamo da li ce vaziti
+% oznacavamo predikate isto kao u primeru sa proslog casa, konkretno u solveru mi uopste ne morao da znamo znacenje nekog predikata
+
+% vampire u pozadini radi "pretpostavimo suprotno" tj radi tako sto negaciju nase konjekture pokusa da doda u nas skup 
+% aksioma i pravila i onda proverava da li je taj novodobijeni skup formula nezadovoljiv.
+% Ako je skup sada nezadovoljiv onda konjektura sledi iz aksioma, tj moze da se izvede u suprotnom ne moze da se izvede iz aksioma
+
+% kada uspe da se dokaze, u terminalu cemo na vrhu imati ispis: Refutation found
+
+fof(a1, axiom, ![X,Y]:(m(X,Y) => (s(X,Y) | p(X,Y))) ).
+fof(a2, axiom, ![X,Y]:(s(X,Y) => r(X,Y) ) ).
+fof(a2, axiom, ![X,Y]:(p(X,Y) => r(X,Y) ) ).
+
+fof(c1, conjecture, ![X,Y]:(m(X,Y) => r(X,Y)))

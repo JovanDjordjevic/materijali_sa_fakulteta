@@ -1,0 +1,18 @@
+ne radimo ovaj tip zadataka ove godine, ali npr evo kako bi bilo u dimacs formatu
+
+(p ⇒ ¬q) ∧ (¬p ∨ r) ∧ (q ⇒ r) ∧ (r ⇒ q) ∧ (q ∨ r) ∧ (q ⇒ ¬r)
+
+menjamo => sa disjunkcijom
+
+(-p | -q) & (-p | r) & (-q | r) & (-r | q) & (q | r) & (-q | -r)
+
+1 je p, 2 je q, 3 je radimo
+minisat za ovo kaze da nije zadovoljivo (ako sam dobro uradio)
+
+p cnf 3 6
+-1 -2 0
+-1 3 0
+-2 3 0
+-3 2 0
+2 3 0
+-2 -3 0

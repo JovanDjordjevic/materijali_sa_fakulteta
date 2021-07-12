@@ -1,0 +1,32 @@
+za ovu oblast pozeljno je da koristimo virtuelno okruzenje za pajton umesto da instaliramo sve biblioteke globalno
+ovo nam daje vecu kontrolu nad bibliotekama i sprecavacemo lakse konflikte i neke ceste bagove
+
+pozicioniramo se u folder koji zelimo i iz terminala pokrecemo:
+    python -m venv venv        (na vezbama je radio python3 -m venv venv)
+    
+ovo pravi venv folder
+virtuelno okruzenje pokrecemo iz terminala komandom:
+    source venv/bin/activate          (ovo je uradio na vezbama na linuxu)
+    (na windowsu se kuca bez source:
+        venv\Scripts\activate
+    )
+
+Sada u terminalu stoji (venv) da nas obavesti da smo u virtuelnom okruzenju
+Da bismo iskljucili okrzuenje, u terminalu samo kucamo:
+    deactivate
+
+
+NOTE: meni na windowsu ovo NIJE radilo iz VS Code terminala, vec sam  morao bas da otvaram  CMD
+NOTE: na kraju nisam ni radio sa venv zato sto imam vec globalno sve potrebne biblioteke bez konflikta
+
+
+na vezbama smo ovde dodali neke biblioteke:
+    pip install numpy pandas jupyterlab matplotlib scikit-learn
+
+
+umesto da radimo sa venv/nasim globalno instaliranim bibliotekama, mozemo koristiti google collab
+to su kao jupyter sveske gde mozemo da radimo sa ovim bibliotekama na nekom hardveru na cloudu
+
+Ono sto mi generalno radimo na vezbama nece biti previse komplikovano, i izvrsavace se za par sekundi. Za neke vece projekte
+gde treniramo model po nekoliko sati/dana/meseci, google collab nije pogodan jer ne dozvoljava da se beskonacno dugo izvrsava nas program
+

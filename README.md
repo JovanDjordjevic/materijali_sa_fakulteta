@@ -17,6 +17,7 @@ Moji materijali sa fakulteta
 		- Racunarska grafika
 		- Relacione baze podataka
 		- Uvod u numericku matematiku
+		- Vestacka inteligencija
 	* ### Cetvrta godina godina<br>
 		- Funkcionalno programiranje
 		- Osnove matematickog modeliranja

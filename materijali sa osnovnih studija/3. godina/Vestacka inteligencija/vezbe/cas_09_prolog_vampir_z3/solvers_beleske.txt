@@ -1,0 +1,31 @@
+na ovom casu radimo sa razlicitm resavacima. Vampire, prolog i z3
+sao cemo one recenice sa proslog casa zapisivati u formatu koji zele ovi resavaci
+
+
+VAMPIRE:
+    datoteke su sa ekstenzijom .tptp (komenatri pocinju sa %)
+
+    svaka formula pise se u obliku:   fof(name, uloga, sama_formula).       (tacka na kraju)
+    fof - znaci first order proposition
+    name - neko ime za nasu formulu
+    uloga - moze biti axiom (neka pravila koja znamo da vaze)
+                  ili conjecture (ono za sta se pitamo da li je tacno na osnovu aksioma)
+            (ima jos uloga, npr lemma, hypothesis itd... ali za nas nisu potrebni)
+    sama_formula - zapis nase formule. operatori koje koristimo su oni standardni bitvski (~, &, |, =>, <=> )
+                   imamo i kvantifikatore:  ! - za svaki    ? - postoji
+
+    Kada koristimo kvantifikatore obavezno moramo ovako sintaksu:  k[promenljive]:(predikat)   ne smemo zagrade da zaboravimo
+    npr:  ![X,Y]:()
+
+    vampire izgleda ne postoji za windows. Na vezbama je korisceno tako sto se vampire izvrsni fajls tavi u isti folder sa .tptp 
+    i pokrene se iz terminala komandom:
+            ./vampire primer.tptp
+
+
+PROLOG:
+    obicno radimo tako sto u nekom .pro (ili .pl(?)) fajlu napisemo nas skup cinjenica, a onda iz interaktivnog terminala to ucitamo
+    ucitavamo sa [ime_fajla].   ne treba nam ekstenzija
+
+
+Z3:
+    koristimo ga u okviru pajtona nakon sto smo skinuli tu biblioteku

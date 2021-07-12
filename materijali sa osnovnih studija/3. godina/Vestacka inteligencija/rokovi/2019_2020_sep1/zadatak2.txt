@@ -1,0 +1,57 @@
+[(¬a ∨ ¬b) ∧ (b ∨ ¬a)] ⇒ a
+
+prvo transformisemo u cnf pa u dimacs da bi moglo da udje u minisat
+
+¬[(¬a ∨ ¬b) ∧ (b ∨ ¬a)] ∨ a
+¬(¬a ∨ ¬b) ∨ ¬(b ∨ ¬a) ∨ a
+(a ∧ b) ∨ (-b ∧ a) ∨ a
+
+(a ∧ b) ∨ (-b ∧ a) ∨ (a ∧ T)
+x1   y1    x2   y2    x3   y3     => n=3, treba taransformacijom da dobijemo 2^n = 8 klauzula
+
+(x1 ∨ x2 ∨ x3) ∧ (y1 ∨ x2 ∨ x3) ∧ (x1 ∨ y2 ∨ x3) ∧ (x1 ∨ x2 ∨ y3) 
+∧ (y1 ∨ y2 ∨ x3) ∧ ( y1 ∨ x2 ∨ y3) ∧ (x1 ∨ y2 ∨ y3) ∧ (y1 ∨ y2 ∨ y3)
+
+(a ∨ -b ∨ a) ∧ (b ∨ -b ∨ a) ∧ (a ∨ a ∨ a) ∧ (a ∨ -b V T)
+∧ (b ∨ a ∨ a) ∧ (b ∨ -b ∨ T) ∧ (b ∨ a ∨ a) ∧ (b ∨ a ∨ T)   # negde sam izmeao redosled ovde u odnosu na redosled klauzula iz proslog reda ali dobro je
+
+# redukujemo sta mozemo
+(a ∨ -b) ∧ (T ∨ a) ∧ (a) ∧ (T)
+∧ (b ∨ a) ∧ (T) ∧ (b ∨ a) ∧ (T)
+
+(a ∨ -b) ∧ (a) ∧ (b ∨ a)
+
+dimacs:
+p cnf 2 3
+1 -2 0
+1 0
+2 1 0
+
+# jedno resenje je 1 -2 0  tj a=T b=N
+ubacimo ga negirano kao dodatnu klauzulu nas cnf
+
+(a ∨ -b) ∧ (a) ∧ (b ∨ a) ∧ -(a ∧ -b)
+(a ∨ -b) ∧ (a) ∧ (b ∨ a) ∧ (-a ∨ b)
+
+dimacs:
+p cnf 2 4
+1 -2 0
+1 0
+2 1 0
+-1 2 0
+
+# jos jedno resenje 1 2 0 tj a=T b=taransformacijom
+# opet isti postupak
+
+(a ∨ -b) ∧ (a) ∧ (b ∨ a) ∧ -(a ∧ b)
+(a ∨ -b) ∧ (a) ∧ (b ∨ a) ∧ (-a ∨ -b)
+
+dimacs:
+p cnf 2 4
+1 -2 0
+1 0
+2 1 0
+-1 2 0
+-1 -2 0
+
+# ovo je sad nezadovoljivo tako da nema vise resenja
