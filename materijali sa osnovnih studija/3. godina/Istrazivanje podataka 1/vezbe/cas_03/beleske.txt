@@ -1,0 +1,30 @@
+klasifikacija i regresija su slicna stvar.
+Razlika je sledeca: ako je ciljna promenljiva kategoricka, 
+onda je u pitanju klasifikacija, a ako je numericka onda je u pitanju regresija
+
+
+U drvetu odlucivanja hocemo da nasi cvorovi budu sto cistiji, tj da sto bolje
+predvidjaju klasu. Imamo razlicite mere za necistocu, generalno se koriste ove 3:
+- ginijev indeks
+- entropija
+- greska klasifikacije
+u formulama na slajdvima p(j|t) znaci: ako smo u cvoru t, koja je 
+verovatnoca da je u pitanju instanca klase j?
+Tumacenje grafika sa slajdova je sledece(razmatramo bianrnu klasifikaciju): 
+najnecistije je kada je verovatnoca za obe klase =0.5, tada su sve tri 
+ove mere maksimalne. U 0 ili 1 nemamo necistocu u odlucivanju i zato su mere = 0
+
+
+U slajdu za dobit, pod I se misli na neku(koju god odaberemo) od one 3 mere ze necistocu,
+N(vj) je broj elemenata u tom nekom cvoru koji pripada klasi j, N je ukupan br elemenata
+
+
+Stabla odlucivanja u SPSS-u radimo sa C5.0 cvorom
+
+Ponekada se moze desiti da je cena neke greske pri klasifikaciji bas velika (npr, ako bismo neku
+biljku koja je otrovna klasifikovali kao da nije otrovna. 
+U okvicu C5.0 cvora, odeljak Costs, mozemo da podesimo matricu cena. To je slicno matrici konfuzije
+Na dijagonali je uvek nula jer su to tacne klasifikacije. Ostali elementi su po defaultu 1, ali
+ako stikliramo "use misclasification costs" mozemo da rucno podesimo. Sto veci broj upisemo(ali
+ne sme bas prevelik, npr 100 je bas previse, trudimo se da dajemo brojeve tipa 2,3,4...), to se
+ta greska tretira kao veca greska, i model se trudi da se prilagodi tako da sto manje za njih gresi

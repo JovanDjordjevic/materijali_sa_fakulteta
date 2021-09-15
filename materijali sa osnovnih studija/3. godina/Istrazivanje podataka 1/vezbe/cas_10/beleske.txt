@@ -1,0 +1,26 @@
+klasterovanje spada u nenadgledano ucenje, tj ovde ne znamo koje su klase, vec samo
+imamo podatke i iz njih se trudimo da izvucemo nesto pametno
+
+Pokusavamo da pronadjemo neke grupe instanci tako da su unutar grupe podaci nekako
+slicni, a izmedju grupa razliciti. Neka tacna formalna definicija izgleda da ne postoji
+Mi ne moramo nuzno pre pokretanja da uopste znamo da neki klateri postoje
+
+K-means pokusava da nadje K klastera preko nekih centroida. Centroide na pcoetku mozemo
+npr random da postavimo, i onda se oni poboljsavaju u svakoj iteraciji (u svakoj iteraciji
+svaku instancu pridruzimo najblizem centroidu, vremenom ce se centroide nekako priblizavati
+centrima klastera). Stajemo onog trenutka kada nema promena u klasterima, tj kada se ne promeni
+nijedna instanca kom centoridu je pridruzena
+
+Za klasterovanje nemamo bas neku savrsenu meru koja kaze koliko je klasterovanje kvalitetno
+
+Npr koristicemo sumu kvadrata gresaka (SSE- sum of the squared error), ali to bas nije mera(?)
+trudicemo se da taj SSE minimizujemo, tj K-means se trudi da ga minimizuje
+(Primetimo da sto vise klastera imamo SSE se smanjuje, tako da tehnicki ako stavimo da je K=broj 
+instanci skupa, SSE ce biti =0, sto ne zelimo da se desava)
+
+Silhouette coefficient je mera kolio su intance grupisane sa instanca koje su im slicne
+U formuli cemo se truditi da A bude sto manje a da B bude sto vece
+Silouete ce upasti u interval [-1, 1] (vidimo to ako npr stavimo a=0 ili b=0)
+Silouete coef se racuna za jednu instancu, a ako hocemo to za ceo skup, mozemo npr da 
+izracunamo za svaki pojedinacni pa onda od toga da uzmemo prosek
+-1 ce biti za lose grupisane podatke, a 1 za gusto grupisane

@@ -1,0 +1,6 @@
+KNN - K najblizih suseda. To je nacin klasifikacije gde se klasa 
+      odlucuje na osnovu K najslicnijih(najblizih) instancni, a ona 
+      klasa koja se najvise pojavljuje u tih K ce biti rezultat klasifikacije
+Ono sto je specificno za KNN je sto mi uopste nemamo model,
+nema podele na trening i test zato sto se tih K najblizih trazi nad
+celim skupom podataka koji imamo

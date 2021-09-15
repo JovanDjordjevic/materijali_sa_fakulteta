@@ -1,0 +1,63 @@
+SVM - support vector machine
+
+Sustina SVM-a je da povucemo neku pravu tako da su sa jedne strane te prave isntance
+jedne klase a sa druge strane te prave instance druge klase '
+To sto pise gore vazi kada imamo 2 klase, tj kada crtamo u 2D, u opstem slucaju (za bilo
+koju dimenziju) to nije prava nego hiperravan
+
+Ta prava koja se crta ne mora biti jedinstvena, ali nisu sve jednako dobre granice. Npr ne zelimo
+da povucemo pravu koja se nalazi bas blizu neke instance, zato sto za slucaj da se pojavi neka nova 
+instanca tu, moze da se nadje sa pogresne strane prave. 
+Hocemo da nasa prava bude otprilike podjednako udaljena od instanci obe klase
+
+Jednacina prave: ax + b = 0
+jednacina hiperravni:  w1*x1 + w2*x2 + ... wn*xn + b = 0, tj uopsteno, skalarni proizvod W*X + b = 0
+
+Razmak izmedju najblize instance jedne kalse i najblize instance druge klase (u odnosu na pravu) se zove margina
+Poenta je naci parametre wi i xi tako da hiperravan bude optimalna tj da se maksimizuje margina
+
+Posto razdaljina od prave do jedne i do druge klase treba da bude ista, mzoemo da kazemo da 
+W*X + b = c        i    W*X + b = -c        ako podelimo sa c
+W/c*X + b/c = 1    i    W/c*X + b/c = -1    da nebi pisao stalno W/c i b/c, samo cu da ih zovem W i b 
+                                            nadalje, ali znamo da to nisu oni isti sa kojima smo poceli
+
+Rastojanje izmedju tacke i hiperravni:  |w*x0 + b| / ||w||2   (?)
+u tu formulu ubacimo tacku u kojoj je najbliza instanca prve klase i dobijamo  1 / ||w||2
+isto to uradimo i za drugu, i to je u zbiru  2 / ||w||2  i to je veicina cele margine
+
+Mi sad tu marginu iz formule treba da maksimizujemo po svim parametrima w i b
+tj to je prakticno isto kao da hocemo da minimizujemo ||w|| / 2
+
+Posto hiperravan bas mora da razdvaja klase, morzmo da imamo i sledeci uslov:
+f(xi) >= 1 za instance prve klase, f(xi) <= -1 za instance druge klase, f(xi) nam je w*xi + b
+(znamo iz geometrije da su razliciti znakovi tacaka sa razlicitih stana iste prave, a ne stavljamo < > 0 nego od 1 i -1
+zato sto hocemo da se u margini ne nalazi nista, a 1 i -1 su kao prave koje su najblize najblizim instancama obe klase (?) )
+Te dve razlicite klase mozemo da obelezimo sa 1 i -1, tj yi = 1 ili yi = -1
+I ona dva uslova mozemo objediniti u 1:
+mora da vazi    yi*(w*xi + b) >= 1
+
+Moze da se pokaze(ne izvodimo ovo) da je resenje koje mi trazimo:  
+    w = sum(i=1 do N)(alfa_i * yi * xi)  gde su alfa_i neki lagranzevi mnozioci
+
+f(x) = w*x + b = sum(i=1 do N)(alfa_i * yi * (xi skalarno* x) + b   (?)
+
+
+
+U realnim problemima skoro nikada necmeo imati skroz lepo odvojene podatke po klasama,
+tako da je ovo sto smo do sada koristili nuepotrebljivo.
+Resenje za to je da dopustamo neke greske, tj da gresku minimizujemo, da se sto manje instnaci nalazi
+sa pogresne strane. Hocemo da vazi nesto ovako:
+yi*(w*xi + b) >= 1 - eps_i    (epsilon_i je greska za itu instancu (?) tj neka ocena koliko je udaljena od margine na pogresnoj strani (?))
+Ovo vise nije prava margina, zovemo je metamargina (?)
+
+
+
+Kada nemamo podatke koji ne mogu uopste da se lienarno razdvoje, npr ako imamo klaster u klasteru (?)
+treba na neki nacin da dodamo jos jendu dimenziju podataka u nadi da ce u visoj dimenziji moci lepo da se razdvoji (?)
+Za to biramo neki kernel K (nisam ispratio sve najbolje), to ovde odje kao neki skalarni proizvod u nekom vektorskom proizvodu (?)
+i to neko preslikavanje zamenimo umesto skalarnog proizvoda u formuli iznad
+
+f(x) = w*x + b = sum(i=1 do N)(alfa_i * yi * K(xi, x)) + b   (?)
+
+Ako dobro izaberemo taj kernel, imacemo neki vektorski prostor gde su podaci linearno razdvojivi, tj u tom vektorskom prostoru
+ce moci da se uradi taj novi skalarni proizvod

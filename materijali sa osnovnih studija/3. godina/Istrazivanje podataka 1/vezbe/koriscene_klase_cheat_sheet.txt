@@ -1,0 +1,45 @@
+from sklearn
+	
+	.metrics	   import	.confusion_matrix
+					.accuracy_score
+					.classification_report
+					.silhouette_score
+
+	.feature_extractin.text	import	CountVectorizer
+					TfidfVectorizer
+					DictVectorizer
+	
+	.model_selection   import	.train_test_split
+					GridSearchCV
+	
+	.pipeline	   import	Pipeline
+	
+	.tree		   import	DecisionTreeClassifier 
+					.plot_tree
+	
+	.preprocessing	   import	StandardScaler
+					MinMaxScaler
+					OrdinalEncoder			(za CategoricalNB posto on zahteva da podaci butu brojevi iako su kategoricki)
+
+	.neighbors	   import	KNeighborsClassifier
+	
+	.naive_bayes	   import	CategoricalNB
+					MultinomialNB
+
+	.neural_network    import	MLPClassifier
+
+	.decomposition	   import	PCA
+
+	.svm		   import	SVC
+
+	.cluster	   import	KMeans
+					AgglomerativeClustering
+					DBSCAN
+
+
+from scipy
+
+	.cluster.hierarchy  import      .dendrogram
+					.linkage
+					.fcluster
+	

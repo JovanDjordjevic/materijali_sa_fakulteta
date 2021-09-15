@@ -1,0 +1,8 @@
+conf(X->Y) = sup(X->Y) / sup(X)
+
+confprior(Y) = conf(prazan_skup -> Y)
+
+lift(X->Y) = conf(X->Y) / sup(Y) = sup(X -> Y) / (sup(X)*sup(Y))
+
+ako je lift = 1 to znaci da X i Y nemaju nikakve veze jedno sa drugim (?)
+lift < 1 znaci da nam pravilo nije interesantno

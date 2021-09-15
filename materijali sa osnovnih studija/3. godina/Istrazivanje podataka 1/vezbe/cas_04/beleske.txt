@@ -1,0 +1,60 @@
+u binarnoj klasifikaciji (moze i uopsteno, ovo je samo spec slucaj)
+matrica konfuzije:
+
+
+|           |           dodeljena klasa                     |
+|           |_______________________________________________|
+|           |         +           |          -              |
+|___________|-----------------------------------------------|
+|svarna | + | TP - true positive       FN - false negative  |
+|klasa  | - | FP - false positive      TN - true negative   |
+|-----------------------------------------------------------|
+
+Iz ove matrice mozemo da izvedemo neke mere za ocenu modela: 
+(uopsteno formule su: nesto_iz_reda / zbir_svega_u_redu)
+
+TPR - true positive rate(zove se i osetljivost/sensitivity)
+TPR = TP / (TP + FN)
+
+TNR - true negative rate(zove se i specificnost/specificity)
+TNR = TN / (FP + TN)
+
+FPR - fasle positive rate
+FPR = FP / (FP + TN)
+
+FNR - fasle negative rate
+FNR = FN / (FN + TP)
+
+
+p - preciznost(precisssion) (TP / kolona)
+p = TP / (TP + FP)
+
+r - odziv(recall)  (isto sto i TPR)
+r = TP / (TP + FN)
+
+graficko tumacenje onih nekih formula sa slajdova:
+https://en.wikipedia.org/wiki/F-score#/media/File:Precisionrecall.svg
+
+mi hocemo da nam i preciznost i odziv budu sto veci. Da sad nebi pojedinacno pazili
+na ta dva broja, imamo meru koja uzima obe u obzir, to je F1 mera, 
+tj harmonijska sredina preciznosi i odziva (koristimo harmonijsku srednu zato sto ce
+ona biti bliza manjoj od ove dve vrednosti, da smo koristili npr aritmeticku, bila bi 
+na sredini izmedju njih, a kada je bliza manjoj, to je realnija ocena modela)
+p - precission
+r - recall
+F1 = (2*r*p) / (r + p)   = 2 / (1/r + 1/p) 
+
+Problem sa F1 je sto nije simetricna. Kada bi mi npr u nasoj binarnoj klasifikaciji zamenili sta je pozitivni a sta
+negativni element, p i r koje bi tada izracunali nebi bili isti kao pre zamene, samim tim i F1 mera nebi bila ista
+
+
+cesto se koristi i ROC kriva (reciever operating characteristic curve), ona sluzi da prikaze neki
+odnos izmedju TPR (na y osi) i FPR (na x osi) 
+(vidi sliku na slajdovima, zelena linija je random model(onaj koji sa sanson 50% dodeljuje klasu u
+binarnoj klasifikaciji), a crvena je ROC za neki model. Idealan model ce biti samo jedna tacka i to ona 
+skroz gore levo (0,1), zato sto su tada ispravno klasifikovane sve instance
+
+AUC - area under ROC curve, sto je veca to je model bolji
+(vidi na slajdu i na papirima kako se radi zadatak)
+Kada se taj zadatak uradi, dobicemo da je ROC kriva za M2 velikim delom ispod one crvene dijagonale(dijagonala je onaj random model), sto znaci da je model M2 bas glup. To mozda znaci da model nema dobru predstavu o tome sta je pozitivna a sta negativna instanca, mozda tu onda vredi da pokusamo da uradimo neki inverz, tj da obrnemo sta znaci da je isntanca pozitivna a sta ne (tj u zadatku da one verovatnoce iz tabele tretiramo ne kao verovatnocu da je + nego 
+verovatnocu da je -)

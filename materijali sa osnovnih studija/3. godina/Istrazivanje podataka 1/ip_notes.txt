@@ -1,0 +1,1317 @@
+NOTE: ove godine su dodate neke oblasti koje nisu radjene na predavanjima prosle godine, to su:
+	  SVM, neuronske mreze, ansambl, pridruzivanja sa niskama, prosle je manje pricano o bajesovkoj klasifikaciji i procenama rezultata 
+	  klasifikacije, mozda ima jos razlika...
+Takodje, neki zadatke za tipa dokazivanje metrika je rekao da ponekad daje na ispitu bukvalno one iz knjige za koje
+postoje vec resenja
+
+Mmomirova skripta od prosle godine (tu ima nekih stvari lepo objasnjeno koje ja nisam):
+	https://docs.google.com/document/d/18xE_3lUA4NC5UlUaGTcdqD6HhA3r9ZNafjyEYR9Tohw/edit
+
+tipovi podataka:
+	tabelarni:
+		- obicni tabelarni
+		- transakcioni
+		- matricni
+		- matrica reci
+
+	grafovski:
+		- obejkti su cvorovi a grane odnosi 
+		- sami objekti su predstavljeni grafom (npr hemijsko jedinjenje)
+
+	podaci sa poretkom:
+		- redni (seqiential) podaci      - imaju pridruzeno vreme
+		- sekvecncioni(sequence) podaci  - imaju pridruzenu pociciju u sekvenci
+		- vremenski (time series) podaci - svaki objekat je vremenska serija
+		- prostorni (spatial) podaci     - imaju pridruzenu informaciju o lokaciji 
+
+mere po tipovima podataka:
+	Kvantitativni:
+		- Haming
+		- Minkovski (i minkovski sa tezinama)
+			ne radi lepo kod retkih podataka i kad imamo sum
+		- Mahalanobis
+			d(x, y) = sqrt( (x-y)^T * M^-1 * (x-y))
+			M^-1 je iverz matrice kovarijasni(?) vektora x i y
+			dobro radi kada imamo korelisane atribute i kada je raspodela atributa priblizno normalna
+			NOTE: formula koja stoji na slajdovima je netacna, ^T mu stoji na drugom (x-y) a ne na prvom, a ovako kako asm ja napisao stoji na wikipediji
+	Za binarne atribute:
+		- SMC
+		- Zakard 
+		- prosireni Zakardovi koeficijenti
+			sluzi kada imamo neke neprekidne (ili prebrojive) vrednosti, x i y su nam vektori
+			T(x,y) = (x skalarno* y) / (||x||^2 + ||y||^2 - (x skalarno* y))
+		- Kosinusna slicnost
+			cos(x,y) = (x skalarno* y) / ( ||x|| * ||y| )
+		- kovarijansa/std dev/mean
+		- pirsonov koef korelacije
+	Kategoricki podaci:
+		- slicnost vektora sa kategorickim moze kao suma slicnosti pojedinacnih atributa iz vektora
+		- 1/0 ako = ili nije =
+		- inverzna ucestalost pojavljivanja 1/pk(xi)^2   (pk broj slogova gde je kti atribut =x)
+		- 1- pk(xi)^2  kako god da se ovo zove
+		- za dokumente (vidi slajdove, 2.Mere_slicnosti.pdf, slajd 24)
+		- kada imamo kombinovane kategoricke i kvantitivne atribute, onda je 
+			lambda*slicnost_numerickih * (1-lambda)*slinost_kategorickih, lambda je koliko su vazni numericki
+	Diskretni podaci:
+		- edit rastojanje
+		- LCSS -longest common subsequence
+	OStale mere:
+		- entropija
+		- mare znasnovane na gustinama (nemamo formule, samo nazive: Euklidska gustina, gustina verovatnoce, graf zasnovane gustine)
+
+Priprema podataka:
+	- tekstualni u numericke:	LSA
+	- iz vremenskh u diskretne:	SAX algoritam
+	- dikretne niske u numericke podatke:	...(?)
+
+Metode ansambla:
+	- poajcavanje (boosting)
+	- pakovanje (bagging)
+	- nasumicna suma (random forest)
+	
+
+Za prve 4 prezentacije nisam pravio detaljne beleske, u momirovoj skripti ima okej objasnjeno
+
+
+
+
+------- 5.klasifikacija.pdf -------
+Kljucna pitanja pri konstrukciji drveta su: kako odabrati najbolju podelu, kako birati za razlicite
+tipove atributa, kada stati sa konstrukcijom drveta, sta raditi sa nedostajucim vrednostima, kako
+proceniti gresku...
+
+Hantov algoritam:  (nije bas konkretno algoritam vec neka opsta ideja kako konstruisati drvo, onm je u osnovi vecine konkretnih algoritama)
+				   (nigde ovde tacno ne kazemo na koji nacin se bira atribut za podelu i kako se deli...)
+	Dt je neki deo trening skupa koji se nalazi u cvoru t, y={y1, y2, .. yn su oznake klasa}
+	- Ako svi slogovi u Dt pripadaju istoj klasi 'yt', tada je taj cvor list i njegova klasa je yt
+	- U suprotnom:
+		- izvrsiti podelu materijala na osnovu test atributa u manje podskupove na koje 
+		  se rekurzivno primenjuje postupak
+
+Atribut za podelu biramo pohlepno, tj hocemo da ta podela optimizuje odredjeni kriterijum
+, koristimo meru necistoce (mera necistoce nam kaze koliko je cvor homogen, tj da li su u njemu instance iste klase ili ne)
+Mera necistoce ima maksimalnu vrednost kada su u cvorvima podjednako zastupljene klase, a minimalnu vrednost
+kada u cvoru postoje instance samo jedne klase (tj 0 ostalih), dakle mi ciljamo da mera necistoce bude sto manja
+Mere necistoce u drvima odlucivanja: (u cvoru t)
+	- gini
+			Gini(t) = 1 - sum_i_po_c( p(i|t)^2 )    c su moguce klase
+	- entropija
+			Entropy(t) = -sum_i_po_c( p(i|t) * log2(p(i|t)) )    c su moguce klase
+	- greska klasifikacije
+			Err(t) = 1 - max_po_i(p(i|t))		i su moguce klase
+
+Dobit za svaku od mera necistoce predstavlja razliku izmedju te mere necistoce u roditelj cvoru i 
+sume mere necistoce u deci cvorovima (ciljamo da ova dobit bude sto veca)
+ima na slajdu formule ali ne moramo da ucimo napamet, to je ono sto smo radili na vezbama kada smo pravili stabla
+
+Moguce podele u stablu odlucivanja u odnosu na tip atributa:
+	- birarni atrib.   -> binarna podela
+	- imenski atrib.   -> binarna / vise grana  
+						  NOTE: kada god radimo podelu na vise grana, tj n-arnu podelu, kada se jednom uradi podela po nekom atributu
+						  taj atribut ne moze da se korsiti nadalje, tj iskoirstili smo ga jednom i nikad vise, dok kada imamo binarnu podelu 
+						  mozemo da radimo tokom vremena vise podela po tom nekom izabranom atributu
+	- redni atrib.     -> binarna / vise grana         (ali mora da se cuva redosled)
+	- neprekidni atr.  -> dikretizacija (pravimo redne kategoricke) pa binarna podela u odnosu na jednu vrednost (od tih dobijenih)
+						  (ovo dodje kao podela na vise grana za ove prethodne).
+						  jos jedna moguca podela je na k grana za k dobijenih intervala (racunski zahtevno jer moramo da probamo mnogo razlicitih 
+						  intervala da vidimo koji daje najblju podelu)
+						  jos jedna moguca podela je obicna binarna na onsvou neke vrednosti V pa gledamo da li je >V ili <V
+						  (za ovo prvo sortiramo sve neprekidne vrednosti pa onda svaku redom koristimo kao to V i racunamo meru necistoce ako je ta podela)
+						  Problem sa ovim je sto moramo da ispitamo sve vrednosti za V da bi nasli optimalnu, kojih moze da ima bas mnogo
+
+NOTE: recimo da imamo neki imenski atribut i da razmisljamo da li da radimo podelu an vise grana ili binarnu podelu
+npr moguce vrednosti su {A B C}. Ako imamo vise grana, onda gini(ili drugu meru) racunamo samo jednom, i u tom cvoru imamo po jedan sabirak za svaki od ovih 
+Ali ako hocemo binarnu podelu, moramo da gini racunamo vise puta, po jednom za svaku od obih podela: {A} {BC}, {B} {AC}, {C} {AB}
+da bismo videli koaj od tiph podela je najbolja, isto to i za ostale tipove atributa, to je ovo sto pise da moraju da se
+isprobaju sve mogucnosti
+
+Gini i entropija favorizuju atribute sa velikim brojem razlicith vrednsoti. Kada imamo takve atribute, ako koristimo ove mere
+dobijacemo lose podele. Iamo 2 opcije za prevazilazenje ovoga:
+	- korsitmo samo binarnu podelu (jer se onda ignorise to sto atribut ima mnogo mogucih vrednosti)
+	- nekako ukljucimo u razmatranje i broj vrednosti. Tu ima neka formula na 44 slajdu koja ne razumems ta tacno radi
+
+Opsti algoritam za formiranje drveta odlucivanja:   (konkretniji je nego Hantov)
+-------  (ulaz je skup atributa F i skup trening instanci E)
+formiraj_drvo(E, F):
+IF uslov_zaustavljanja():
+	list = napravi_cvor()						- ako je ispunjenj uslov zaustavljanja, ne pravimo dalje drvo
+	klasifikuj_instance_u_tom_listu()			- ono sto je od instanci stiglo do ovde moze da se klasifikuje, ako sluajno u ovom trenutku nisu sve instance u cvoru iste klase, onda za klasu proglasimo onu koja je brojnija
+	RETURN list
+ELSE
+	koren = napravi_cvor()						- ako nije zadovoljen uslov zaustavljanja pravimo novo poddrvo a ne list
+	uslov = nadji_najbolju_podelu()				- gledamo kako najbolje da podelimo, ovde korsitimo one mere necistoce
+	V = skup_mogucih_ishoda_za_uslov
+	FOR v IN V:									- broj elemenata iz V govori koliko cemo dece cvorova praviti (tj da li ce podela u cvoru biti binarna ili visestruka)
+		E_new = skup_koji_zadovoljava_v			- pravimo nov skup instanci E koji ce uci u naredni cvor (tako da zadovoljava uslov za konkretnu granu 'v' u najboljoj nadjenoj podeli)
+		dete = formiraj_drvo(E_new, F)			
+		dodaj_dete_kao_potomak_korena_i_oznaci_sa_v
+	END FOR
+END IF
+RETURN koren
+na kraju svega treba da radimo potkresivanje
+-------
+
+Tipicni uslovi zaustavljanja u algoritmu mogu da budu:
+	- svi slogovi u tekucem cvoru pripadaju istoj klasi
+	- svi slogovi u tekucem cvoru imaju iste vrednosti za sve atribute
+	- broj instanci je manji od neke zadate granice
+	- dostigunt kriterijum ranijeg zaustavljanja (npr max zadata dubina)
+	...
+
+PROS and CONS stabla odlucivanja:
+	PROS:											CONS:
+	- jeftina za konstrusanje						- slabo rade sa povezanim atributima 
+	- laka za interpretaciju						- nacin potkresivanja znacajno utice na rezultate
+	- preciznost									- moze da se desi overfit/underfit
+	- mera necistoce nema uticaj na performanse		
+	- primenljiva na sve tipove podataka
+	- rad sa nedostajucim vrednostima
+
+Provera modela na test podacima se zove i generalizacija. Zelimo na neki nacin da ocenimo kolika se greska desila 
+pri generalizaciji. Ako su nam e(t) greska na trening podacima i e'(t) greska na test podacima 
+u cvoru t (ukupna greska za e na T (T je celo drvo) je suma po svim cvorovima, slicno za e'):
+	- optimisticni pristup:  e'(t) = e(t)     
+	- pesimisticki pristup:  e'(t) = e(t) + 0.5 
+					    	 e'(T) = ... = (e(T) + k*omega) / N       N je ukupan broj trening instanci, omega je cena dodavanja lista (?)
+							 (?) ima na slajdu 58 i neki primer, ne znam u formuli odakle i sta mu je ovo k (?)
+
+MDL slajdovi 60 i 61 ne kapiram
+
+Da bismo sprecili prevelik rast dubine drveta (koje moze da dovede do overfita) je da radimo prepotkresivanje
+to moze da se postigne nekim od onih tipicnih uslova zaustavljanja
+Mozemo i da pustimo da se celo drvo napravi i onda na kraju da ga nekako potkresemo (od listova ka korenu)
+Ideja je da neki cvor do kog dodjemo (tj poddrvo ciji je on koren) zamenimo listom tako da se ne pogorsa kvalitet modela
+
+Nedostajuce vrednosti mogu da nam prave problem u dva glavna slucaja:
+	- pri treniranju modela dodje neka isntanca koja kao atribut po kome treba da se deli ima nedostajucu vrednost	
+	- isto to samo sto je u pitanju podatak iz test skupa (ovo je mnogo gore)
+
+Mere performansi(?) drveta:
+	- matrica konfuzije (ovo se najlakse vidi na slici, hocemo da na glavnoj dijagonali imamo skoro sve vrednosti, tj da TP i TN budu sto veci moguci)
+	- tacnost				= (TP + TN) / (TP + TN + FP + FN)     ( (?)nije dobro samo ovo da koristimo, posebno ako imamo nebalansirane klase, tj kada jedne kalse ima mnogo vise nego druge)
+																  (tacnost nije osetljiva sama po sebi na cenu koju zadajemo matricom cena a naredne mere jesu(?))
+	- perciznost			p = TP / (TP + FP)
+	- odziv					r = TP / (TP + FN)
+	- f mera i f beta mera  f = 2rp / (r + p)
+							f_beta = (1 + beta)^2 * pr / (beta^2 * p + r)
+							za beta = 0, ovo postaje p, za beta=beskonacno postaje r, za beta=1 to je samo f mera
+	- tezinska preciznost   = (w1*TP + w4*TN) / (w1*TP + w2*TN + w3*FP + w4*FN)  
+							(pazi da ista tezina wi stoji uz TP i TN i gore i dole!)
+		
+
+
+
+------- 6.Algoritmi_drveta_odlucivanja.pdf -------	 
+(podsecanje: svi algoritmi koje ucimo ovde rade samo klasifikaciju (osim CART), tj ciljni atribut MORA da bude 
+kategoricki. Ako je numericki onda je to regresija, CART moze da radi oba)
+(pro tip, ako ova pitanja dodju na ispitu, viid na racunaru u SPPS modeleru opcije koje ti daju C5.0 i CART cvorovi i to pisi kao osobine, its better than nothing)
+
+ID3 (iterative dichotomizer 3)
+	Koristi entropiju kao meru necistoce i informacionu dobit kao kriterijum podele
+	Koristi 2 kriterijuma zaustavljanja:
+		- svi podaci u cvoru pripadaju istoj klasi
+		- najveca inf. dobit je <= 0
+	Ne vrsi potkresivanje uopste
+	Radi samo sa kategorickim atributima (ne moze da korsiti numericke i one koji imaju nedostajuce vrednosti)
+	Formira  iskljucivo binarno drvo
+
+C4.5 (ovo nije samo 1 alg vec je kao neka familija algoritama, ima C4.5, C4.5 bez potkresivanja, C4.5 sa pravilima)
+	Zasnovan je na ID3 ali menja neke stvari
+	Koristi entropiju kao meru necistoce i informacionu dobit kao kriterijum podele
+	Koristi 2 kriterijuma zaustavljanja:
+		- svi podaci u cvoru pripadaju istoj klasi
+		- broj razlicitih instanci je ispod zadate granice
+	Za klasu u lsitu se bira najbrojnija klasa (metoda glasanja)
+	Radi se naknadno potkresivanje drveta, na posebnom skupu za proveru se odredjuje koliko svaki unutrasnji cvor doprinosi tacnosti. Ako
+	odstranjivanje tog cvora povecava tacnost, onda se on uklanja. Koristi pesimisticki pristup
+	Za raziku od ID3, ne radi isklucivo binarnu podelu, vec radi n-arnu (ako ima n vrednosti)
+	C4.5 moze da radi sa numerickim atributima i to radi tako sortira numericke podatke i onda ide redom i bira 
+	neko V i onda gleda >V ili <V
+	NOTE: na slajdovima za nedostajuce vrednsoti je malo konfuzno, navedeno je dosta mogucnosti kako se sa njima barata, 
+		  ali ono sto je podebljano plavo je ono sto ovaj konkretan algoritam korsiti
+	Nedostajuce vrednsoti:
+		- pri izboru atributa za deobu u cvoru koji ima NV(pri treniranju):				 	-> informaciona dobit x% poznatih vrednosti (?)   (na predavanju je rekao kao da se izracuna inf. dobit u tom cvoru i onda se umanji za neki % (?))
+		- gde se smesta instanca u podeli ako atribut za podelu sadrzi NV(pri treniranju):	-> u svaku granu cemo staviti neki % instanci u zavisnosti od procenta poznatih atributa (?)
+		- kada u test skupu dodje neka isntanca sa NV(pri testiranju):						-> distribuira u grane prema verovatnoci da instanca treba da ode u tu granu (?) 
+	C5.0 je komercijalna verzija algortima koja je donela neka poboljsanja:
+		- korsiti manji skup pravila sa istom preciznoscu
+		- koristi boosting 
+		- smanjeno korsicenje memorije "navodno" i radi "navodno" do 240x brze od C4.5
+		- nizi nivo greske i manje drvo odlucivanja nego C4.5
+		- radi sa tezinama atributa (C4.5 to ne radi)
+	------- pseudokod za C4.5:   (D je skup vrednosti, el je min. broj podataka u cvoru)
+	C4.5(D, el):
+		T = {}									- ovo je trazeno drvo, na pocetku nije formirano
+		IF uslov_zaustavljanja:					- svi iz D su u istoj klasi ili ih ima manje od el
+			return;
+		END IF
+		FOR x IN D:								- tj za svaki atribut x iz D
+			izracunaj_inf_dobit_za_podelu_po_x
+		END FOR
+		formiraj_cvor_Y_koji_deli_po_x_i_ima_najvecu_inf_dobit		- znamo iz prosle petlje za koji x imamo najvecu dobit
+		D_new = f(x)							- pravi se podskupovi D_new koji ce ici u naredne cvorove, podsetimo se da posto C4.5 radi n-arnu podelu, ovih D_new moze biti vise od 2
+		FOR Di IN D_new:
+			Ty = C4.5(Di)						- pozivamo C4.5 algoritam za svaki taj novi podskup i dobijamo poddrvo na mestu cvora Y
+			dodaj_Ty_kao_granu_T_u_cvor_Y
+		END FOR;
+		RETURN T    							- vracamo celo napravljenos tablo u ovom koraku
+	-------
+	
+CART (classification and regression trees)   (sa * su stvari u ranijim implementacijama)
+	Moze da radi i klasifikaciju i regresiju
+	Cart ne obucava samo jedno stablo vec vise njih a onda na kraju bira najbolje. Ta provera se radi na 
+	posebnom skupov za proveru ili koristeci cross validation na trening skupu
+	Podaci mogu da imaju i i neprekidne i kategoricke atribute (tj ne zahteva diskretizaciju za neprekidne atribute)
+	* U prvoj ranoj implementaciji krositio je Gini, simetricni Gini, "twoing" i uredjeni "twoing" (?) a posle su dodate entropija, X^2 itd
+	*	"twoing" nije mera necistoce forsira da u dete cvorovima napravi priblizno jednaku distibuciju (?)
+	*	"uredjen twoing" grupise zajedno instance susednih klasa, tj cuva uredjenje kada imamo redne ciljne atribute (?)
+	*	*twoing se koristi SAMO za kategoricke atribute, ne moze na numericke)
+	CART koristi iskljucivo binarnu podelu
+	CART ima mogucnost da automatski uklanja nebalansirane klase, za to koristi metodu prethodnika (prior)
+	prethodnici se koriste interno (ne vide se spolja kao tezinski faktori(?)) kao tezine prilikom odlucivanja o podeli u decu cvorove (?)
+	i zasnovan je na verovatnoci za ciljnu kategoriju u trening skupu
+	Imamo ista tri problema saa NV kao i u C4.5:
+		- pri izboru atributa za deobu u cvoru koji ima NV:				 	-> nije navedeno na slajdovima, ali negde sam procitao da samo ignorise te atribute (?)
+		- gde se smesta instanca u podeli ako atribut za podelu sadrzi NV (dok treniramo model):	-> u momirovoj skripri kaze da se i ovo resava surogat atributima, ali mitic nije rekao na predavanju nista
+		- kada u test skupu dodje neka isntanca sa NV:						-> resava se surogat atributi
+	Treci problem sa NV se resava se surogat atributima (to ne znaci da mi nedostajucu vrednsot zamenimo nekom drugom vrednoscu
+	vec da nadjemo drugi atribut koji bi mogao da se korsiti umesto ovog atributa u podeli, tj taj surgat atribut treba do tog nivoa u podeli da se
+	ponasa slicno kao originalni. Ako se slucajno desi da i taj surogat bas u toj podeli ima NV, onda biramo sledeci surogat itd )
+	* U ranijim verzijama CARTa se nije radilo prepotkresivanje, vec se konstruisalo celo drvo pa se posle potkresivalo,
+	* radilo se 'potkresivanje rezanjem troskova' (cost complexity pruning) tako sto se formira vise potkresanih drveta pa se oni porede
+	* po ceni ((?) ne kaze sta je cena nego kaze da se porede npr po Giniju (?))
+	Tekuce verzije rade prepotkresivanje, mozeom da zadamo dubinu drveta itd..
+	CART moze da odredi koji atributi su vazniji od drugih prilikom odlucivanja, to radi tako sto se na kraju sabere dobit za svaki
+	cvor u kome je neki atribut korsicen za podelu
+	Moze da korsiti matricu cene i tezine
+	-------
+	na ispitu mitic trazi i psudokod ali ga nije dao na slajdovima
+	-------
+	
+CHAID, QUEST, SLIQ i SPRINT algoritme je na brzinu prosao na kraju predavanja i bukvalno citao slajdove, stvarno me mrzi....
+(i oni izgleda postoje u SPSS pa ako nedaj boze dodju na ispitu, moze da se citaju odobine odatle)
+Rekao je na poslednjim predavanjima da za ove algoritme SLIQ, SPRINT itd.. je dovlojno samo ono sto pipse na slajdovima
+ali mrzi me...
+
+
+
+
+------- 7.Dodatne_metode_klasifikacije.pdf -------	
+Radimo nekoliko dodatnih vrsta klasifikatora koji nisu zasnovani na stablima odlucivanja:
+	- zasnovani na pravilima 
+	- zasnovani na instancama
+	- neuronske mreze
+	- SVM
+	- bajesovski klasifikatori
+	- ansambl
+
+Klasifikatori zasnovani na pravilima:
+	pravilo: (uslov) -> y    tj   preduslov -> posledica    
+	Pravilo P pokriva(obuhvata) instancu x ako vrednost atributa instance x zadovoljava levu stranu (uslov) pravila
+
+	preciznost i odziv pravila u klasifikatoru sa pravilima nije isto sto i preciznost
+	i odziv od pre kod drveta:
+	odziv je procenat broja slogova koji zadovoljavaju levu stranu pravila (odziv je ovde slicno kao brojac podrske za klasterovanje)
+	preciznost je procenat pravila koji zadovoljavaju desnu od onih koji zadovoljavaju levu stranu (slicno je kao podrska u klasterovanju)
+
+	Zelimo da nam pravila budu uzajamno iskljuciva (da nemamo 2 pravila koja pokrivaju istu instancu, tj da svaki slog bude pokriven najvise jednim pravilom) 
+	Zelimo i da nam pravila pokrivaju sve moguce kombinacije atributa (ako se desi da neka mogucnost nije pokrivena, mozemo da kazemo koja ce biti default klasa)
+
+	Ako pravila ne zadovoljavaju ove 2 stvari, mozemo ih nekako poredjati u neki poredak pa onda ono pravilo u poretku na koje se prvo naidje bude iskorisceno,
+	alternativa je da nemamo poredak nego da prodjemo kroz sva pravila i onda poredimo njihove rezultate i glasanjem odlucimo klasu instnace
+	(prvi pristup je mnogo cesci jer drug ima nekih problema, prvenstveno sto uvek mormao da prodjemo kroz sva pravila, a drugo je da moze da se desi da 
+	na kraju imamo jednak broj glasova za vise klasa, pa onda mora da se odlucuje na neki drugi nacin)
+
+	Pravila mozemo da sortiramo na vise nacina:
+		- zasnovano na pravilima (po prioritetiu/kvalitetu pravila)
+		- zasnovano na klasama   (prvo idu pravila koja se odnose na jednu klasu, pa pravila koja se odnose na drugu klasu itd.. tj grupisana su po klasama)
+
+	Pravila mozemo da formiramo na 2 nacina:
+		- indirektno   (izdvajamo pravila iz drugih modela, npr stabla odlucivanja. Ako smo u stablu samo pratimo puteve od korena do listova, npr C4.5-rules pravi C4.5 stablo i onda izvlaci iz njega pravila)
+		- direktno     (direktno pravimo pravila na osnovu podataka, 1R, CN2 i RIPPER algoritmi)
+
+	Jedan od direktnih metoda formiranja pravila je sekvencijalno pokrivanje:
+		1) Krecemo od praznog skupa pravila
+		2) Izdvajaju se pravila za narednu klasu (ne kaze se koja su to pravila (?))
+		3) svi slogovi koji nisu porkriveni pravilima su 'negativni primeri' i oni ostaju u za sledecu interpretaciju
+		4) prosirujemo skup pravila pomocu learn_one_rule funkcije
+		5) uklanjamo slogove iz trening  skupa koji su pokriveni pravilima
+		6) ponavljamo od 2) pa nadalje do zaustavljanja
+	Osobine sekvencijalnog pokrivanja:
+		- porast skupa pravila (moze od opsteg ka pojedinacnom, tj krecemo od praznog pravila {}->y i dodajemo nove konjkukte u preduslov dokle god se povecava kvalitet pravila)
+							   (moze i od pojedinacnog ka opstem, biramo nasumicnu instancu na osnovu koje se pravi pocetno pravilo koje onda poboljsavamo uklanjanjem konjukata u preduslovu tako da tako pravilo pokriva sto vise pozitivnih instnaci)
+		- uklanjaju se instance koje su obradjene (kada nebi uklanjali instance pravilo koje bi se naucilo bi uvek bilo isto, vrteli bismo se u nekoj beskonacnoj petlji)
+		- provera pravila (?)
+		- kriterijum zaustavljanja      (izracunamo dobit i ako ona nije znacajna, ne nastavljamo konstrukciju tekuceg pravila)
+		- potkresivanje skupa pravila	(slicno kao kod drveta, treba smanjiti gresku potkresivanjem. To radimo tako sto uklonimo neki konjukt pa racunamo gresku pre i posle
+										Ako se greska povecala, konjukt moze da se iskljuci)
+
+	------- 1R (one rule) algoritam ((?) nista detaljnije nema na slajdovima a na predavanju je bukvalno samo procitao to)
+	Za svakia tribut formira jedno pravilo i bira pravilo sa najvecom preciznoscu
+	Radi sa atributima koji imaju diskretne vrednosti, a nepoznate vrednsoti tretira kao izdvojene vrednosti u skupu vrednosti atributa
+	-------
+	------- CN2 algoritam:
+	Formira uredjen skup pravila prema kvalitetu
+	Koristi sekvencijalno porkivanje i oderdjuje naredno pravilo bez fiksiranja klase (tj iz koraka u korak moze da se menja klasa koja se predvidja (?)),
+	koristi pristup od ospteg ka pojedinacnom, tj krece od praznog pravila, a konjkte dodaje tako da se minimizuje entropija
+	Nedostajuce vrednosti se menjaju najcescim (za kategoricke) i srednjim (za numericke) vrednostima
+	-------
+	------- RIPPER algoritam:
+	Formira uredjen skup pravila 
+	Koristi sekvencijalno porkivanje ali se unapred fiksira klasa i odrede sva pravila za tu klasu. Na 
+	na narednu klasu se prelazi tek kada se kompletira prethodna, takodje pocinje od praznog pravila, ali konjiukte
+	dodaje tako da se maksimizuje FOIL mera (slajd 24, mrzi me...)
+	U slucaju binarne klasifikacije, kao default klasa se uzima ona koja je brojnija, ali klasifikacija pocinje od one manje brojnije
+	Ako imamo viseklasnu klasifikaciju, prvo gledamo najmanje brojnu, pa sledecu po brojnosti itd i na kraju najbrojniju
+	RIPPER nema strogo definisan nacin kako se postupa sa nedostajucim vrednostima, vec se to odredjuje u implementaciji
+	-------
+
+	mere za proveru kvaliteta pravila: 
+		- preciznost	p = n+ / n       		    n je broj instanci pokrivenih pravilom, n+ broj pozitivnih instanci pokrivenih pravilom
+		- laplas		L = (n+ + 1) / (n + k) 	    k je ukupan broj mogucih klasa, laplas ne moze imati vrednost 0 sto moze da nam bude pozeljno 
+		- m procenat 	M = (n+ + k*p+) / (n + k)   p+ je prethodna verovatnoca za pozitivnu klasu
+
+	PROS and CONS klasifikatora zasnovanih na pravilima:
+		PROS:													CONS:
+		- ista izrazajna moc kao drva 							(?) nije naveo nigde a trazio je na ispitu (ovo sto pise sam guglao)
+		- laka intepretacija									- losije performanse u odnosu na ostale kalsifikatore (ovo je suprotno od onoga sto je mitic naveo kao pozitivnu stranu)
+		- ako formiranje										- losiji su kada moramo da radimo sa neprekidnim atributima jer to zahteva diskretizaciju
+		- klasifikuju brzo, slicne performasnse kao stabla		- posto se pravila ne "nauce" kao kod masiskog ucenja nego se dodaju, moze da se desi eksplozija pravila, tj da ih ima mnogo, da su isprepletana i komplikovana, sto utice na razumevanje modela
+																- ne znaju sta da rade sa nedostajucim vrednostima pa te instance igrnorisu (?)+
+
+Klasifikatori zasnovani na instancama:
+	U sustini kod njih ne postoji model, kada klasifikujemo test instance uvek gledamo ceo trening skup i na osnovu njega odlucujemo, a ne na osnovu modela
+	Kada ima mnogo trening instanci, moze se desiti usporenje rada. Ovaj tip klasifikatora zovemo i 'lenji klasifikatori' jer rade nesto tek kada dobiju test instancu
+	Neki primeri klasifikatora:
+		- Ucenje napamet    (zna da klasifikuje test instancu samo ako se bas skroz poklapa sa nekom isntancom iz trening skupa)
+		- KNN 				(klasifikuje se na osnovu K suseda (po nekom kriterijumu razdaljine/slicnosti) 
+							Od K koje izaberemo zavisi kako ce se 'model' ponasati, npr za K=1 dobijamo Voronoi dijagram
+							KNN moze da se primeni na sve tipove podataka samo moramo da izaberemo odgovarajucu emru rastojanja, npr ako
+							imamo asimetricne binarne atribute eukklidsko rasojanje bi bilo veoma lose (to moze da se vidi na primeru na slajdu 40 ako proba da se izracuna)
+
+
+
+
+------- 8.neuronske_mreze.pdf -------
+Ideja je sumulirati rad ljudskog mozga. Jedan neuron se simlira jednim perceptronom.
+Perceptron ima nekoliko ulaznih i jedan izlazni podatak. Ulaz cini neki vektor X i dodatni slobodni
+clan b koji se zove i 'bias' (tj. otklon). Svakom ulazu je dodeljena neka tezina wi,
+ta tezina simulira jacinu veze u mozgu. Obucavanje mreze se svodi na menjanje tih tezina
+a cilj obucavanja mreze je da se nadje skup tezina W koji minimizuje ukupnu kvadratnu gresku
+tj hocemo da E(w) = 1/2 * sum_i_do_n( (yi - yi')^2 ) nude minimalno   (yi je klasa koja treba da bude, a yi' predvidjena)
+Na izlazu iz perceptrona, ono sto je izracunato(neka kombinacija ulaza, ne mora biti linearna) se propusta kroz aktivacionu funkciju f(koja takodje ne mora da 
+bude linearna), koja odredjuje da li ce se  taj izlaz propagirati u naredni perceptron (ako je povezan)
+
+Aktivaciona funkcija moze biti npr: linearna, sigmoid, tanh, sign ...
+
+------- Algoritam treniranja perceptrona
+Neka je D skup trening podataka gde je X skup atributa a y klasa za pojedinacnu instancu
+Inicijalizujemo tezine iz skupa tezina W na slucajne vrednosti
+REPEAT 
+	FOR d IN D:
+		previdi_klasu_za_d									- na osnovu atributa x1, x2...
+		FOR wi IN W:
+			azuriraj tezinu wi na osnovu neke formule		- nova vrednost je kombinacija stare vrednsoti i greske predvidjanja (ima na slajdovima formule, mrzi me...)
+		END FOR
+	END FOR 
+UNTIL dostigunt_krijerijum_zaustavljanja
+-------
+
+Pri azuriranju tezina koristimo parametar lambda, to je brzina ucenja, uzima vrednosti iz [0, 1]
+Ako je labda blizu nule, nove tezine najvise zavise od stare tezine, ali ako je blizu 1 onda se veci znacaj daje tekucoj iteraciji
+Ako imamo linearno razdvojiv klasifikacioni problem (podaci u prostoru mogu da se razdvoje jednom hiperravni) onda
+algoritam konvergira ka optimalnom resenju
+
+Neke vrste neuronskih mreza: 
+	- sa propagacijom unapred
+	- sa propagacijom unazad
+	- rekurentne 
+	- asocijativne
+	- RBF	(?)
+	- SOM	(?)
+	...
+
+
+
+
+------- 9.uvod_u_svm.pdf -------
+SVM (Support vector amchine) je pogodan kada imamo veliki broj dimenzija u podacima (npr puno atributa)
+Moze da se korsiti i za klasifikaciju i za regresiju
+SVM koristimo za bianrnu klasifikaciju. Ideja je da se napravi hiperravan koja u prostoru deli podatke tako da su sa jedne
+strane ravni podaci jedne klase, a sa druge strane podaci druge klase. U slucaju da imamo n-arnu klasifikaciju, mozemo vise puta da primenimo SVM
+tako sto radimo binarnu klasifikaciju na {neka klasa} {sve otale klase} pa na taj drugi skup opet radimo SVM
+Usov za koriscenje SVM je da su podaci linearno razdvojivi
+
+Model ovde predstavlja formulu hiperravni koja razdvaja podatke. Hocemo da hiperravan koju nadjemo ima najvecu mogucu 
+marginu. Podaci iz trening skupa koji nam odredjuju marginu cine potporne (support) vektore
+Podaci iz test skupa se klasifikuju tako sto se ubace u formulu za hiperravan i onda se na osnovu znaka
+vidi da li su sa jedne ili druge strane ravni
+
+SVM radi na numerickim podacima. Posto imamo neku formulu koju racunamo, ovde ne mozemo direktno da koristimo kategoricke
+vrednsoti ali mozemo da svakoj kategorickoj dodelimo neku numericku vrednosti
+
+* formule za izvodjenje me jako mrzi, stefan je okej objasnio to na vezbama
+* lagranza ostatak prezentacije i 9.uvod_u_svm_primeri.pdf  sam preskocio...
+* Rekao je da za ispit ne treba napamet da se uci sve posle lagranzebih mnozilaca,
+* vec samo da se razume sve to sta je i koji je njihov efekat
+* Mora da se zna mercerova teorema i onih 5 kernela koje smo naveli
+
+
+
+------- 10.Bajesovski_klasifikatori.pdf -------
+verovatnoca da je isntanca klase C ako ima vektor atributa A = {A1, A2, ... An}:
+P(C|A) = P(A,C) / P(A)
+Slicno i za obrnut slucaj, verovatnoca da neka isntanca ima vektor atributa A pod uslovom da pripada kalsi C 
+P(A|C) = P(A,C) / (C)
+
+Bajesova teorema:	P(C|A) = P(A|C)*P(C) / P(A)
+
+Hocemo da nadjemo C koje daje maksimalnu mogucu vrednsot za P(C|A1, A2, ... An)
+Osnovna pretpostavka je da su klase medjusobno nezavisne i u tom slucaju mozemo da korsitimo bajesovu teoremu
+Bitan je jos i uslov da atributi budu medjusobno nezavisni za svaku mogucu klasu (?)
+
+Nacin racunanja veorvatnoca zavisi od tipova atributa
+	- Ako imamo neke diskretne vrednosti, onda racunamo klasicno prebrojavanjem u tabeli, kao na vezbama
+	- Ako imamo neke neprekidne vrednosti, onda se prvo radi diskretizacija u neke intervale, pa se onda radi
+	  prebrojavanje kao pre (gledamo u koji interval upada koja vrednost)
+	  Jos jedan nacin za neprekidne atribute je nesto sa gustinom verovatnoce (?) Pretpostavimo da podaci
+	  imaju normalnu raspodelu (jer je uglavnom i imaju(?) ) i onda korsitimo formulu za normalnu raspodelu
+	  (ima na slajdovima neki primer koji nisam razumeo)
+
+Kod bajesa imamo problem kada je neka od uslovnih verovatnoca=0, tada ce ispasti da je cela verovatnoca=0
+u tom slucaju korstimo neke druge mere da bismo ocenili klasu:  (formule su iste kao pre samo je sada drugacije znacenje)
+	- laplas		P(Ai=a|C=c) = (na + 1) / (n + v)		n-ukupan broj isntanci, na-broj trening instanci koji je klase c koji ima atribut=a, v-ukupan broj vrednosti koje Ai moze da uzme
+	- m-procenat	P(Ai=a|C=c) = (na + m*p) / (n + m)		m-ekivalent velicini klasa( kada smo pre imali m procenu, ovo je bio broj mogucih klasa, be znam da li mitic misli na ovo ?)  
+															p-inicijalna procena za vrednsot P(Ai=a|C=c) koja je poznata unapred
+
+Kada imamo one pretpostavke o nezavisnosti klasa i atributa dobijamo naivne bajesovske kalsifikatore. Kada nemamo te pretpostavke
+moramo da radimo neki drugi vid klasifikacije. Npr ako su neki atributi zavisni ili su u korelaciji koristicemo 'bajesovske mreze poverenja' (?)
+Osobine naivnih bajesovskih klasifikatora:
+	- otporni na sum
+	- otporne na nebitne atribute
+	- mogu da rade i sa NV (takos to ignorisu tu instancu)
+
+
+
+
+------- 11.ansambl.pdf -------
+Posto globalno ne postoji jedan algoritam koji se najbolje ponasa u svim situacijama, ideja je da skupimo 
+vise klasifikatora za isti problem na jedno mesto i onda na osnovu njih da konstrusemo model koji je u proseku
+bolji od svakog pojedinacnog 
+
+Condorcet teorema:
+	Neka grupa ljudi nezavisno jedan od drugog bira izmedju 2 mogucnosti od kojih je samo 1 ispravna,
+	i neka je p verovatnoca da su izabrali ispravnu mogucnost. Njihovi glasovi se kombinuju po pravilu vecine,
+	i neka M oznacava verovatnocu da je vecina naparvila korektan izbor. Ako je p > 0.5 
+	tada M -> 1 ako broj glasanja tezi ka beskonacnosti
+(u prevodu ako svaki pojedinac moze barem malo bolje od slucajnog izbora da odluci, ako takvih pojedinaca
+ima beskonacno, verovatnoca da bude napravljen dobar izbor je 1, tj skoro sigurno ce se odabrati tacno)
+
+Jak klasifikator  - klasifikator koji moze da ima proizvoljno malu gresku
+Slab klasifikator - klasifiaktor koji je nesto bolji od slucajnog nagadjanja
+
+condorcet teorema za posledicu ima da mi mozemo da imamo grupu slabih klasifikatora koji
+ce zajedno dobro da odluce, tj posto svi pogadjaju malo bolje od slucajnog nagadjanja,
+greska klasifikacije moze da bude proizvoljno blizu 0. Lakse nam je da napravimo vise slabih nego jedan jak klasifikator
+
+Ovaj nacin odlucivanja je pogodan samo za binarnu klasifikaciju
+
+Kada pravimo vise klasifikatora potrebno je da svaki od njih treninramo na nekom trening skupu. Ako imamo samo jedan
+pocetni trening skup, mozemo ga replicirati pa onda da se svaki trenira na tom istom, ili ga mzoemo izdeliti na manje
+delove i onda trenirati modele na po jednom delu
+Slicno tome, mozemo da imamo vise istih klasifikatora ili vise razlicitih kalsifikatora 
+
+Ako imamo n klasifikatora u ansamblu i svaki od njih ima neku gresku eps, ako vise od pola napravi gresku, onda
+ce se isntanca test skupa pogresno klasifikovati, ovo moze da se izrazi formulom koja je slicna za (a+b)^N
+greska = sum_i=m_do_n( (n nad i) * eps^i * (e-eps)^(n-i)  )
+ovde je m broj koji je veci od n/2, npr ako iamo 15 klasifikatora sa greskom eps, m=8, tj i krece od 8 i ide do 15
+Ispostavlja se da je ovako izracunata greska manja od pojedinacne greske za svaki klasifikator
+
+Ansambl radi dobro sa nestabilnim klasifikatorima, tj onima koji su osetljivi na male promene u trening skupu
+To je zato sto ako je klasifikator stabilan, on nece moci da proizvede razlicite rezultate, tj
+ako u ansamblu imamo vise stabilnih klasifikatora, to gubi poentu jer je uvek daju iste rezultate (?)
+
+metode za kosntrukciju: 
+	- promena skupa za trening		 	
+		(primeri su algoritmi boosting i bagging)
+		Ovde se misli na ono objasnjeno iznad, od pocetnog trening skupa mozemo da konstruisemo nove skupove za trening
+		To mozemo da radimo npr uzimanjem uzoraka. U ovoj metodi, onaj veliki klasifikator formiramo koriscenjem vise
+		ISTIH slabijih klasifikatora koji se treniraju na novodobijenim skupovima
+		Pakovanje (bagging, Bootrstrap AGGregatING):
+			Od pocetnog skupa se uzastopni uzorkovanjem sa vracanjem, prave se novi inicijalni (bootstrap) skupovi koji
+			su iste kardinalnosti kao originalni skup. Posto imamo uzorkovanje sa ponavljanjem, neki elementi pocetnog skupa
+			mogu da se u novom jave vise puta a neki nijednom. U proseku svaki bootstrap skup sadrzi oko 63% pocetnog skupa
+			------ Bagging pseudokod
+			//D je skupnulaznig podataka i k je broj inicijalnih(bootstrap) skupova
+			FOR i=1 TO k:
+				formiraj_inicijalni_uzorak_Di_velicine_N							- N je i velicina ulaznog trening skupa
+				treniraj_klasifikator_Ci_na_skupu_Di
+			END FOR
+			klasu koja je dobila najveci broj glasova dodeljujemo test instanci X	- ovo mu stoji u algoritmu ali nekako je out of place
+			------
+			(?) nisam razumeo primer dat za bagging na slajdovima i na predavanjima ga je veoma shit objasnio
+		Pojacavnanje(boosting):
+			Ideja je adaptivno menjati trening podatke u odnosu na prethodne greske kalsifikacije, tj radimo
+			vise iteracija klasifikacije, ali u svakoj narednoj obracamo vise paznju na one instance koje su pogresno
+			klasifikovane u prosloj iteraciji. To postizemo tako sto svaki od N slogova na pcoetku ima neku pridruzenu tezinu, a onda 
+			na kraju svake iteracije menjamo te tezine takos to se tezina onih pogresno klasifikovanih povecava, a za tacne se smanjuje
+	- promena skupa ulaznih atributa 	
+		(primer je random forest)
+		Iz trening skupa mozemo izdvajati neke podskupove koji ne sadrze isti broj atributa kao pocetni skup,
+		vec neki podskup atributa. Te atribute koji ce se koristiti opet mozemo npr da biramo slucajnim uzorkom
+		ali i nekom strategijom. ovaj pristup je dobar kada imamo neke redundatne atribute
+		Rndom forest:
+			Pravimo vise drveta odlucivanja koja NISU potkresana (idemo do kraja)
+			Svaki od klasifikatora iz ansambla konstrusie novi podskup atributa koji ce koristiti
+			Svako drvo koristi slucajni vektor generisan sa fiksnom distribucijom raspodele (sta znaci ova recenica tebra (?))
+			(na slajdu 20 prica o tim vektorma ali nista mi nema smisla (?))
+	- promena skupa oznaka klasa 		(kodiranje izlaza sa otklanjanjem gresaka (?) )
+		(lose objasnjeno i na slajdovima i na predavanjima (?)) Ako u trening skupu imamo dovoljno velik broj mogucih klasa,
+		ideja je da se uzimaju dva disjunktna podskupa tih klasa i da se klasifikuje u odnosu na njih (tj napravili smo binarnu klasifikaciju,
+		isntanca je ili u prvoj grupi klasa ili u drugoj). Ako isprobamo vise grupisanja posticicemo efekat ansambla
+		Ako pri testiranju klasifiaktor predvidi klasu 0, tada svi klasifikatori u njegovoj grupi (?) dobijaju jedan glas i obrnuto
+		Na karju klasa koja dobije ansjvise glasova se dodeljuje test instanci
+	- menjanje alg. za klasifikaciju	
+		Nad jednim istim trening skupom treniracemo vise razlicitih modela za klasifikaciju (?)
+		Na slajdovima uz ovo toji objasnjenje da neuronske mreze i stabla odlucivanja mogu potencijalno da 
+		daju razlicite rezutlate za iste podatke
+
+
+
+
+------- 12.poredjenje_rezultata_klasifikacije.pdf -------
+Pitamo se koji algoritam za klasifikaciju je najbolje da korstimo (za konkretan problem) (izbor algoritma zavisi
+od tipova podataka koje klaisifkujemo, od toga da li ima NV...),
+koji su nam najbolji parametri za taj algoritam(npr bitno je da odaberemo dobru meru za razdaljinu koja
+odgovara tipu podataka sa kojim radimo), kako podeliti trening podatke na trening i test
+i da li koristiti i vaidacioni skup (i u kom procentu, cesto je npr 70:30), kako proceniti rezultate klasifikacije....
+
+Unakrsna validacija - trening skup cemo podeliti na nekih N delova, i trenirati model na N-1 od tih delova
+a onaj preostali cemo koristiti za proveru parametara (NOTE: ovo NIJE test skup, tj zelimo da test skup budu neki podaci
+koje model uopste nije video do tog trenutka, taj validacioni skup se koristi za izbor optimalnih parametara. Ako se test skup koristi
+pri izboru parametara, ta pojava se zove 'curenje podataka' (data leak))
+U svakoj iteraciji cemo neki drugi (od tih N) skupova koristiti kao validacioni
+
+za proveru kvalitata modela pored prethodno navedenih mera (tacnost, preciznost, odziv, f-mera...) imamo jos:
+	- ROC kriva (Reciever Operating Characteristic)
+		na x osi je FPR, na y osi je TPR
+		ROC se crta za svaku klasu, jer model mozda neku predvidja bolje nego drugu
+		Koristimo samo za binarne klasifikatore 
+	- AUC (Area under curve) 
+		Misli se na povrsinu ispod ROC krive, sto je povrsina veca predvidjanje je bolje,
+		Max vrednost za AUC je 1, a ako je AUC=0.5 onda je to isto kao da imamo slucajni model
+	- Kriva informacione dobiti (?)
+
+
+
+
+------- 13.uvod_u_klaster_analizu.pdf -------
+Uospteno klasterovanje je pronalazenje grupa objekata tako da su unutar grupe objekti medjusobno slicni
+(tj da su na sto manjem rastojanju), a da su izmedju grupa razliciti (udaljeni)
+Klasterovanje radimo kada nam nije poznata klasa kojoj objekti pripadaju i onda moramo sami da nekako zakljucimo odnose izmedju njih
+
+obrati paznju sta jeste a sta nije klaster analiza (npr klasifikacija nije klasterovanje, jednostavna
+podela nije klasterovanje, rezultat upita nije klasterovanje, podela grafa nije klasterovanje...)
+
+Sta jeste i nije klsater zavisice od konkretnog kriterijuma po kom radimo klasterovanje
+
+tipovi klasterovanja:
+	- particiono				 (svaki element pripada tacno jednom klastru)
+	- hijerarhijsko				 (ovde su klateri ugnjezdeni u neki hijerarhiju, dakle jedan element moze da bude u vise klastera)
+	- ekskluzivno/neekskluzivno  (da li element moze da pripada samo jednom ili moze vise klastera)
+	- rasplinuto/nerasplinuto  	 (na predavanju je rekao da neka tacka moze da pripada vise kalstera odjednom, tj da npr pripada 40% jednom, 60% drugom kalsteru, i to zove rasplinuto, onda je posle rekao da tacka mzoe da pripada klasteru sa nekom verovatnocom i da je to rasplinuto (?))
+	- delimicno/kompletno 		 (da li se klasteruje ceo skup podataka ili samo neki deo)
+	- heterogeno/homogeno 		 (da li su klasteri iste velicine/oblika...)
+Tipovi klastera:
+	- dobro razdvojeni
+	- klasteri zasnovani na centru (center based) (na reprezentativnim predstavnicima (?))
+	- zasnovani na grafovima (graph based) (u sustini ovde klasteri dodju kao komponente povezanosti grafova 
+										    ili podgrafovi gde su elementi na maloj razdaljini (?))
+	- zasnovani na susedstvu	(kao u grafu, a u istom su klasteru ako su <= nekom pragu razdaljine)
+	- zasnovani na gustini		(koriste se kada su klasteri nepravilni/isprepletani i kada imamo sum i outliere)
+	- konceptualni				(na osnovu zajednicke osobine, samo sto ta osobina poneka ne moze da se izrazi preko psotojecih mera (?))
+
+Algoritmi zasnovani na reprezentativnim predstavnicima:
+------ alg za klasterovanje pomoicu reprezentativnih predstavnika (ovo je u sustini samo opsti zapis kmeans algoritma)
+// ulaz je skup podataka D={x1, x2, ... xn} i broj k -broj predstavnika
+S = {Y1, Y2...Yk} = inicijalni_izbor_skupa_reprezentativnih_predstavnika
+REPEAT
+	formiraj_klastere_dodelom_svake_tacke_iz_D_najblizem_predstavniku_iz_S_koristeci_fuckciju_rastojanja
+	ponovo_formiraj_S_odredjivanjem_novog_predstavnika_za_svaki_klaster
+UNTIL doslo_do_konvergencije
+RETURN klasteri
+-------
+
+Najznacajniji algoritmi klasterovanja zasnovanih na reprezentativnim predstavnicima:
+	- k means (vremenska slozenost O(br_tacaka * br_klastera * br_iteracija * atributa) )  
+		Koristi se za podatke koji su tacke u Euklidskom prsotoru
+		, za evaluaciju klasterovanja mozemo da korsitimo SSE (Sum of Squared Errors)
+		SSE = sum_po_klasteru( sum_po_elementu_iz_klastera( dsit(ci,x)^2 ) ), x je tacka, ci je reprezentativna tacka/centroid klastera
+		Kada koristimo kmeans za klasterovanje dokumenata koristimo kosinusno rastojanje
+		, podaci u term matrici, nesto sto je analogno SSE ovde je ukupna kohezija (kohezija je stepen slicnosti dokumenata u klasteru)
+		ista je formula kao za SSE, smo sto umesto dist()^2 imamo cosinus(ci,x) 
+		--- ovde ide (***) ---
+	- k medijana 	(centroid je medijana) (koristi menehetn rastojanje, manje osetljiv na sum i outliere)
+	- k medoida 	(centroid je medioid tj tacka iz samog skupa podataka, isto korsiti menhentn)  (alg je na slajdu 53, mrzi me...)
+
+(***)
+izbor pocetnih centroida: (od izbora centroida moze da zavisi kakve cemo klastere dobiti)
+	- slucajno		(sanse da slucajno odaberemo dobre centroide koji ce lepo predstavljati klastre je male, posebno ako ima puno "realnih klastera")
+	- uzastopno izvrsavanje algoritma sa slucajno izabranim pa na kraju uzmemo najbolje
+	- hijerarhijsko kalsterovanje na uzorku i onda izaberemo centroide odatle (?)
+	- izaberemo m (m>k) i onda od njih biramo k dobrih
+	- postprocesiranje dobijenih rezultata 
+		- eliminacija outliera	 (moze i u preprocesiranju)
+		- eliminacija malih klastera sa outlierima (?)
+		- naknadna podela klastera koji imaju visok SSE
+		- spajanj/integracija klastera koji su veoma blizu jedan drugog i imaju malu SSE
+	- primena bisekcije k sredina   (?) (cesto se dovijeni centroidi odavde korsite kao ulaz u osnovni kmeans)
+		na pocetku tretiramo sve pdoatke kao jedan kalster, pa ga delimo na 2, onda jedan od 
+		ta dva delimo ponovo delimo itd. dok ne dodjemo do k. Onaj koji delimo moze da bude:
+			- najveci klaster
+			- klaster sa najvecom SSE
+			- neki drugi kriterijum
+
+"Prazan" klaster ima samo u sebi centroid, ovo resavamo takos to centroid zamenimo necim od:
+	- neka tacka koja najvise ucestvuje u SSE
+	- najdalja tacka od centroida
+	- tacka iz klastera sa najvecim SSE (ovo ce verovatno dovesti do toga da se taj kalster podeli na 2 nova)
+
+kmeans PROS and CONS:
+	PROS:											CONS:
+	- jednsotavan									- ne radi za klastere proizvoljnog oblika
+	- najbolje radi sa globularnim pdoacima			- ne radi za klastere razlicitih gustina
+	- moze da prepozna klasere razlicitih 			- osetljiv na sum i outliere
+	  gustina ako korisitmo Mahalanobisvo			- biranje reprezentativnih tacaka i broja K je nezgodno
+(***)
+
+
+
+
+------- 14.algoritmi_klasterovanja.pdf -------
+Na pocetku pise "drugu veliku grupu alg z kalsterovanje cine alg hijerarhijskog klasterovanja"
+bez da igde eksplicitno akze koja je prva. Jedini moguc zakljucakje da se misli da su
+"alg za klasterovanje zasnovani na reprezentativnim predsavnicima" sa proslog casa prva grupa
+
+algoritmi hijerarhijskog klasterovanja se dele u 2 grupe:   (u oba slucaja se ne navodi eksplicitno broj klastera (osim ako bas ne zelimo taj uslv zaustavljanja)
+															takodje u oba slucaja moramo da cuvamo neku matricu slicnosti/rastojanja, tako da je prostorna slozenost
+															sigurno bar O(n^2), a vremenska ce biti O(n^3) jer u n koraka idemo kroz matricu)  
+	- sakupljajuce klasterovanje (agglomerative)
+		------- pseudokod
+		//ulaz je skup podataka D
+		izracuna_se_matrica_slicnosti_M_dimenzije_nxn
+		REPEAT
+			nadjemo_2_najbliza_klastera_i_i_j_na_osnovu_M
+			spojimo_i_j_u_nov_klaster
+			brisemo_i_i_j_iz_M_i_formiramo_novi_red_i_kolonu_u_M_za_nov_klaster
+		UNTIL kriterijum_izlaska
+		RETURN tekuci_skup_klastera
+		-------
+		CONS: (za sakupljajuce klasterovanje generalno)
+			- posle spajanje klasteri ne mogu da se razdvoje
+			- nemamo globalnu funkc koju treba da minimizujemo
+			- zavisno od funkcije rastojanja koju birmao moze da nam smeta sum, outlieri, klasteri razlicitih velicina/gustina...
+	- razdvajajuce klasterovanje (divisive) (predstavnik je npr bisekcija k sredina) 
+		------- pseudokod
+		//ulaz je skup podataka D
+		inicijaliujemo_drvo_T_tako_da_koren_sadrzi_D
+		REPEAT
+			biramo_list_L_iz_T_na_osnovu_predefinisane_strategije
+			razdvajamo_L_na_L1,...Lk_nekim_algoritmom_A
+			dodamo_L1,...Lk_kao_decu_cvora_L_u_T
+		UNTIL kriterijum_izlaska
+		-------
+
+Slicnost/rastojanje izmedju klastera pri spajanju mozemo da odredimo  (ovo je samo za agglomerative clsutering?):
+	- min veza  (zove se i single veza, uzimamo najmanje rastojanje medju tackama neka 2 klastera)
+		PROS:											CONS:
+		- moze da obradi ne-elipticke klastere			- osetljiv na sum i outliere
+	- max veza  (zove se i complete veza, uzimamo najvece rastojanje medju tackama neka 2 kalstera)
+		PROS:											CONS:
+		- otporan na sum i outliere						- davace globularne klastere i tendencija je da razbija velike klastere
+	- prosecno rastojanje medju svim tackama klastera (svaka sa svakom (ali bez ponavljanja jer d(a,b) = d(b,a)))
+		PROS:											CONS:
+		- otporan na sum i outliere (ovo dodje kao 		- davace globularne klastere
+		  neki kompromis izmedju prethodna dva)
+	- rastojanje centroida klastera (ili alternmativno medijane)
+		ovo je navodno lose jer ne uzima u obzir raspodelu podataka u klasterima
+	- formiramo nov klaster od 2 druga tako da se spajanjem minimizuje promena varijanse unutar tog novog klastera (?)
+	- Ward-ov metod (nov klaster se formira od dva klastera cijim spajanjem se ukupna SSE unutar novog klastera povecava najmanje moguce) 
+		Objasnjenje koje sam guglao: wardov metod se "pretvara" da spaja 2 klastera i onda racuna SSE za tako dobijeni klaster,
+		ovo se radi za svako moguce spajanje (?) i odabere se ono koje ima najmanju SSE
+		formula za wardov:	... nisam zapamtio ... (?)
+		PROS:											CONS:
+		- otporan na sum i outliere						- davace globularne klastere
+	- Lens Vilijamsova formula za slicnost klastera(to je uopstenje svih prethodnih)
+		Na predavanju je rekao da nam ova formula omogucava da ne moram da cuvamo originalne tacke vec je moguce
+		da se matrica slicnosti azurira kod svakog spajanja (ali nije objasnio sta to znaci, niti igde pise kako se ostvaruje (?))
+		Ako je klaster R dobijen spajanjem A i B , i gledamo slicnost R i Q (gde je p funkcija slicnsoti):
+			p(R, Q) = alfa_a*p(A,Q) + alfa_b*p(B,Q) + beta*p(A,B) + gama*|p(A,Q) - p(B,Q)|
+		izgovorm vrenodsti za ove alfa,beta... mozemo da dobijemo ostale mere slicnosti, npr
+		za alfa_a = 1/2 , alfa_b = 1/2, beta = 0, gama = -1/2 dobicemo  min(single) vezu,
+		a isto to a gama = 1/2 dobijamo max vezu
+		dao je tabelu za razne mere, mrzi me da ucim to...
+ 
+Algoritmi zasnovani na mrezama i gustini   (jel ovo treca grupa (?))  
+	Ovde je ideja da se odrede regioni(klasteri) sa visokom gustinom tacaka koji su razdvojeni regionima 
+	sa manjom gustinom tacaka. Ovi algoritmi su pogodni za klastere koji su razlicitog oblika. 
+	Delimo prostor na neke celije/hiperkocke i brojimo tacke u nekoj celiji. Ako je broj tacaka 
+	tu veci od neke unapred zadate velicine k, onda kazemo da je celija gusta. Guste celije
+	koje imaju zajednicke ivice (ili dovoljno samo jednu tacku) ce ciniti klaster, dok retke celije ne pripadaju nijednom klasteru
+	Od broja celija moze da zavisi da li ce se neka proglasiti za gustu/retku (posto manja celija moze da sadezi manje podataka nego veca)
+	------- Alg zasnovan na mrezama
+	// ulaz su pdoaci D, gustina tacaka t, gustina mreze p 
+	diskretizujemo_sve_dimenzije_D_u_p_vrednosti
+	odredi_gustinu_celija_mreze_za_gustinu_t
+	napravi_grafik_gde_su_guste_celije_povezane_ako_su_susedne
+	odrediti_komponente_povezanosti_grafa							- to ce biti klasteri
+	RETURN komponente_povezanosti_grafa
+	-------
+
+	DBSCAN (Density Based Spatial Clustering of Applications with Noise) je primer algoritma zasnovanog na gustini
+	Ideja je da se za svaku tacku odredi da li je 1) tacka jezgra, 2) tacka na granici 3)sum
+	Ako imamo neko zadato eps i t, 1) je ako se u eps okolini nalazi bar t drugih tacaka,
+	2) je ako u eps okolini ima manje od t tacaka ali se nalazi bar jedna tacka jezgra, 3) u ostlaim slucajevima
+	PROS:											CONS:
+	- pogodna za klastere nepravilnih oblika		- los kada imamo klastere razlicitih gustina
+													- osetljiv je na dimenzionalnost podataka (?)		
+	-------  DBSCAN pseudokod
+	// ulaz je skup podataka D, eps, i t 
+	odrediti_jezgro_granicu_i_sum_za_podatke_iz_D_na_osnovu_eps_i_t
+	formirati_graf_gde_su_povezane_tacke_koje_pripadaju_jezgru_ako_su_medjusobno_unutar_eps
+	odrediti_komponenete_povezanosti_grafa
+	granicne_tacke_dodeliti_komponenti_povezanosti_sa_kojom_je_najbolje_povezana		- u smislu onoj klasi cijih jezgarnih tacaka  ima vise u eps okolini granicne tacke (?)
+	RETURN komponente_povezanosti_grafa													
+	-------
+
+Nacin da odredimo da li ima smisla kalsterovati:
+	- probamo razlicite algoritme i ako ne daju rezultat onda nema smisla da klasterujemo(kako glupa recenica isuse boze)
+	- za podatke u euklidskom prostoru mozemo da korsitimo neke metode tipa:
+		-Hopkinsova statistika 
+			Biramo neki broj p koji je <n (n je broj podataka) slucajnih tacaka iz prostora u kom se nalaze podaci
+			iz originalnog skupa onda odaberemo uzorak velicine. Sada za sve tacke od p slucajno generisanih i za sve tacke
+			iz uzorka iz originalnih racunamo rastojanje do najblize tacke iz originalnog skupa
+				Hopkins = sum_1_do_p(oi) / sum_1_do_p(vi + oi)		(v su rastojanja za vestacki skup, a o za uzoracki skup)
+			Ako je ~0.5 onda su podaci slucajni, ako je ~1 onda ima smisla klasterovati (jer u tom slucaju vi teze 0 (?))
+
+Ako ima smisla raditi klasterovanje, najlaksi nacin da odredimo broj klastera koji treba da postoji je da probamo
+vise vrednosti i onda uporedimo rezultat, tj vidimo da posle nekog broja klastera greska krece da raste, tj tu treba da stanemo
+
+Provera korektnosti klasterovanja:
+	- unutrasnji kriterijumi provere
+		- mere hohezije (pogodni za alg. gde se odredjuju ratojanja, kao npr kmeans ali losi za alg sa mrezama/gustinama)
+						(kohezija dodje kao neka mera koliko su povezani elementi u klasteru, tj koliko su blizu jedan drugom)
+			- zbir kvadrata medjusobnog rastojanja tacaka u klasteru/zbir kvadrata rastojanja tacaka do centroida
+			- (?)
+		- mere razdvajanja (ovo dodje kao neka mera koliko su razliciti klasteri udaljeni)
+			- zbir rastojanja izmedju elemenata u klasteru i elemenata van klastera / rastojanje centroida
+		- odnos rastojanja u/van klastera 		(preciznije nego kohezija i razdvajanje, hocemo da bude sto manja)
+		- sillouette coefficient 
+			silueta se racuna za konkretan objekat X, sto je blize 1 to je bolje
+			silhouette = (b - a) / max(b, a) 	b je rastojanje od X do najblize tacke iz nekog drugog klastera
+												a je prosecno rastojanje od X do tacaka iz istog klastera kom X pripada 
+		- verovatnosna mera (nisam skapirao, nista na predavanju nije rekao konkretno za ovo, slajd 51 (?))
+	- spoljasnji kriterijumi provere
+		(ovo je kada imamo neke dodatne informacije sta kojoj klasi pripada ili neke druge informacije
+		u realnim situacijama ovo uglavnom ne moze da se radi)
+		- matrica konfuzije
+		- neke mere tipa gini, entropija, preciznost, odziv, f-mera
+
+Klasterovanje kategorickih podataka:   
+	(nad ovakvim pdoacima ne rade direktno prethodno navedene metode jer nam je racunanje rastojanja problematicno)
+	Mozemo da ih konvertuejmo u binarne, nakon toga centroid mozemo da trazimo:
+		- histogram verovatnoca za svaki atribut (?)
+		- uzmemo kategoricku vrednost koja se javlja u najvecem procentu
+		  (naveden je neki ROCK algortiam koji moze da radi klasterovanje sa kategorickim, ali nista detaljno o njemu)
+	Moguci pristupi:
+		- k-modalno klasterovanje 
+			(moda je vrednost koja se najcesce pojavljuje)
+			(moda se racuna za svaki atribut nezavisno i onda se za centroid uzme taj skup svih moda
+			Centroid uopste ne mora da pripada polaznom skupu)
+			(ovaj prsitup je dobar kada su nam vrednsoti kategorickih atributa ravnomerno rasoredjene, ako nisu 
+			ravnomerno rasp. onda se vrsi normalizacija ( koju nisam skapirao?))
+		- k-medoid klasterovanje
+			(slicno samo ce centroid biti medoid, tj neki element iz polaznog skupa)
+
+Klasterovanje po potprostorima: (nije skroz jasno da li se ovo odnosi na klasterovanje kategorickih)
+	(ne moramo da klasterujemo po celom skupu atributa vec po nekom nejegovo podskupu, a od izbora tog 
+	podskupa zavise osobine klastera koji ce se dobiti)
+	primeri algoritama: CLIQUE  i DENCLUE	(nisam ispratio sta oni tanco rade i kako)
+
+Klasterovanje skalabilinh podataka: (nije skroz jasno da li se ovo odnosi na klasterovanje kategorickih)
+	to je kada celi podaci NE mogu da se smeste u memoriju
+	primeri algoritama: CLARA, CLARANS, CURE, BIRCH 	(nisam ispratio sta oni tanco rade i kako)
+
+Imamo jos jednu kategoriju klasterovanja (?) koja je zasnovana na neuronskim mrezama
+SOM (Self Organizing Map), slicne su KNN, ali se pri radu pored tekuceg centroida azuriraju i oni koji
+su mu u blizini po topografskoj orijentaciji (?)
+Celije (?) su organizovane preko neuronskih mreza 
+------- osnovni SOM algoritam	
+inicijalizuemo_centroide						- centroidi se na pocetku biraju slucajno
+REPEAT
+	izabrati_sledeci_objekat					- nije uopste jasno na sta se ovde misli i zasto se radi, niti je mitic bilo gde objasnio, samo na slajdovima stoji "ako je broj objekata veliki, ne korsite se svi"
+	naci_najblizi_centroid_tom_objektu			- na osnovu neke metrike (euklidsko/kosinusno...)
+	azurirati_centroid_i_susedne_centroide		- ima na slajdu 65 neki kancer
+UNTIL centroidi_se_ne_menjaju
+dodeli_svaki_obejakt_najvlizem_centroidu
+RETURN dobijeni_centroidi_i_klasteri
+-------
+PROS:									CONS:	
+- susedni klasteri su vise				- potreban odabir parametara, funkcije za racunanje susedstva i centroida  (????)
+  u relaciji od nesusednih				- SOM klaster ne mora da odgovara prirodnom klasteru 
+- pogodno za vizuelizaciju				- Nedostaje specificna funkcija objekta kojom moze da se izrazi postupak (????)
+- SOM odredjuje strukturu  (????)		- nema garancije za konvergenciju (ali u praksi konvergira)
+
+
+
+
+------- 15.otkrivanje_anomalija.pdf -------
+Hawkins-ova definicija anomalije:
+	Anomalija je opservacija koja se toliko razliku od ostalih opservacija da se javlja sumnja 
+	da je nastala pomocu drugacijeg mehanizma
+
+Uzroci anomalija mogu da budu razne: pogresno unesen podatak, neka druga ljudska greska, pogresno formiran podatak,
+kada imamo podatke iz razlitih izvora koji mozda drugacije mere te podatke....
+
+pored onih uobicajnih klasicnih outliera i suma moramo da pazimo i da 
+kada imamo vise atributa u instanci podataka moze slucajno da se desi da pojedinacno atributi upadaju u 
+odgovarajuce vrednosti ali da kombinacija atributa nema smisla, tj bude anomalija
+Sum nije interesantan za istrazivanje, ali anomalija koja nije nastala sumom moze da bude
+
+Tehnike za preoznavanje anomalija:
+	- zasnovane na formiranju modela
+		kad napravimo neki model koji se ponasa ocekivano, anomalije su one vrednsoti koje se ne uklapaju
+		u model(to je kod nadgledanih modela), ili one koje mozda pripadaju retkim klasama (to je kod nenadgledanih modela)
+	- sa vizuelizacijom
+		vidimo na crtezu sta odstupa
+	- zasnovane na statistici
+		nisam bas razumeo ovo (?)
+	- zasnovane na odredjuvanju rastojanja
+		anomalije su oni objekti koji su dalje od nekog praga od ostalih
+		ovde kaze da se koristi KNN ili Mahalanobisovo rastojanje (?)
+		Generalno metode zasnovane na rastojanju su jednostvne za primenu ali racunski zahtevne
+	- zasnovane na odredjuvanju gustina
+		Ako je oko nekog objekta gustina ostalih objekata mala, onda on moze biti anomalija
+		nisam ispratio ovo za KNN i DBSCAN neke formule (?)
+		LOF (Local Outlier Factor) je gustina u nekom lokalnom okruzenju za svaku tacku. 
+		U sustini gledamo koliko su mu gusti najblizi susedi, sto je LOF vece to je verovatnije da je u pitanju neki element van granica
+		Generalno metode zasnovane na gustini su jednostvne za primenu ali racunski zahtevne
+	- zasnovani na klasterovanju  (nije skroz jasno da li ovo spada u metode zasnovane na gustinama ili je zasebna stvar)
+		objekat je anomalija ako ocigledno ne pripada nijednom klasteru
+
+
+
+
+------- 16.pravila_pridruzivanja.pdf -------
+Za nas su pravila pridruzivanja oblika X -> Y i tumacimo ih: ako se u nekoj transakciji nasao X vrlo
+je verovatno (ali nije garantovano) da ce se naci i Y (naravno i X i Y mogu biti i pojedinacni elementi ali i neki
+skupovi elemenata (skupovi stavki))
+
+Osnovni pojmovi:
+	- skup stavki			- sadrzi jednu ili vise stavki
+	- k-skup stavki 		- skup koji sadrzi k stavki
+	- duzina transakcije	- broj stavki u transakciji
+	- podrska				- support(A->B) = broj_transakcija_koji_sadrze_A_i_B / ukupni_broj_transakcija
+	- pouzdanost			- conf(A->b) = broj_koji_sadrzi_A_i_B / br_koji_sadrzi_A
+	- cest skup stavki		- skup koji ima support > minsup		(mi cemo pravila pridruzivanja definisati nad cestim skupovima stavki)
+	- pouzdan skup stavki	- skup koji ima confidence > minconf 
+
+Formalna definicija pravila pridruzivanja:
+	Ako su X i Y skupovi stavki, onda se pravilo u oznaci X -> Y naziva pravilo pridruzivanja sa minimalnom
+	podrskom minsup i minmalnom pouzdanoscu minconf ako vazi:	1) support(X unija Y) >= minsup
+																2) conf(X -> Y) >= minconf
+
+Cilj nam je da nadjemo SVA moguca pravila pridruzivanja koji zadovoljavaju 1) i 2)
+minconf obicno postavljamo visoko, npr 80% a minsup je uglavnom nizi, npr 5-10%
+Visoka podrska nam govori da se pravilo cesto pojavljuje i da je manje verovatno da je to pojavljivanje slucajno
+Visoka pouzdanost nam ukazuje na visok nivo uzrocnosti i jaku vezu pridruzivanja, tj kaze nam da je to pravilo od interesa
+
+Problem sa generisanjem svih mogucih pravila je sto ih ima previse, tako da cemo korsititi neke tehnike koje nam omogucavaju
+da unapred pametno odbacimo neka pravila koja znamo da nam nece biti interesantna. Sto manje poredjenja radimo, to ce proces biti
+efikasniji, a to smanjivanje poredjenja mozemo da radimo:
+	- smanjenjem broja kandidatskih stavki  (npr apriori princip, gde eliminisemo skupove koji nisu cesti bez da uospte racunamo njihovu podrsku)
+	- smanjenje broja transakcija			(sa povecanjem velicine kandidatskih skupova smanjuje se broj transakcija koje sadrze skupove te velicine, tj moramo da razmatramo manje transakcija)
+	- Smanjenje broja poredjenja			(mozemo da podatke smestamo u neke efikasne strukture podataka)
+ 
+Stavke iz skupa transakcija koje ispitujemo se najcesce predstavljaju u obliku resetke
+
+Apriori princip:	 ako je skup stacki cest, tada su i siv njegovi podskupovi cesti  (ovo se jos zove i zatvorenje nanize(downward closure))
+Osobina anti-monotonosti:	Mera f poseduje osobinu anti-monotonosti ako za sve skupove X i Y 
+							vazi: X je podskup od Y   ->  f(Y) <= f(X) 
+Posledica ovoga je da ako neki skup A nije podrzan (tj nije cest), tada nijedan skup B koji je nadskup
+od A ne mora da bude uopste razmatran zato sto ne moze biti cest
+
+anti-monotonost vazi za support ali ne i za confidende. Za conf moramo da korsitimo ovo:
+ako X1 < X2 < I, gde us ova 3 skupovi, onda:
+	conf(X2 -> I - X2) >= conf(X1 -> I - X1)
+Posledica ovoga je da je moguca eliminacija redundatnih pravila, naveden je primer: ako imamo pravila {hleb} -> {pivo, mleklo}
+i {hleb, pivo} -> {mleklo}, prvo pravilo moze da se ukloni jer ima istu podrsku ali manju pouzdanost od drugog
+
+Moguci algoritmi za odredjivanje skupa pravila:
+	- brute force 	(za svaki skup stavki u resetku prebrojavamo podrsku pregledanjem baze i uparuje se svaka transakcija sa svakim kandidatom, ovo je vrlo neefikasno)
+	- apriori algoritam (koristi apriori princip i anti-monotonost, i neke posebne strukture podataka da dodatno smanji broj poredjenja)
+	  ------- apriori pseudokod  (ovo je samo za generisanje cestog skupa stavki!!!)
+	  k=1
+	  F1 = {skup svih cestih 1-stavki}
+	  WHILE Fk_nije_prazan:
+	  	generisemo_skup_k+1_stavki_spajanjem_stavki_na_osnovu_Fk		 - apriori koristi Fk-1 x Fk-1 princip opisan ispod
+		odbacujemo_k+1_stavke_koje_ne_zadovoljavaju_apriori_princip		 - tj koje znamo da ne moramo ni da proveravamo na osnovu zatvorenja nanize
+		odrediti_Fk+1_brojanjem_podrske									 - nov cest skup stavki (odredjuje se samo na osnovu podrske)
+		odbacimo_one_sa_podrskom_manjom_od_minsup						 - i odbacuje se samo na osnovu minsup, u ovom algoritmu uopste ne gledamo minconf
+		k++
+	  END WHILE
+	  RETURN (unija svih F1, F2, ... Fk)								- cesti skupovi stavki za sve duzine 1,2,...k
+	  -------
+	  Na osnovu cestog skupova stavki Y pravimo pravila, tako sto ih podelimo na 2 neprazna podksupa:
+	  X i Y-X, i onda je pravilo X -> Y-X ako ima vecu pouzdanost od minconf (i sup>minsup)
+	  Nacini generisanja tekuceg skupa stavki za apriori:
+	  	- gruba sila 
+		- Fk-1 x F1    -> tj formiramo skup duzine k tako sto na skup duzine k-1 koji vec imamo dodajemo jednoclane skupove
+						  ovaj nacin moze da bude neefikasan zatos to isti skup moze da se dobije na vise nacina
+		- Fk-1 x Fk-1  -> kombinujemo 2 skupa samo ako su im svi elementi isti sem poslednjeg i onda uzmemo te zajednicke + ta 2 sto se razlikuju
+						  apriori alg koristi ovaj princip (ovde pretpostavljamo da su stavke sortirane u leksikografskom poretku)
+
+Smanjivanje broja poredjenja strukturama podataka:  (vidi slike u momirovoj skripti, strana 55)
+Mozemo da koristimo
+	- prefiksno stablo
+		najbolje se vidi sa slike, na nivou N cuvamo prefiks duzine N, sve mora da bude leksikografski uredjeno
+	- hash drvo
+		kandidatske stavke hesiramo i smesamo u buckete (korpe). U listovima su bucketi sa kandidatima, dok svaki unutrasnji cvor
+		imaj neku hes funkciju, a pomocu tih funkcija se obilazi drvo. Kada dodje na red neka stavka koju treba da proverimo, propustamo je
+		kroz hash funkcije (redom od korena pa nanize kroz cvorove) dok se ne dodje do bucketa
+		vidi primer u momoirovoj skripti
+
+Skup stavki je maksimalno cest ako nijedan od njegovih neposrednih nadskupova nije cest (ako je neki skup maksimalno cest, onda su svi njegovi podskupovi cesti, tj oni
+koji nisu podskup nekog maksimalno cestog, mogu slobodno da se izbace iz razmatranja jer od njih necemo dobiti nijedno pravilo)
+Skup stavki je  zatvoren ako nijedan od njegovih neposrednih nadskupova nema istu podrsku (posledica je da svi podskupovi
+zatvorenog skupa stavki imaju istu podrsku)
+Maksimalni zatvoreni skup stavki je presek skupa maksimalnih i skupa zatvorenih stavki. Ispostavlja se da je dovoljno
+da cuvamo samo ovvaj skup jer iz njega mozemo dobiti sva pravila koja su nam znacajna (ovako postizemo kompaktno predstavljanje
+relevantnih skupova stavki)
+
+Imamo vise razlicitih nacina kako da obilazimo resetku sa pravilima: (nijedan nije najbolji, biramo sta hocemo u zavisnosti od problema)
+	- u sirinu/nivo po nivo  (ovo radi apriori algoritam) (mana ovoga je sto mora u memoriji da se cuvaju sve stavke, jer je za naredni nivo potrebna informacija o prethodnom)
+	- u dubinu				 (ovo koristi neki SIDE algoritam koji nismo radili)
+	- od opsteg ka posebnom  (jel ovo isto sto i u sirinu (?))
+	- od posebnog ka opstem 
+	- dvosmerno		 
+	- obilazenje moze jos da bude prefiksno i postfiksno  (tj 'u desno' ili 'u levo)
+
+Transakcije mogu da budu predstavljene u tabeli u dva oblika, jedan je onaj standardni gde imamo broj transakcije i onda u istom redu 
+oznake da li je neka stavka deo transakcije ili ne, a drugi nacin je 'vertikalni' zapis, gde svaki red sadrzi jedan artikal i 
+informaciju u kojim se sve transakcijama nasao. U nekim situacijama ta vertikalna reprezentacija je bolja
+jer iako ce koristiti vise memorije (?) stedece se na potrosnji CPU-a (?)
+nisam razumeo sta tacno, ali korsiti neke liste transakcija, a za prebrojanvanje k+1 stavki korsite se preseci 
+tih listi za skupove k-stavki
+------- vertikalni apriori pseudokod
+k=1
+F1 = {skup svih cestih 1-stavki}
+formirati_vertikalnu_listu_transakcija								 - razlika 				
+WHILE Fk_nije_prazan:
+	generisemo_skup_k+1_stavki_spajanjem_stavki_na_osnovu_Fk		 - isto kao pre
+	odbacujemo_k+1_stavke_koje_ne_zadovoljavaju_apriori_princip		 - isto kao pre
+	formirati_liste(?)_za_kadidatse_stavke_duzine_k+1_ 					- (?)
+		_kao_presek_listi_para_stavki_iz_Fk_koriscenih_za_				- (?)
+		_pravljenjes_skupa_duzine_k+1									- (?)
+	Fk+1 = ceste_stavke_zajedno_sa_listama								- (?) 
+	k++
+END WHILE
+RETURN (unija svih F1, F2, ... Fk)	
+-------
+
+(ovaj FP rast je veoma shit objasnjen na predavanjima i slajdovima)
+(preporuka je da se procita i iz momirove skripte jer je tamo okej objasnjeno, str 62 nadalje, samo ovi primeri iz knjige 
+koji su korisceni i u momirovoj i na slajdovima deluju pogresno za uslovna stabla ali nisam siguran da sam u pravu)
+Algoritam FP (Frequent Pattern) nam omogucava kompaktnu reprezentaciju skupova, sto je vrci broj
+transakcija sa istim pocetnim delom, to je stepen kompresije veci 
+Za svaku transakciju koju imamo (u onom standardnom obliku) u okviru jedne transakcije (reda u tabeli)
+sortiramo 1-skupove stavki OPADAJUCE PO BROJU POJAVLJIVANJA (u svim transakcijama(?)) (u zavisnosti od sortiranja,
+dobice se razlicit izgled drveta) (NOTE: NA SLAJDOVIMA OVO NIJE URADJENO MITICU DEBILU)
+Pocinjemo od nekog korenog cvora, i dodaju se stavke i njihovi brojevi pojavljivanja (u svakom cvoru mora da se azurira
+broj pojavljivanja, na osnvu tih brojeva moze da se rekonstruise polazni skup stavki.) Uz brojeve pojavljivanja, cuvamo i 
+neke pokazivace (to se najbolje vidi na slikama)
+Kada ovo drbo konstruisemo, ceste skupove stavki nalazimo na sledeci nacin: (pretpostavimo da ono
+uredjenje koje smo napravili u transakcijama bude {A,B,C,D,E}) prvo nadjemo sve ceste stavke koje se zavrsavaju na E, 
+pa one koje se zavrsavaju na D, pa na C,B,A, ovo dodje kao neko obilazenje drveta po sufiksu. Jedini cesti skupovi
+stavki koji npr sadrze E mogu da se nadju samo obilazenjem onih grana drveta kojima je sufiks E
+Onda isto to radimo za viseclane sufikse (npr DE) (?) a iz od drveta koje smo napravili pravimo 'uslovno FP drvo' gde
+su izbaceni sufiksi iz proslog koraka (?????)
+
+
+
+
+------- 17.mere_interesantnosti.pdf -------
+Kada generisemo pravila, ogromanj broj njih moze da nam uoste ne bude interesantnan, zato koristimo ove
+mere (ne postoji najbolja mera u svim slucajevima, biramo onu u zavisnoti od nasih podataka i na osnovu onoga 
+sto ocekujemo kao rezultat istrazivanja (?) )
+
+Vecinu mera mozemo lako da izvedemo iz tabele kontigenata (najlakse se vidi na slici sta je)
+Vidimo neke osobine, npr f1+ = f11 + f10, slicno za ostale,
+					     f1+ + f0+ = N (N je ukupni broj transakcija u bazi), slicno i f+1 + f+0 = H
+Slicna tabela moze da se napravi i u vise dimenzija, isto se najlakse vidi na slici
+
+Neke cinjenice koje koristimo:
+	- sup(A) = f1+ / N
+	- sup(A,B) = f11 / N, ali to je i =P(A,B) tj verovatnoca da se A i B javljaju zajedno
+	- P(A,B) = P(A)*P(B) ako su A i B nezavisni, dakle i njihova podrska je u tom slucaju sup(A,B) = sup(A) * sup(B)
+	- ako se sup(A,B) i sup(A)*sup(B) razlikuju to znaci da su A i B nekako zavisni
+	- pouzdanost meri odstupanje sup(A,B) od sup(A) ali ne i od sup(B)
+
+Mere:
+	- lift 					
+		Kada posmatramo obicnu formulu za confidence, vidimo da ona nigde ne ukljucuje podrsku za B, 
+		Lift mera nam daje neku ocenu koja ukljucuje i podrsku za B. Interesantna su nam pravila koja imaju lift > 1
+			Lift(a,b) = conf(a->b) / sup(b)    =   sup(a->b) / sup(a)*sup(b)
+	- pietsky shapiro mera	
+		Koristimo kada Lift ne daje dobru informaciju, npr pravilo koje ima manju podrsku i veci lift, moze
+		u nekim situacijama da bude manje interesantno od pravila koje ima vecu podrsku i manji lift. Ta situacija se desava 
+		kada je pravilo primenljivo na veci deo materijala (?)
+			PS = sup(a,b) - sup(a)*sup(b)
+		Ako PS=0 -> a i b su nezavisni, PS>0 -> a i b su pozitivno korelisani, PS<0 -> a i b su negativno korelisani
+	- odnos kamata          
+		ovo je kao uosptena formula za lift (?) (tu nemamo samo A i B, nego mozemo da imamo A,B,C,D....)
+			I(a, b, c, d..) = sup(a,b,c,d...) / proizvod( sup(i_ti_element) )
+		Kada imamo samo 2, onda je to lift
+		Odnos kamata NE zadovoljava osobinu zatvorenja nanize tako da sa tim ne mozemo bas da napravimo neki korsitan algoritam 
+	- deployability			
+		procenat onih koji zadoboljavaju levu ali ne i desnu stranu pravila
+			deployability = ( (broj_pravila_koji_zadovoljavaju_samo_levu_stranu_pravila) / N )*100
+	- koef. korelacije		
+		(slajd 13 i 14, odakle mu da je ocekivanje isto sto i podrska???)
+		kada imamo 2 promenljive, mozemo da koristeci tabelu kontigenata izrazimo Pirsonov koeficijent korelacije
+			p = (f11*f00 - f01*f10) / sqrt(f1+ * f+1 * f0+ * f+0)
+	- x^2 mera (hi kvadrat mera)
+		nisam razumeo, niti je objasnio lepo na predavanju
+	- IS mera
+		Primenjuje se samo za asimetricne binarne promenljive	
+		Ovo je kao lift mera samo ima koren ispod razlomacke crte
+	  		IS(a,b) = sup(a,b) / sqrt( sup(a)*sup(b) )
+	- kosinusna mera kolone  
+		(=IS za binarne, nisam razumeo dalje od toga (?))
+	- pouzdanost svih		
+		Odnosi se na skupove stavki, ne na pravila
+			all_confidence(X) = sup(X) / max_po_x( sup(x))
+		Znaci ovde je X skup od koga smo napravili neko pravilo, a x je pojedinacni element(stavka) tog skupa
+		Ovo nam kaze da sva pravila koja mogu da se izvedu iz X imaju podrsku bar jednaku all_confidence(X)
+
+Dobra mera M mora da zadovoljava 3 osobine:
+	- M(A,B) = 0 ako su A i B statisticki nezavisne
+	- M(A,B) se monotono povecava kako raste P(A,B) tojest sup(A,B) cak i kada sup(A) i sup(B) ostaju nepromenjene
+	- M(A,B) se monotono smanjuje kako se P(A) (ili P(B) ali ne oba) smanjuje dok P(A,B) i P(B) (tj P(A))  ostaju nepromenjene
+
+Ako za meru vazi M(A,B) = M(B,A) onda je mera simetricna (naprimer PS je simetricna)
+Pitanje je jos i kako se koja mera ponasa u situacijama kada sklairamo vrednosti u redu ili koloni,
+sta se desava u sluaju inverzije (tj ako su nam do sada bile znacaje 1ice, a sad su nam znacaje nule), 
+i jos sta se desava kada se dodaju prazni slogovi
+Na slajdu 24 ima tabela koja odgovara na ovo za neke mere, mrzi me da pisem 
+
+Simpsonov paradoks:
+	Kada u analizi imamo neke skrivene grupe podataka koje ne uzmemo u obzir, moze da se desi da dobijemo
+	kontra rezultat u odnosu na slucaj gde ne razmatramo te 'skrivene' grupe podataka. Ovo moze da se desi
+	bez obzira koju meru za procenu kvaliteta koristimo(?)
+	(vidi na slajdovima primer)
+
+
+
+  
+------- 18.pravila_pridruzivanja_dodatne_tehnike.pdf -------	
+algoritmi koje smo do sada videli (apriori i vertikalni apriori) su primenljivi samo na asimetricne binarne atribute
+za ostale vrste atributa (kategoricke, neprekidne, simetricne binarne) mora nesto drugog
+
+za kategoricke:
+	- napravimo od njih asimetricne binarne(dakle imamo po jednu 0 ili 1 za svaku mogucu kategoricku vrednost)
+	  Ovo moze da bude problematicno ako npr atribut ima ogroman broj mogucih vrednosti, dodatno desice se da
+	  veliki broj tih noviha tributa ima malu podrsku. Moguce resenje za to je agregacije (? ali nije rekao na koji nacin se ta agregacija radi)
+	  Jos jedan problem koji moze da se desi je da je jedna vrednsot atributa mnogo cesta (npr 95% ima tu vrednost),
+	  za to je moguce resenje da se izbrisu stavke koje imaju visoku ucestalost tog atributa jer nam to nije interesantno 
+	  (? uopste nije skroz jasno da li su ovo sve bili generalni problemi ili samo za kategoricke podatke)
+
+za neprekidne imamo razlicite metode:
+	- zasnovane na diskretizaciji
+		Diskretiazcija moze biti sa (ovo nisam razumeo) i bez nadzora(delovi iste sirine, diskretizacija dobijena klasterovanjem...)
+		Velicina intervala koje odaberemo za diskretizaciju ce uticati na podrsku i conf
+		jedno resenje je da probamo sve moguce sirine intervala ali to je neefikasno
+	- statistici zasnovane metode
+		(?) koristimo neku Z statistiku, nisam nista razumeo, ima u momirovoj skripti ali me jako mrzi...
+	- zasnovane na ne-diskertizaciji (minApriori)
+		ovde nam je zanimljivije da gledamo veze izmedju neprekidnih atributa nego izmedju itnervala
+		koji bi se dobili diskretizacijom
+		u minApriori za term matricu radimo normalizaciju i onda podrsku za stavku (stavka nam je skup reci)
+		racunamo kao zbir minimalnih vrednosti u VRSTI koju cine reci iz stavke
+		Tj minApriori nije algoritam nego je to mera podrske (?). Monotono raste kako raste normalizovana frekvencija reci
+		, monotono raste kako raste broj dokumenata koji sadrze rec, monotono opada ako raste borj reci u 
+		skupu stavki( ovo je anti-monotonost)
+
+Pravila pridruzivanja izmedju vise nivoa:
+	Neke konkretne artikle u potrosackoj korpi mozemo da tretiramo kao listove u nekoj hijerarhiji. Npr recimo da je natklasa
+	id 'hleb' 'hrana'. Kada listova u hijerarhiji ima mnogo, moze se desiti da podrska za pravila koja ih sadrze bude veoma mala i da
+	nam neko pravilo slucajno promakne. Ideja je da mozemo da formiramo pravila koja se ne nalaze na istom nivou hijerarhije, npr
+	ako je 'racunar' potkalsa od 'elektronika', mi mozemo da probamo da napravimo parivlo koje ima 'hleb' i 'elektronika'
+	U drvetu hijerarhije vazi:
+		- Ako je X roditelj od X1,X2 onda sup(X) <= sup(X1) + sup(X2)
+		- ako je sup(X1 unija Y1) >= minsup gde je X rodtelj od X1, a Y roditelj od Y1
+		  onda sup(X unija Y1 )>= minsup, sup(X1 u Y) >= minsup i sup(X u Y) >= minsup
+		- ako conf(X1->Y1) >= minconf tada conf(X1->Y) >= minconf
+	Da bismo ostvarili ovakva pravila pridruzivanja imamo 2 pristupa:
+		- da pravilo koje razmatramo prosirimo stavke transakcije sa stavkom sa viseg nivoa hijerarhije
+		  Problem ovde moze da bude sto stavke pri vrhu hijerarhije imaju mnogo vecu podrsku, i takodje ovako povecavamo dimenzionalnost podataka sto mozda ne zelimo
+		- da formiramo ceste skupove stavki prvo na najvisem nivou, pa onda na narednom nivou itd
+		  Problem je ovde sto gomilamo IO operacije jer vise puta citamo datoteku  sa hijerarhijom(?)
+
+Pravila pridruzivanja za nizove podataka:
+	Nizove posmatramo ovako, svaki objekat moze u vise vremenskih trenutaka da registruje neke dogadjaje
+	npr:
+		object 		timestamp	events 
+		A 			10			2,5,3			(npr mozemo da tumacimo kupac A u trenutku 10 kupi artikle 2,5,3 a u trenutku 20 kupi artikle 6 i 1)
+		A			20			6,1				(ovaj skup eventova je tarnsakcija u datom trenutku t)
+	Ovakve podatke mozemo smestiti na neku vremensku osu, cilj nam je da uocimo neke pravilnosti ali uzimajuci u obzir i trenutke kada su se desili (?)
+
+	Formalna definicija niske (sekvencijalnog obrasca (?)):
+		Niska je uredjena lista elemenata(transakcija) S=<e1e2e3...>, pri cemu svaki element sadrzi
+		skup dogadjaja(stavki) ei = {i1i2...ik}. Svakom elementu se dodeljuje odredjeno vreme (ili mesto).
+	
+	k-niska je niska koja sadrzi k dogadjaja(stavki), primer <Analiza1, Analiza2, Analiza3>
+
+	Formalna definicija podniske:
+		Niska <a1a2...an> je sadrzana u nisci <b1b2...bm> ako postoje celi brojevi i1<i2...<in tako da vazi
+		a1 <=(podskup) bi1, s1 <= bi2... an <= bin 
+	(znaci ovde pazimo na to da su ai i bi TRANSAKCIJE, tj u 2 niske se ti elementi poklapaju ako je jedna 
+	transakcija sadrzana u drugoj, nebitno kojim redosledom i to jos moramo da pazimo da ne moze npr 2 transakcije
+	neke iz s2 da se nadju u jednoj transakciji iz s1) (ima okej primer na slajdovima sta je podniska a sta ne)
+
+	Kada istrazujemo sekvencijalne obrasce, zadata nam je baza sa niskama i neka najmanja podrska minsup
+	Podrska niske w je:		sup(w) = broj_niski_koje_sadrze_w / ukupan_broj_niski
+	Cilj je naci sve podniske koje imaju podrsku vecu od minsup  (isto ima okej primer na slajdovima)
+	
+	Ponovo i ovde gledamo ceste podniske, samo sto imamo vise razlicitih nacina da konstruisemo kandidatske podniske
+	Npr duzne 1 su standarno <{a1}> ali vec za duzinu 2 imamo vise nacina: Ako imamo n dogadjaja a1,a2..an
+	mozemo da konstruisemo kao <{ai, aj}> za sve kombinacije i,j  ali mozemo ih i ovako <{ai} {aj}> za sve kombinacije i,j 
+	dakle kao nisku sa jednim elementom sa dva dogadjaja ili kao nisku sa 2 elementa sa po 1 dogadjajem.
+	Analogno i za sve vece duzine niski.
+	Dogadjaji mogu i da se ponavljaju, npr ako imamo dogadjaj a i b, a trazimo nisku duzine 3, jedna moguca
+	varijanta je <{a}{a,b}> (naravno redosled je vazan jer je tako po definiciji niske tako da niska <{a}{b,a}> nije
+	ista kao ova prethodna!)
+
+	Algoritam za formiranje sekvencijalnih obrazaca (misli se na kandidate (?)) 
+		- napravimo prvi prolaz kroz bazu i dobijemo sve 1-element cestih podniski
+		- formiramo kandidate takos to spajamo parove cestih podniski u svakom koraku
+		- potkresemo one koji sadrze retke podniske
+		- racunamo podrsku za kandidate
+		- uklonimo one koji imaju podrsku manju od minsup
+	(citaj opet slajdove 31 - 35, ovo je najgori moguci kancer, nista na predavanju lepo nije objasnio)
+	-------Algoritam za formiranje sekvencijalnih obrazaca (slicno kao apriori alg) (KANCERCINA)
+	k = 1
+	Fk = {sve ceste 1-podniske}
+	REPEAT
+		k++
+		ck = {skup_k_podniski_formiranih_na_osnovu_Fk-1}
+		FOR svaka_sekvenca_podataka_t:
+			Ct = podniska(Ck, t)						- ovo se misli na sve kandidate iz t (?)
+			FOR svaka_kandidatska_k-podniska iz Ci:
+				suport(c) += 1							- povecava se podrska, ZASTO (????)
+			END FOR
+		END FOR
+		Fk = {izdvajamo_ceste_k-podniske}
+	UNTIL Fk_je_prazan 
+	RETURN unija_F1_F2...Fk
+	-------
+	U opstem slucaju k-nisku pravimo od k-1 niske ovako: uzmemo neke 2 k-1 niske. Ako izbacivanjem prvog dogadjaj iz jedne i poslednjeg
+	dogadjaja iz druge dobijemo 2 identicne niske, onda ih spajamo, npr ->  A = <{1}{2}{3}> i B = <{2}{3}{4}>
+	Imamo 2 slucaja:
+		- ako poslednji element iz B sadrzi samo 1 dogadjaj
+			u tom slucaju samo nadovezemo: ako iz A izbacimo {1} i iz B izbacimo {4}, dobijamo {2}{3} od obe niske, 
+			i onda mozemo da ih spojimo u nisku duzine 4 koja je {1}{2}{3}{4}
+		- ako poslednji element u B ima vise od jednog dodjaja
+			tada nadjemo prvi dogadjaj unutar tog elementa koji se ne sadrzi u poslednjem elementu u A i dodamo taj dogadjaj na poslednji element iz A 
+			npr: ako A = <{1}{5}{3}> i B = <{5}{3, 4}>. ako iz A uklonimo 1 i iz B 4, vidimo da su jednaki, i vidimo da  je prvo dogadjaj koji se ne sadrzu u 
+			poslednjem elementu iz A jednak 4, pa ga dodajemo na poslednji element A i dobijamo <{1}{5}{3,4}>
+
+
+	Mozemo dodati i neka vremenska ogranicenja, tj da imamo neki vremenski okvir u kom podniska mora da se javi u nekoj nisci
+	Mozmeo imati neku minimalnu i maksimalnu dozvoljenu vrednost za vremenski interval izmedju dva pojavljivanja, ti intervali mogu da se
+	odnose na razliku izmedju pojavljivanja prve i poslednje stavke u kompletnoj sekvenci/nisci ili na najmanju/najvecu razliku izmedju pojavljivanja
+	dve niske, ili na vremenski prozor koji predstavlja razliku izmedju pojavljivanja prve/poslednje stavke u pojedinacnoj nisci
+	
+	Mingap je duzina "pauze" izmedju 2 niske koja mora da postoji, npr ako je mingap=0 onda niske mogu da budu jedna do druge
+	NOTE: kada je objasnjavao ovo na predavanjima, za maxgap i mingap je bas gledao RAZMAKE tj {...} ->ovaj_razmak_ovde<- {...}
+	Maxgap i maksimalni razmak(maxspan) nisu isto, maxgap je maksimalni dozvoljen razmak izmedju 2 niske, a maksimalni razmak je
+	maksmialna dozvoljena duzina od pocetka do kraja intervala gde podniska pocinje i zavrsava (misli se na broj celih ovih {}
+	vidi tabelu sa primerima na slajdu 37)
+
+	Kada imamo ona vremenska ogranicenja 2 opcije:
+		- da istrazujemo podatek i da pritom ignorisemo ogranicenja a onda da radimo neku dodantu obradu
+		- da modifikujemo algoritam da potkresuje pravila koja krse ogranicenja (ovde onda ne vazi apriori  princip jer nam
+	
+	maxgap pravi problem, na slajdu 39 vidimo da smo za nisku sa 2 elementa imali podrsku manju nego za nisku sa
+	3 elementa, tj moze da se desi da se neka pravila odbace zato sto ne zadovoljavaju maxgap.
+	ako je maxgap=beskonacno onda nemmao problem (?)
+
+	Da bismo ovo prevazisli, uvodimo neprekidne podniske, definicija:
+		Niska s je neprekidna podniska od w=<e1e2...ek> ako vazi:   (dovoljno je da vazi 1 od ovih uslova)
+			1) s je dobijeno iz w brisanjem dogadjaja ili iz e1 ili iz ek   (prvog ili poslednjeg)
+			2) s je dobijeno brisanjem dogadjaja iz nekog elementa ei koji sadrzi najanje 2 dogadjaja
+			3) s je neprekidna podniska od t i t je neprekidna podniska od w (rekurzivna definicija)
+		(ovo se lako vidi na primerima, i radi onako kako bi bilo intuitivno, kada ne mozemo samo 1 od ovih uslova da primenimo, 
+		mozemo da ih primenimo vise, npr u tabeli na slajdu 40, za drugi primer smo prvo obrisali {3} sa kraja, a onda i dogadjaj
+		2 iz elementa {1,2} i tako smo dobili nisku koja se trazi)
+
+	Kada imamo neprekidne podniske, mozemo da koristimo modifikovani apriori princip:
+		Ako je k-niska cesta tada su sve njene neprekidne k-1 podniske takodje ceste
+	To sad mozemo da uklopimo u nase istrazivanje, ako nemamo maxgap uslov, sve ostaje isto kao i pre, tj razmatramo sve k-1 podniske 
+	i kandidatska k-niska se potkresuje ako je najamnje jedna od njenih k-1 podniski retka, ALI, ako imamo
+	maxgap uslov(koji nam je smetao) onda mozemo da razmatramo samo neprekidne podniske duzine k  (i da odbacimo one 
+	za koje postoji k-1 podniska koja je retka)
+
+	Pored ona 3 vremenska uslova, moze da se doda jos jedan uslov: ogranicenje velicine prozora 
+	To je najveci dozvoljen vremenski razmak izmedju prvog i poslednjeg pojavljivanja DOGADJAJA u ELEMENTU niske
+	Ako je prozor velicine 0 onda se svi dogadjaji iz elementa desavaju u isto vreme. 
+		(FUN FACT: na predavanjima se tacno vidi da mitic nema pojma o cemu ovde prica, on je bukvalno prekopirao neki primer
+		od negde bez da uopste razume sta je velicina prozora i onda se muci na casu da razume sta je to, ko zna da li je primer na 
+		slajdovima dobar ili ne, nije uopste razjasnjeno, prelepo)
+		(ima mnogo bolje objasnjenje u momirovoj skripti)
+
+	Slajd 43 alternativne metode prebrojavanja ne razumem
+
+Redak obrazac je skup stavki ili pravilo koje ima podrsku manju od zadatog minsup (retke stavke mogu da nam budu vazne bas zato sto su retke (?))
+Negativna stavka znaci da se ta stavka ne nalazi u nekom skupu transakcija
+Negativan skup stavki X je skup za koji vazi 
+	1) X = A unija B gde je B skup negativnih stavki (kardinalnosti barem 1), a A skup pozitivnih stavki
+	2) sup(X) >= minsup
+Negativno pravilo pridruzivanja je pravilo pridruzivanja za koje vazi:
+	1) izdvojeno je iz negativnog skupa stavki
+	2) sup >= minsup
+	3) conf >= minconf
+Skup stavki X={x1, x2...xn} je negativno korelisan ako sup(X) <= sup(x1)*sup(x2)...*sup(xn)
+(intuitivno ovo znaci da npr kako cena jedne stavke raste, tako cena druge stavke opada (?))
+Parvilo pridruzivanja X->Y je negativno korelisano(delimican uslov) ako 	sup(X unija Y) < sup(X)*sup(Y)  (X i Y moraju da budu disjunktni)
+Parvilo pridruzivanja X->Y je negativno korelisano(pun uslov) ako 	sup(X unija Y) < proizvod( sup(xi) )*proizvod( sup(yi) )  (X i Y moraju da budu disjunktni)
+(u praksi se ovo ne koristi cesto zog mogucnosti da se izgubi neko pravilo koje nam je interesantno (?))
+
+Mnogi retki obrsci imaju odgovarajuce neagtivne obrasce	 (?)
+Mnogi negativno korelisani obrasci imaju odgovarajuce negativne obrasce (?)
+Sto je manja podrska za X unija Y, obrazac je vise negativno korelisan 	(?)
+Retki negativno korelisani obrasci su interesantniji od cestih negativno korelisanih obrazaca 
+Vidi slajdove 49 i 50 (hoce da kaze da mi i sa ovim mozemo da pravimo tabelu kontigenata)
+
+Imamo 2 pristupa za istrazivanje negativnih obrazaca:
+	- pristup zasnovan na simetricnim binarnim promenljivama:
+		U onoj obicnoj tabeli transakcija, za svaki item iz transakcije napravimo po 2 binarna atributa
+		tj jedan koji je =1 ako se item nalazi u datoj transakciji i drugi koji je =1 ako se item
+		ne nalazi u transakciji (ima na slajdu 51 tabela kako bi to izgledalo). 
+		Problem sa ovim je sto se duplo povecava dimnezionalnost podataka, tj moguce je dobiti 2 puta vise skupova stavki u resetki
+		koje moraju da se ispitaju
+		Problem je takodje sto ne mozemo da primenjujemo pravila potkresivanja na osnovu podrske, zato sto za svakus stavku x,
+		ili x ima podrsku 50% ili x' ima podrsku 50%
+	- pristup zasnovan na hijerarhiji
+		(slicno kao hijerarhijski pristup, pogledaj sliku na saljdu 52)
+		Poenta je da ako na nekom visem nivou mozemo da nadjemo cest skup stavki, a skup stavki koje 
+		formiraju objekti koji su nize u hijerarhiji nije cest, to ne znaci da od tog necestog ne moze da se 
+		napravi interesantno pravilo, vec to moze da nam ukaze da postoji neka veza izmedju njih, ali da je ta 
+		veza negativna (?)
+	- tehnike zasnovane na indirektnom pridruzivanju
+		(ovo je apsolutno nikako objasnjeno, kaze da izmedju A i B moze da postoji jedna ili vise veza
+		koje prelaze preko nekih C1, C2...Ck, lik ostavio nedovrsen slajd i na predavanju nista nije rekao dalje za ovo)
+
+Na osnovu pravila pridruzivanja (uopsteno) moze da se napravi model za klasifikaciju.
+Recimo da imamo pravilo X->Y gde to pravilo ima veliki sup i veliki conf, ako je na desnoj strani klasni 
+atribut (tj samo ta jedna stavka), to znaci da oni sa leve strane odredjuju taj koji je sa desne strane

@@ -1,0 +1,55 @@
+vidi na stefanovim slajdovima za druge vezbe neke mere slicnosti
+
+generalno trudimo se da mere slicnosti i mere razlicitosti budu suprotne jedne drugima
+
+u formuli za rastojanje minkovskog, kada parametar r zamenimo nekim konkretnim vrednostima,
+dobijamo neke poznate formule, npr:
+	r = 1    - menhetn rastojanje
+	r = 2 	 - euklidsko rastojanje
+	r -> beskonacno    - supremum
+
+
+normalizacija je proces svodjenja svih vrednosti nekog atributa na interval [0,1],
+to mozemo npr tako sto nadjemo minimum i maksimum vrednosti i njih preslikamo u 0 i 1
+to moze ovim preslikavanjem npr:  y = (x-min) / (max-min) 
+
+
+standardizacija je svodjenje podataka na neke vrednosti tako da imaju prosek = 0 i standardnu
+devijaciju = 1. Primetimo da ovde nemamo fiksiran opseg kao kod normalizacije
+(x - prosek) / (std dev)
+
+
+Outlieri mnogo veci problem mogu da prave kada radimo normalizaciju, zato sto se sve vrednosti
+koje nisu outlier budu sabijene u neki manji interval od [0,1]
+
+
+SMC - simple matching coefficient, to je neka basic mera slicnosti za binarne vektore
+f11 npr znaci da je atribut i u prvom i u drugom vektoru =1, analogno za f00, f10, f01
+SMC = broj_uparenih / broj_atributa  =  (f11 + f00) / (f11 + f10 + f01 + f00)
+
+Zakardovi koeficijenti su isto kao SMC samo bez f00
+Zakard = =  (f11) / (f11 + f10 + f01)
+
+kosinusna slicnost:
+cos(p,q) = (p sk_proizvod q) / ( ||p|| * ||q||  )
+ako je cos mali, znaci da su p i q slicni
+
+korelacija:  (ona formula iz verovatnoce)
+r = cov(x,y) / (std_dev(x) * std_dev(y))
+
+na IP cov(x,y) racunamo ovako:
+cov(x,y) = (1/(n-1)) * sum( (xi - xi_avg)*(yi - yi_avg) )
+xi, yi su atributi objketa x, a xi_avg i yi_avg su srednje vrednosti za te atribute
+
+std_dev(x) = (1/(n-1)) * sqrt( ( sum(xi-xi_avg) )^2 )
+
+n je broj atributa(?) u formuli za r, (1/(n-1)) gore i dole se skrati
+
+kada x raste onda raste i y  -> to je pozitivna korelacija
+kada x raste onda y opada    -> negativna korelacija
+
+
+
+Kada gledamo koju meru slicnosti da koristimo, prvo gledamo kog su tipa atributi
+nasih podataka. Npr u onom pirmeru sa slonovima, imamo tezinu, visinu, duzinu kljove itd
+To su sve neki brojevi, tako da slicnost slonova mozemo da merimo npr euklidskim rastojanjem

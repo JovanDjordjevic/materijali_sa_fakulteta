@@ -1,0 +1,50 @@
+Formula za uslovnu verovatnocu:
+P(a|b) = P(a,b) / P(b)
+
+Bajesova formula:
+y - klasa koju trazimo
+X - atributi (moze ih biti vise, tj (X1, X2, .. Xn) )
+P(y|X) = P(X|y)*P(y) / P(X)   
+
+Naivni Bajesovski klasifikator na osnovu atributa X pogadja da li je u pitanju klasa y,
+ali tesko nam je da bas koristimo pravu Bajesovu formulu pa nekako aproksimiramo
+
+Sa leve strane P(y|X) je tesko da se oceni zato sto bi nam trebalo bas bas mnogo instanci
+(posebno ako imamo vise atributa X, to se zove "prokletstvo dimenzionalnosti"), dakle posto je to 
+jednako sa ovim sa desne strane, preko toga cemo da klasifikujemo
+
+Sa desne strane P(y) racunamo lako, samo prebrojimo koliko koje klase ima u celom skupu
+i podelimo sa velicinom skupa
+P(X|y) je i dalje tesko za racunanje, opet nam treba bas mnogo instanci, ali tu dolazimo do
+naivnog Bajesa. Mi tu kazemo "neka su svi X-evi uslovno nezavisni od y". Kada su nezavisni, znamo
+da mozemo da kazemo da je P(ab) = P(a)*P(b), a kada su uslovno nezavisni onda vazi
+P(x1, x2, x3...xn|y) = proizvod( P(xi|y) ,i=1..n)  i sada to zamenimo u bajesovu formulu: 
+
+P(y|X) = proizvod( P(xi|y) ,i=1..n)*P(y) / P(X) 	(NOTE: za racunanje koristimo formulu za uslovnu verovatnocu!)
+
+Sada ispod razlomacke crte imamo P(X), ali posto ono vise nikako ne zavisi od y, mi to proglasimo
+za neku konstantu c, i sada kad bismo racunali npr za iris skup, dobili bismo nesto ovako:
+P(setosa|X) = neki_brojilac_1 / c
+P(virginica|X) = neki_brojilac_2 / c
+P(versicolor|X) = neki_brojilac_3 / c
+Za trazenu klasu cemo progalsiti onu koja u racunici da najveci brojilac(pri metimo da taj brojilac
+sam po sebi uopste ne mora da upada u interval[0.1] tj ne moramo da bude verovatnoca)
+Mozmeo to da izrazimo formulom:
+
+y_predicted = argmax_po_y( proizvod( P(xi|y) ,i=1..n) )
+
+Jedan od problema ovog pristupa je ako imamo neki Xi takav da se y|Xi uopste ne pojavljuje u trening skupu
+ispasce da je brojilac 0*nesto, tj da je ceo brojilac=0, tj da je verovatnoca da je y trazena klasa bas 0
+Ne volimo da dobijamo verovatnoce 0 i 1 zato sto su za nas previse iskljucive, tako da cemo da korsitimo
+nesto slicno koa u onom primeru "verovatnoca da sunce nece da izadje sutra" (*), tj izmenicemo parametre tako da umesto
+da dobijamo 0 ili 1 dobijamo neke brojeve koji su im veoma blizu
+U (*) formula bi bila (k+1) / (k+2), a mi cemo imati
+(k + alfa) / (k + alfa * d)	(te parametre alfa i d vidimo u primeru u pajtonu)
+		
+
+Pogledaj na slajdovima koja je formula za multinomijalni naivni bajes, prosle godine je u jednom roku to doslo da se radi
+na papiru!
+
+
+
+

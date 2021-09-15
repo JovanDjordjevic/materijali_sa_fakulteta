@@ -1,0 +1,43 @@
+operacije koje mogu da se primene na atribute:
+
+1) razlicitost (= i =/=)
+2) uredjenje (<, <=, >, >=)
+3) aditivnost (+, -)
+4) multiplikativnost (*, /)
+
+
+podela atributa prema OPERACIJAMA:
+
+- kvalitativni	
+	- imenski (nominalni)   ima op 1)			npr boja ociju, postanski kod, id, pol
+	- redni (ordinal)       ima op 1) i 2)			npr cinn u vojsci, redni brojevi zgrada u ulici
+-kvantitativni
+	- intervalni (interval) ima op 1), 2), 3)		npr datum,
+	- razmerni (ratio)	ima op 1), 2), 3), 4)		npr duzina, masa, cene artikala, godine, kolicina novca
+
+podela atributa prema VREDNOSTIMA koje zadrze
+- diskretni(zovu se i kategoricki)		(specijalan slucaj diskretnih su binarni)
+- kontinuirani (neprekidni)
+
+
+Bitno je da razumemo da razmerni imaju "fiksnu nulu", a ne neku arbitrarnu. Npr, ako bismo ako bi atribut bio temperatura u celzijusima, neko bi mzoda rekao da je to razmerni atribut, ali 20C nije duplo vise nego 10C (?). 
+
+
+
+tf - term frequency (koliko se neka rec/term nalazi u podacima)
+	ne volimo da korstimo samo tf zato sto imamo uvek neke ceste reci koje se puno javljaju svuda (i, a, od, do...)
+	i reci koje se bas retko javljaju pa one ne mogu da dodju do izrazaja (a one su nam cesto bitnije)
+
+idf - inverse document frequency, ovim popravljamo nedostatak tf, ovde vise dodju do izrazaja
+	one reci koje se manje pojavljuju
+idf(t) = log(N/nt)		N - broj dokumenata
+				nt - br dokumenata u kojima se term t pojavljuje
+
+
+CRISP-DM (cross industry standard process for data mining)
+1) razumevanje posla
+2) razumevanje podataka
+3) priprema podataka
+4) modeliranje
+5) evaluacija
+6) razvoj

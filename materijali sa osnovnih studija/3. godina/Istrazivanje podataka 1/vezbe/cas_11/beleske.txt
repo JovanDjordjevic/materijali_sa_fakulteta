@@ -1,0 +1,21 @@
+kod k-means klasterovanja sa obicnim euklidskom rastojanjem,
+klasteri su nekako sfericnog oblika. To moze da bude mana, mozda neki klasteri nepravilnog
+oblika ne budu lepo zapazeni
+
+ideja hijerarhijskog klasterovanja je da se uspostavi neka hijerarhija
+medju instancama, a time cemo usput dobiti i klastere
+
+Imamo 2 pritupa: odozdo navise (sakupljajuci pristup), gde instance grupisemo po kalsterima pa te klastere grupisemo itd
+                 odozgo nanize (razdvajajuci pristup), gde krecemo da je sve u jednom klasteru i onda taj klaster delimo na manje
+
+Pristup odozgo nanize je mnogo (eksponencijalno) sporiji kada mi zelimo od n klastera da napravimo n-1
+Pristup odozdo navise moze da se radi u polinomskom vremenu i generalno se vise koristi
+
+Stablo koje hijerarhija instanci pravi zovemo dendrogram
+
+
+
+
+DBSCAN(density-based spatial clustering of aplications with noise)
+uvodimo obaj algoritam zato sto on moze da detektuje sum. U proslom pristupu, svaka instanca ce 
+biti ubacena u neki klaster, a ovaj alg moze da detektuje da je neka isntanca sum i da je ne ubaci ni u jedan klaster

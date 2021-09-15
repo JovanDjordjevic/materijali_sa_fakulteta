@@ -1,0 +1,46 @@
+Neuronske mreze se svde otprilike na mnozenje matrica, razlog zasto se GPU koriste za treniranje mreza
+je sto se na njima brze izvrsava mnozenje matrica
+
+Ulaz u mrezu je neki vektor X koji se sastoji od atributa (X1, X2 ... Xn)
+
+Pri ulazu u neuron, svaki input se mnozi sa nekom tezinom, tj ako je X vektor input, 
+a w je neki vektor (tezina w1,w2...wn), radimo skalarni proizvod X*w
+Potrebno je da imamo i neki slobodni clan, tj to postizemo tako sto dodamo vestacki jedan cvor 
+ciji je ulaz 1, a tezina neka w0, tj uopsteno, prosiricemo nase vektore tako da budu:
+X = (1, X1, X2 ... Xn)
+w = (w0, w1, w2...wn)
+
+Ono sto mi ovom operacijom u neuronu dobijemo je neka linearna funkcija, ali posto nisu svi nasi problemi 
+linearni, mi to sto dobijemo na izlazu iz neurona provlacimo kroz neku nelinearnu funkciju g koja se zove 
+aktivaciona funkcija, tj radimo g(X*w) i to je onda izlaz iz neurona
+
+Posto ne moramo imati samo jedan neuron, vec njih vise, i posto za svaki od njih mozemo da imamo neke razlicite 
+vektore tezina, te tezine mozemo da slozimo u neku matricu W gde je svaki red jedan vektor tezina, i ta matrica 
+odredjuje sve tezine za jedan sloj mreze. 
+Mi sada mozemo da izrazimo izlaz za ceo sloj mreze kao g(W x X)  (mnozenje matrica, posto ce X biti samo jedna kolona, izlaz ce biti isto jedna kolona)
+
+Izlaz iz cele neuronske mreze treba da nam da nekakve brojeve na osnovu kojih mi radimo klasifikaciju. Jedna od funkcija 
+koju mozemo da koristimo za to odlucivanje je softmax. Ona izgleda nekako ovako otprilike f(x) =  (e^x) / (sum_po_i e^xi) 
+Ako je izlaz iz cele mreze neki vektor (o1, o2, ... on)  (velicina izlaza je broj klasa koje postoje, npr za iris bi bilo (o1, o2, o3) )
+treba izracunati P1 = softmax(o1) , P2 = softmax(o2) ...  P su verovatnoce da bude ta klasa, u zbiru svi softmaxovi moraju da budu 1
+
+Cela poenta ovoga je da treba model treba da nauci kako da dobro postavi parametre za tezine w tako da izlaz iz cele
+neurosnke mreze predvidi lepo sta je na ulazu. 
+To radimo tako sto za neke pocetne w izracunamo kolka je greska na izlazu iz mreze
+Ta greska je E(w)  (jer zavisi od w), i onda se trudimo da je minimizujemo. Za to koristimo gradijente
+koristeci backpropagation (algoritam za racunanje gradijenata u neuronskoj mrezi)
+
+Kada radimo binarnu klasifikaciju, izlaz iz cele mreze je jedan broj. U tim situacijama za odlucivanje
+ne koristimo softmax nego sigmoid funkciju, ako je ona > 0.5 onda je prva klasa, a ako je < 0.5 onda je druga
+
+Jedna od cesto korsicenih aktivacionih funkcija je 'relu', ona je = 0 u intervalu (-besk, 0], a od [0, +besk) je ista kao y=x
+tj relu(x) = max(0, x)
+Razlog zasto je vrlo cesta je sto backpropagation racuna nekakve izvode, a izvod relu funkcije je vrlo jednostavan
+
+------------------------------------------------------------------------------------------------------------------
+PCA - principal component analysis
+
+Ponekada kada imamo podatke velikih dimenzija (npr 100), a zelimo da ih nekako vizuelizujemo u 2 ili 3 dimenzije
+moramo nekako da nadjemo neke 2-3 glavne komponente (one ne moraju nuzno da bud vec postojeci atributi, mozemo
+i sami da ih napravimo kao kombinaciju postojecih) i onda da kada vizuelizujemo po njima dobijemo sto realniji prikaz
+podataka kao da smo crtali svih 100 dimenzija
