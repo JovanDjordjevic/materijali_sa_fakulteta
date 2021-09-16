@@ -11,6 +11,7 @@ Moji materijali sa fakulteta
 		- Objektno oijentisano programiranje
 		- Operativni sistemi
 	* ### Treca godina<br>
+		- Istrazivanje podataka 1
 		- Prevodjenje programskih jezika
 		- Programiranje baza podataka
 		- Programske paradigme
