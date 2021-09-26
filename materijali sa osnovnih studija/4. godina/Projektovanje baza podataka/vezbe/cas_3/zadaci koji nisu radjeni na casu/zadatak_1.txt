@@ -1,0 +1,43 @@
+Prvo prevedeni nezavisni entiteti:
+	Zaposleni(JMBG*, ime, prezime, adresa, telefon)
+	Autobus(reg_broj*, tip, godina_nabavke, aktivan)
+	Linija(sifra*, pol_stanica, kraj_stanica, trajanje_voznje)
+	Servisna_usluga(sifra*, naziv, koliko_puta)
+	Rezervni_deo(sifra*, naziv, jedinica_mere, zalihe, min_dozv_zalihe)
+
+Zavisni entiteti i specijalizacije:
+	Vozac(JMBG*, kat_vozacke_dozvole, zdrav_stanje)
+		Vozac[JMBG] <= Zaposleni[JMBG]
+	Automehanicar(JMBG*, strucna_sprema)
+		Automehanicar[JMBG] <= Zaposleni[JMBG]
+	
+(1,1):
+	imamo jednu ovakvu ali ne moze jos da se prevedene jer obe strane relacije nisu jos prevedene
+
+(0,1):
+	Raporedjen(JMBG*, reg_broj)
+		Raporedjen[JMBG] <= Vozac[JMBG]
+		Raporedjen[reg_broj] <= Autobus[red_broj]
+	Saobraca(reg_broj*, sifra)
+		Saobraca[reg_broj] <= Autobus[red_broj]
+		Saobraca[sifra] <= Linija[sifra]
+	
+gornja granica N:
+	Zamena(sifra*, sifra_2*)					NOTE: ovdfe je na slici odnos entiteta samog sa sobom pa moramo da preimenujemo jedan kljucni atribut
+		Zamena[sifra] <= Rezervni_deo[sifra]
+		Zamena[sifra_2] <= Rezervni_deo[sifra]
+	Potrebni(sifra*, sifra_2*, kolicina)		NOTE: i ovde mora da se preimenuje jer se isto zovu
+		Potrebni[sifra*] <= Servisna_usluga[sifra]
+		Potrebni[sifra_2*] <= Rezervni_deo[sifra]
+	Izvrsava(reg_broj*, sifra*, datum)
+		Izvrsava[reg_broj] <= Autobus[reg_broj]
+		Izvrsava[sifra] <= Servisna_usluga[sifra]
+	
+sad moze onaj (1,1) sto je bio pre: (dodajemo i kljuc i atribute!!!)
+	Izvrsava(reg_broj*, sifra*, datum, JMBG, datum)
+		Izvrsava[JMBG] <= Automehanicar[JMBG]
+
+sad moze i onaj poslednji sa gornjom granicom N:
+	Koriscen(reg_broj*, sifra*, sifra_potrebnog_1*, sifra_potrebnog_2*, kolicina)
+		Koriscenp[reg_broj*, sifra*] <= Izvrsava[reg_broj*, sifra*]
+		Koriscen[sifra_potrebnog_1*, sifra_potrebnog_2*] <= Potrebni[sifra_potrebnog_1*, sifra_potrebnog_2*]

@@ -1,0 +1,47 @@
+Zadatak 4. Odrediti ključeve relacije R, a zatim i transformisati postupno relaciju R tako da bude u 2NF, pa u 3NF i na kraju u BCNF.
+
+R(id_pozorista, naziv, adresa, broj_telefona, ime_predstave, sifra_predstave, reditelj, zanr)
+
+F = {
+(FZ1) id_pozorista → naziv, adresa, broj_telefona
+(FZ2) broj_telefona → adresa
+(FZ3) id_pozorista, sifra_predstave → reditelj, zanr, ime_predstave
+(FZ4) ime_predstave → sifra_predstave
+}
+
+Rešenje:
+
+Mrzi me da proveravam jednoclane, ocligledno nisu kandidati za kljuc
+Za dvoclane:
+    {id_pozorista, sifra_predstave}+ = {id_pozorista, sifra_predstave,reditelj, zanr, ime_predstave
+                                        , naziv, adresa, broj_telefona}
+Vidimo da za {id_pozorista, sifra_predstave} prateci FZ koje su nam date mozemo da dobijemo sve
+atribute iz R u ovom zatvorenju tako da je to kandidat za kljuc (i to jedini)
+
+Pogledamo Fz koje imamo:
+FZ1 je parcijalna
+FZ2 je tranzitivna: nekljucni -> nekljucni
+FZ3 je superkljucna (nije smetnja ni za jednu NF)
+FZ4 je tranzitivna: nekljucni -> kljucni    (NOTE: za BCNF nam smeta kada je desno neki kljucni atribut, tj podskup kljuca, a levo je neki podskup koji
+                                            nije CEO kljuc, tj levo moze biti i neki nekljucni, neki parcijalni skup, ili neka kombinacija kljucnih i nekljucnih atributa (?))
+
+Za 2NF nam smeta FZ1, pa je se oslobadjamo:
+    R1(id_pozorista, naziv, adresa, broj_telefona)
+    R2(id_pozorista, ime_predstave, sifra_predstave, reditelj, zanr)
+    R = R1 x R2
+
+=> sada imamo 2NF
+
+za 3NF nam smeta FZ2, ap je se oslobadjamo:
+    R3(broj_telefona, adresa)
+    R4(id_pozorista, naziv, broj_telefona)
+    R1 = R3 x R4 
+
+=> R = R3 x R4  x R2  i imamo 3NF
+
+Nemamo BCNF zato sto nam za to smeta FZ4, p je se oslobadjamo:
+    R5(ime_predstave, sifra_predstave)
+    R6(id_pozorista, ime_predstave, reditelj, zanr)
+    R2 = R5 x R6
+
+=>  R3 x R4 x R5 x R6 i imamo BCNF

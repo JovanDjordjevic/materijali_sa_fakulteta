@@ -1,0 +1,23 @@
+trigeri su mehanizam da se neka akcija izvrsi pre 
+ili posle izvrsavanja neke druge akcije
+
+npr imamo:
+BEFORE INSERT
+AFTER INSERT
+BEFORE UPDATE
+AFTER UPDATE
+BEFORE DELETE
+AFTER UPDATE
+
+mozmeo da npr pre ubacivanja podatka u tabelu izvrsimo neku izmenu tih podataka
+
+CHECK () sluzi da se proveri da li je izraz u zagradama validan,
+ali u mySql, CHECK se parsira ali se igrnorise, samim tim sve sto treba da se 
+proveri, mi cemo raditi trigerima
+ 
+u ranijim verzijama mysql nisamo mogli da imamo vise trigera sa istom akcijom
+tj nismo mogli npr da imamo 2 BEFORE INSERT trigera nego je sve sto radimo moralo
+da se smesti u jedan triger
+U novim verzijama moze ovo da se radi, a redosled izvrsavanja ce biti onaj kojim 
+smo ih i naveli u kodu, ali ako je potrebno da eksplicitno navedemo da se neki
+triger desava pre nekog drugog tirgera koristimo PRECEEDS 

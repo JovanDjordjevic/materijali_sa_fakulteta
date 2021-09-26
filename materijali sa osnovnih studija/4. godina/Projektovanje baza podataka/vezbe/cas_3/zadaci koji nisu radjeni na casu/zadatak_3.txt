@@ -1,0 +1,38 @@
+Nezavisni:
+	Apoteka(sifra*, naziv, adresa)
+	Zaposleni(mbr*, ime, prezime,adresa)
+	Lek(sifra*, naziv, potrebe)
+	Nabavka(sifra*, nacin_placanja, iznos, datum)
+	Veletrgovina(sifra*, telefon, adresa, naziv)
+
+Zavisni i specijalizacije:
+	Farmaceut(mbr*, strucna_sprema)
+		Farmaceut[mbr] <= Zaposleni[mbr]
+	Komercijalista(mbr*, telefon)
+		Komercijalista[mbr] <= Zaposleni[mbr]
+	
+(1,1):
+	Nabavka(sifra*, nacin_placanja, iznos, datum, sifra_veletrgovine)
+		Nabavka[sifra_veletrgovine] <= Veletrgovina[sifra]
+	Nabavka(sifra*, nacin_placanja, iznos, datum, sifra_veletrgovine, mbr)
+		Nabavka[mbr] <= Komercijalista[mbr]
+
+(0,1):
+	nema
+
+N:
+	Zaposlen(sifra*, mbr*, datum, vreme)
+		Zaposlen[sfira] <= Apoteka[sifra]
+		Zaposlen[mbr] <= Farmaceut[mbr]
+	Raspolaze(sifra_apoteke*, sifra_leka*, kolicina, pros_mesecne_potrebe)
+		Raspolaze[sifra_apoteke] <= Apoteka[sifra]
+		Raspolaze[sifra-sifra_leka] <= Lek[sifra]
+	Zamena[sifra_1*, sifra_2*]
+		Zamena[sifra_1] <= Lek[sifra]
+		Zamena[sifra_2] <= Lek[sifra]
+	Isporucuje[sifra_leka*, sifra_nabavke*]
+		Isporucuje[sifra_leka] <= Lek[sifra]
+		Isporucuje[sifra_nabavke] <= Nabavka[sifra]
+	Isporucen(sifra_apotele*, sifra_leka*, sifra_nabavke*, kolicina)
+		Isporucen[sifra_apoteke] <= Apoteka[sifra]
+		Isporucen[sifra_leka, sifra_nabavke] <= Isporucuje[sifra_leka, sifra_nabavke]

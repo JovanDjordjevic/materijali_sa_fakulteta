@@ -1,0 +1,73 @@
+priamrni kljucevi oznaceni sa *
+<= ce da nam oznacava podskup 
+
+Prevodimo prvo nezavisne entitete u tabele:
+	Biljka(ID*, naziv, jedinica_mere, kolicina, min_doz_zalihe, aktuelna_cena)
+	Dobavljac(ID*, naziv, adresa, drzava, telefon)
+	Mesavina(ID*, jedinica_mere, kolicina_na_zalihama, cena)
+		NOTE: potencijalna greska na slajdovima, Narudzbina nema svoj primarni kljuc iako je nezavisan entiet, mi smo ga ovde dodali da bude neki ID
+	Narudzbina(ID*, datum, uslov_placanja)
+	Kupac(ID*, naziv, adresa, telefon, osoba_za_kontakt)
+	Racun(ID*, ukupan_iznos)
+
+Prevodimo zavisne entitete:	
+		NOTE: posto 1 dobavljac moze imati vise nabavki, u tabeli za Nabavku ne smemo imati kao primarni kljuc samo ID dobavljaca vec moramo i datum da bi jednoznacno bio odredjen
+		Ne zaboravimo da oznacimo podskupe za kljuceve!
+	Nabavka(ID_dobavljaca*, datum*)
+		Nabavka[ID_dobavljaca] <= Dobavljac[ID]
+
+		NOTE: sluicno kao za nabavku, jedan racun moze imati vise naplata pa 
+		moramo uzeti jos jedan atribut u priamrni kljuc
+	Naplata(ID_racuna*, redni_broj_rate*, uplacen_iznos, datum_naplate)
+		Naplata[ID_racuna] <= Racun[ID]
+
+Prevodimo relacije koje imaju (1,1) bar sa jedne strane:
+	NOTE: za ove relacije ne pravi se nova tabela vec izmenjujemo postojece tabele
+	po pravilu koje smo naveli u slajdovima
+
+	Za 'Izdaje se':  (u oba smera je tacno, ali mi smo ovde ocenili da je prirodnije da ubacimo u tabelu Racun)
+		Racun(ID*, ukupan_iznos, sifra_narudzbine)
+			Racun[sifra_narudzbine] <= Narudzbina[ID]
+	Za 'Narucuje':
+		Narudzbina(ID*, datum, uslov_placanja, sifra_kupca)
+			Narudzbina[sifra_kupca] <= Kupac[ID]
+
+Prevodimo relacije koje imaju (0,1) bar sa jedne strane:
+	U ovom primeru nema takvih relacija
+
+Prevodimo relacije koje imaju gornju granicu N sa obe strane:
+	NOTE: u ovom trenutku NE mozemo da prevedemo raelaciju 'Sadrzi' zato sto
+	njena leva strana 'Dobavlja' nije jos prevedena, ali 'Dobavlja' MOZE da se prevedemo
+	u ovom koraku zato sto sa obe strane ima gornju granicu N, a nakon sto to uradimo, tek 
+	onda mozemo da prevedemo 'Sadrzi'
+
+	Za 'Dobavlja': (pravimo novu tabelu, isto i za ostale)
+		Dobavlja(ID_dobavljaca*, ID_biljke*)
+			Dobavlja[ID_dobavljaca] <= Dobavljac[ID] 
+			Dobavlja[ID_biljke] <= Biljka[ID]
+
+	Za 'Sastoji se od':
+		SastojiSeOd(ID_biljke*, ID_mesavine*, kolicina)
+			SastojiSeOd[ID_biljke] <= Biljka[ID]
+			SastojiSeOd[ID_mesavine] <= Mesavina[ID]
+
+	Za 'Nalazi se':
+		NalaziSe(ID_mesavine*, ID_narudzbine*, kolicina, cena)
+			NalaziSe[ID_mesavine] <= Mesavina[ID]
+			NalaziSe[ID_narudzbine] <= Narudzbina[ID]
+	
+	NOTE: 'Sadrzi' smo mogli da prevedemo odmah posle 'Dobavlja', nismo morali
+	tek sad na kraju, ali svejedno je
+	Pazimo samo da lepo ispostujemo pravila za priamrni kljuc. Nebitno nam je sto je
+	sa obe strane ove relacije neka druga relacija, uziammo unjiju njihovih priamrnih kljuceva
+	Posto smo sa obe strane imali u pirmarnom kljucu ID_dobavljaca naravno ne treba da ga ubacujemo
+	duplo vec samo jednom
+	Za 'Sadrzi':
+		Sadrzi(ID_dobavljaca*, ID_biljke*, datum*, kolicina, cena)
+				NOTE: posto primarni kljuc iz Dobavlja nije jedan atribut vec par, treba kao par i da ga
+				pisemo ovde ispod!!!!!
+			Sadrzi[ID_dobavljaca, ID_biljke] <= Dobavlja[ID_dobavljaca, ID_biljke]
+				NOTE: ISTO to i za Sadrzi, bez obzira sto se u novonastaloj tabeli ID_dobavljaca
+				ppojavljuje samo jednom!!!
+			Sadrzi[ID_dobavljaca, datum] <= Nabavka[ID_dobavljaca, datum]
+

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<!-- Def: Kazemo da je xml datoteka *dobro formirana* ako postuje pravila xml standarda -->
+<!-- https://www.w3.org/XML/ -->
+
+<!-- Stukturu xml datoteka mozemo da definisemo preko xsd sheme ili dtd pravila -->
+<!-- Def: Kazemo da je xml datoteka *validna* ako postuje pravila definisana preko xsd/dtd -->
+
+<!-- Zakljucak -->
+<!-- 1: Ako xml datoteka nije dobro formirana, onda nije prava xml datoteka -->
+<!-- 2: Ako je xml datoteka validna, onda je i dobro formirana -->
+<!-- 3: Ako je xml datoteka dobro formirana, to ne znaci da je validna -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="list">
+  <xs:complexType>
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="person">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="fname" type="xs:string"/>
+            <xs:element name="lname" type="xs:string"/>
+          </xs:all>
+          <xs:attribute name="person_id" type="xs:int"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>

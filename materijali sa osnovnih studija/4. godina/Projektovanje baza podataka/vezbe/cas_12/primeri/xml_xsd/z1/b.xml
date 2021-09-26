@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- za validaciju da li je xml ispravan ili ne koristio je alat xmllint 
+(na linuxu izgleda dodje vec instaliran, mene mrzi da podesavam za windows)
+pokretao ga je sa:
+    xmllint b.xml _-schema a.xsd _-noout
+
+(_ je isto - nego pisem _- da se nebi sjebali komentari)
+-->
+
+<!-- ovde sada mozemo da koristimo ono sto smo upisali u semi
+moramo da navedemo sve atribute koje smo zahtevali, ako ne unesemo nesto sto
+je required, xmllint ce da nam izbaci gresku-->
+
+<model>
+    <Kompanija Naziv="Sloboda Cacak" PIB="K01"/>
+    <Kompanija Naziv="Metalac GM" PIB="K02"/>
+    <Avion BrojSedista="225" BrojMotora="3" LID="A01" PIBproizvodjac="K02" PIBvlasnik="K01"/>
+    <Avion BrojSedista="225" BrojMotora="7" LID="A02" PIBproizvodjac="K02" PIBvlasnik="K02"/>
+</model>

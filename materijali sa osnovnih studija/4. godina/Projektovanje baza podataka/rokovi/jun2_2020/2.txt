@@ -1,0 +1,55 @@
+R(id_pozorišta, naziv_pozorišta, adresa, telefon, mesto, ptt, id_predstave, naziv_predstave, žanr, reditelj, 
+          jmbg_glumca, ime_glumca, prezime_glumca, honorar, datum_zaposlenja)
+
+FZ1 : id_pozorišta → naziv_pozorišta, adresa, telefon, mesto, ptt
+FZ2 : ptt → mesto
+FZ3 : id_predstave → naziv_predstave, žanr, reditelj
+FZ4 : jmbg_glumca → ime_glumca, prezime_glumca
+FZ5 : id_pozorišta, jmbg_glumca → datum_zaposlenja
+FZ6 : id_predstave, jmbg_glumca → honorar
+
+kandidat je {id_pozorišta, jmbg_glumca, id_predstave}
+
+FZ1 : kljucni -> nekljucni
+FZ2 : nk -> nk
+FZ3 : k -> nk
+FZ4 : k -> nk
+FZ5 : k -> nk
+FZ6 : k -> nk
+
+za 2NF nam smetaju sve sem FZ2 (?)
+
+FZ1:
+    R1 = (id_pozorišta, naziv_pozorišta, adresa, telefon, mesto, ptt)
+    R2 = (id_pozorišta, id_predstave, naziv_predstave, žanr, reditelj, 
+          jmbg_glumca, ime_glumca, prezime_glumca, honorar, datum_zaposlenja)
+R = R1 x R2
+
+FZ3:
+    R3 = (id_predstave, naziv_predstave, žanr, reditelj)
+    R4 = (id_pozorišta, id_predstave, jmbg_glumca, ime_glumca, prezime_glumca, honorar, datum_zaposlenja)
+R = R1 x R3 x R4
+
+FZ4:
+    R5 = (jmbg_glumca, ime_glumca, prezime_glumca)
+    R6 = (id_pozorišta, id_predstave, jmbg_glumca, honorar, datum_zaposlenja)
+R = R1 x R3 x R5 x R6 
+
+FZ5:
+    R7 = (id_pozorišta, jmbg_glumca, datum_zaposlenja)
+    R8 = (id_pozorišta, id_predstave, jmbg_glumca, honorar)
+R = R1 x R3 x R5 x R7 x R8
+
+FZ6:
+    R9 = (id_pozorišta, jmbg_glumca, honorar)
+    R10 = (id_pozorišta, id_predstave, jmbg_glumca)
+R = R1 x R3 x R5 x R7 x R9 x R10
+
+Sad je u 2NF, za 3NF nam smeta FZ2 koja je ocuvana u R1:
+FZ2:    
+    R11 = (ptt, mesto)
+    R12 = (id_pozorišta, naziv_pozorišta, adresa, telefon, ptt)
+R = R11 x R12 x R3 x R5 x R7 x R9 x R10
+
+sad je u 3NF
+ne smeta nam nista za BCNF tako da je takodje i u BCNF

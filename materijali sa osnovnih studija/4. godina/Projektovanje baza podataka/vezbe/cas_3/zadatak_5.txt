@@ -1,0 +1,67 @@
+nezavisni entieteti:
+    Kaseta(Broj*, status)
+    Upaltnica(Sifra*, datum, iznos)
+    Klijent(ID*, ime, prezime, br_licne_karte)
+    Trener(Sifra*, telefon, ime, prezime, skola, specijalnost, adresa)
+    Tretman(Sifra*, naziv, jedinica_mere)
+    Program(Sifra*, cena, naziv)
+
+zavisni enetieti:
+    ovde ih nemamo
+
+(1,1) relacije:
+        NOTE: podsetimo se da se za ovo ne prave nove tabele nego u tabelu onog
+        sa cije je strane (1,1) ubacije kljuc onog koji je sa druge strane
+        NOTE: to ne postaje primarni kljuc u tabeli u koju je ubacen!
+    Upaltnica(Sifra*, datum, iznos, sifra_klijenta)
+        Uplatnica[sifra_klijenta] <= Klijent[Sifra]
+    Klijent(ID*, ime, prezime, br_licne_karte, sifra_trenera)
+        Klijent[sifra_trenera] <= Trener[Sifra]
+
+    NOTE: iako relacija 'Vodio' ima j (1,1) sa jedne strane, u ovom trenutku ne mozemo
+    da je prevedemo zato sto i dalje nisu prevedene obe njene strane
+
+(0,1) relacije:
+        NOTE: imamo slicnu situaciju i za 'Koristi', zato sto u ovom trenutku
+        'Pretplata' i dalje nije prevedena
+    
+        NOTE: posto je ovde (0,1) sa obe strane, mogli smo bilo koji od ova 2 da izaberemo
+        za primarni kljuc, oba su tacna
+    Zauzeo(broj_kasete*, ID_klijenta, vreme)
+        Zauzeo[broj_kasete] <= Kaseta[Broj]
+        Zauzeo[ID_klijenta] <= Klijent[ID]
+    
+relacije sa gornjom granicom N:
+    Pretplata(ID_klijenta*, sifra_programa*, datum_pretplate, datum_zavrsetka, cena, borj_rata)
+        Pretplata[ID_klijenta] <= Klijent[ID]
+        Pretplata[sifra_programa] <= Program[Sifra]
+    Sprovodi(sifra_trenera*, sifra_tretmana*)
+        Sprovodi[sifra_trenera] <= Trener[Sifra]
+        Sprovodi[sifra_tretmana] <= Tretman[Sifra]
+    Obuhvacen(Sifra_programa*, Sifra_tretmana*, trajanje)
+        Obuhvacen[Sifra_programa] <= Program[Sifra]
+        Obuhvacen[sifra_tretmana] <= Tretman[Sifra]
+ 
+NOTE: sada mozemo da prevedemo one relacije koje nismo mogli iznad, 
+(kada ih se tako vise nagomila, onda ih radimo onim redosledom kojim inace radimo
+ove zadatke). U ovm slucaju se nije nagomilalo, tj i dalje nisu prevedene obe strane za
+'Vodio' tako da prvo prevodimo 'Koristi'
+
+    Koristi(ID_klijenta*, sifra_programa*, sifra_tretmana*)
+        Koristi[ID_klijenta, sifra_programa] <= Pretplata[ID_klijenta, sifra_programa]
+        Koristi[Sifra_programa, sifra_tretmana] <= Obuhvacen[Sifra_programa, sifra_tretmana]
+
+NOTE: tek sad mozemo 'Vodio', psoto je (1,1) ne nastaje nova tabela vec 
+ubacujemo u Koristi
+
+    Koristi(ID_klijenta*, sifra_programa*, sifra_tretmana*, sifra_trenera, sifra_tretmana)
+        Koristi[ID_klijenta, sifra_programa] <= Pretplata[ID_klijenta, sifra_programa]
+        Koristi[Sifra_programa, sifra_tretmana] <= Obuhvacen[Sifra_programa, sifra_tretmana]
+        Koristi[sifra_trenera, sifra_tretmana] <= Sprovodi[sifra_trenera, sifra_tretmana]
+
+        
+
+
+
+
+

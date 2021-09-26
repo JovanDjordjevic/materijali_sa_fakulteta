@@ -1,0 +1,7 @@
+Teorija:
+?
+
+Zadaci:
+1) dcrtanje EER dijagrama
+2) normalizacija
+3) pisanje okidaca nad pogledima

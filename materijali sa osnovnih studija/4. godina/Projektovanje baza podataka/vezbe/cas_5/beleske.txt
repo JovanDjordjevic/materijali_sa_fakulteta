@@ -1,0 +1,6 @@
+sve sto radimo radimo sa MySql
+
+vidi moguce tipove podataka na prezentaciji
+
+Na vezbama je zapravo pokretan kod koji smo pisali, ali posto mene mrzi da podesavam
+celo okruzenje, na kraju primera/zadataka cu samo ostavljati komande koje su pokretane

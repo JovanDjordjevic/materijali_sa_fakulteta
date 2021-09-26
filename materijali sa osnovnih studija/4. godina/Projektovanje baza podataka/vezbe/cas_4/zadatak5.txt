@@ -1,0 +1,108 @@
+Zadatak 5. Odrediti ključeve relacije R, a zatim i transformisati postupno relaciju R tako da bude u 2NF, pa u 3NF i na kraju u BCNF.
+
+R(id_sektora, sredstva_sektor, id_rukovodioca, id_radnika, id_projekta, id_kancelarije, broj_telefona, naziv_posla, sifra_posla, datum_primanja, iznos_primanja, sredstva_projekat, povrsina_kancelarije)
+
+F = {
+(FZ1) id_sektora → sredstva_sektor, id_rukovodioca
+(FZ2) id_radnika → id_sektora, id_projekta, id_kancelarije, broj_telefona
+(FZ3) id_radnika, naziv_posla, datum_primanja → iznos_primanja, sifra_posla
+(FZ4) id_projekta → sredstva_projekat
+(FZ5) id_kancelarije → povrsina_kancelarije
+(FZ6) sifra_posla →  naziv_posla
+}
+
+Rešenje 5.
+
+jednoclani:
+{id_sektora}+ = {id_sektora, sredstva_sektor, id_rukovodioca}
+{sredstva_sektor}+ = {sredstva_sektor}
+{id_rukovodioca}+ = {id_rukovodioca}
+{id_radnika}+ = {id_radnika, id_sektora, id_projekta, id_kancelarije, broj_telefona,
+                , sredstva_sektor, id_rukovodioca, sredstva_projekat, povrsina_kancelarije}
+{id_projekta}+ = {id_projekta, sredstva_projekat}
+{id_kancelarije}+ = {id_kancelarije, povrsina_kancelarije}
+{broj_telefona}+ = {broj_telefona}
+{naziv_posla}+ = {naziv_posla}
+{sifra_posla}+ = {sifra_posla, naziv_posla}
+{datum_primanja}+ = {datum_primanja}
+{iznos_primanja}+ = {iznos_primanja}
+{sredstva_projekat}+ = {sredstva_projekat}
+{povrsina_kancelarije}+ = {povrsina_kancelarije}
+
+Ovde najbolje sto imamo je zatvorenje za id_radnika, ali u njemu fale nekia tributi tako da
+to nije kandidat za kljuc
+
+Gledamo za velicinu 2:
+ima ih mnoogo ne gledamo, ali nece se dobiti
+
+Gledamo za velicinu 3:
+Vidimo iz FZ3 da nam on daje one atribute koji su nam falili kada je bio samo {id_radnika}, tako da 
+proverimo zatvorenje:
+
+{id_radnika, naziv_posla, datum_primanja}+ = {id_radnika, naziv_posla, datum_primanja, id_sektora, id_projekta
+                                            ,id_kancelarije, broj_telefona, sredstva_sektor, id_rukovodioca, sredstva_projekat, povrsina_kancelarije}
+
+Ovo je kandidat za kljuc, ali u ovom primeru moze da se nadje jos jedan:
+Vidimo da id_radnika i datum_primanja ne moze da se zameni nijendim drugim atributom, ali zato 
+naziv_posla mozemo da zamenimo sa sifra_posla i da dobijemo isto zatvorenje:
+
+{id_radnika, sifra_posla, datum_primanja}+ = {id_radnika, naziv_posla, datum_primanja, id_sektora, id_projekta
+                                            ,id_kancelarije, broj_telefona, sredstva_sektor, id_rukovodioca, sredstva_projekat, povrsina_kancelarije}
+
+imamo 2 kandidata za kljc:
+    {id_radnika, naziv_posla, datum_primanja}
+    {id_radnika, sifra_posla, datum_primanja}
+
+Posto imamo vise kandidata za kljuc MORAMO OBA DA IMAMO NA UMU KADA GLEDAMO FZ KOJE IMAMO!!  (?)
+
+Gledamo FZ:
+FZ1 je trazncitivna: nekljucni -> nekljucni
+FZ2 je parcijalna
+FZ3 je superkljucna
+FZ4 je trazncitivna: nekljucni -> nekljucni
+FZ5 je trazncitivna: nekljucni -> nekljucni
+FZ6 je smetnja za BCNF jer je traznitivna a ne sadrzi ceo kljuc sa leve strane (?)
+
+Dovodimo u 2NF tako sto se oslobadjamo FZ2:
+    VAZNO: ovde hodcemo da se oslobodimo FZ2 ali priemtimo sledece: Ako bismo razdvojili R po pravilu,
+dobili bismo R2 iz kog su izbaceni atributi {id_sektora, id_projekta, id_kancelarije, broj_telefona},
+tj nece nam biti ocuvana FZ1 : id_sektora → sredstva_sektor, id_rukovodioca. Takodje bi bile
+izgubljene i FZ4 i FZ5!!!
+
+    GENERALNO PRAVILO: ako hocemo da uklonimo neku FZ, ako se ono sto se nalazi sa njene dense strane
+nalazi sa leve strane neke druge FZ, ne smemo da je ukonimo bez da prvo ukonimo te druge!!!!
+
+Znaci da bi se oslobodili FZ2 moramo prvo da se oslobodimo FZ1, FZ4 Ii FZ5!!
+Oslobadjamo se FZ1:
+        NOTE: iako je to FZ koja na smeta za 3NF, u redu je da je eliminisemo sada kada nam smeta za uklanjanje
+        neke FZ koja nam smeta za 2NF
+    R1(id_sektora, sredstva_sektor, id_rukovodioca)
+    R2(id_sektora, id_radnika, id_projekta, id_kancelarije, broj_telefona, naziv_posla, sifra_posla, datum_primanja, iznos_primanja, sredstva_projekat, povrsina_kancelarije)
+    R = R1 x R2
+
+Oslobadjamo se FZ4:
+    R3(id_projekta, sredstva_projekat)
+    R4(id_sektora, id_radnika, id_projekta, id_kancelarije, broj_telefona, naziv_posla, sifra_posla, datum_primanja, iznos_primanja, povrsina_kancelarije)
+    R2 = R3 x R4
+
+Oslobadjamo se FZ5:
+    R5(id_kancelarije, povrsina_kancelarije)
+    R6(id_sektora, id_radnika, id_projekta, id_kancelarije, broj_telefona, naziv_posla, sifra_posla, datum_primanja, iznos_primanja)
+    R4 = R5 x R6
+
+TEK SADA MOZEMO DA SE OSLOBODIMO FZ2!!!
+    R7(id_radnika, id_sektora, id_projekta, id_kancelarije, broj_telefona)
+    R8(id_radnika, naziv_posla, sifra_posla, datum_primanja, iznos_primanja)
+    R6 = R7 x R8
+
+
+=> relacija je u 2NF,    R = R1 x R3 x R5 x R7 x R8
+Posto smo se u ovom koraku usput i oslobodili svih tranzitivnih koji su   nekljucni -> nekljucni
+relacija je sada i u 3NF
+
+Za BCNF nam smeta FZ6 pa je se oslobadjamo:
+    R9(sifra_posla, naziv_posla)
+    R10(id_radnika, sifra_posla, datum_primanja, iznos_primanja)
+    R8 = R9 x R10
+
+=> R = R1 x R3 x R5 x R7 x R9 x R10   i R je u BCNF

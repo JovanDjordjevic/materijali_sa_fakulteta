@@ -1,0 +1,31 @@
+RACUN(SifR, Datum, UkupanIznos)
+PROIZVOD(SifPr, Naziv, Cena)
+STAVKA_RACUNA(SifS, SifR, SifPr, RedniBr, Kolicina, Iznos)
+
+a)
+select cena 
+from preizvod 
+where naziv = 'Olovka123'
+
+mozemo hash indeks
+
+b)
+select SifS
+from STAVKA_RACUNA 
+where Kolicina >= 100
+
+ovde mozemo klasterovani b stablo indeks
+
+c)
+select SifR
+from RACUN 
+where datum = X and UkupanIznos >= Y
+
+mozemo redak hash indeks za datum i btree indeks za iznos (?)
+
+d)
+select p1.cena 
+from proizvod p1
+where not exists (select p2.cena from proizvod p2 where p2.cena > p1.cena)
+
+(?)

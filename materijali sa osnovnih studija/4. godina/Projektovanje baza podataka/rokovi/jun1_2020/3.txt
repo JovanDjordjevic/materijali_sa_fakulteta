@@ -1,0 +1,7 @@
+NOTE: nemam pojma da li je dobro
+
+a) za oba upita bi dobro resenje bio dobro resenje klasterovani b stablo indeks nad atributom dnevni_promet (?)
+    mozda bi <br_zapolesnih, dnevni_promet> bio dobar kompozitni indeks (?)
+
+b) za prvi bi mozda bilo dobro da ima 2 b-tree indeksa (?)
+   za drugi upit bi nam verovatno bio dovoljan jedan hash indeks na br_zaposlenih (?)

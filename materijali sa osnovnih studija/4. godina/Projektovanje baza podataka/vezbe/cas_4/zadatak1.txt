@@ -1,0 +1,86 @@
+Zadatak 1.  Odrediti ključeve relacije R, a zatim i transformisati postupno relaciju R tako da bude u 2NF, pa u 3NF i na kraju u BCNF.
+
+R(id_pacijenta, ime, prezime, ptt, naziv_mesta, adresa, datum, sifra_zahvata, naziv_zahvata, sifra_zuba, iznos_racuna)
+
+F = {
+(FZ1) id_pacijenta → ime, prezime, ptt, naziv_mesta, adresa
+(FZ2) ptt → naziv_mesta
+(FZ3) id_pacijenta, datum → sifra_zahvata, naziv_zahvata, sifra_zuba, iznos_racuna
+(FZ4) sifra_zahvata → naziv_zahvata
+}
+
+
+
+Rešenje:
+
+Nijedan jednoclani podskup atributa ne moze biti kandidat za primarni kljuc, 
+evo npr za id_pacijenta da se vidi zasto:
+iz FZ1 vidimo da id_pacijenta odredjuje ime, prezime, ptt, naziv_mesta, adresa
+tojest zatvorenje za id_pacijenta je:
+    {id_pacijenta}+ = {id_pacijenta, ime, prezime, ptt, naziv_mesta, adresa}
+slicno i za ostale:
+    {ptt}+ = {ptt, naziv_mesta}
+    {sifra_zahvata}+ = {sifra_zahvata, naziv_zahvata}
+        NOTE: zatvorenje za atribute koji ne ucestvuju ni u jednoj FZ su oni sami,
+        ebo kako izgledaju. Njih generalno ne moramo da ramzatarmo ako relacija ima vise od jednog atributa
+    {ime}+ = {ime}
+    {prezime}+ = {prezime}
+    {nazi_mesta}+ = {naziv_mesta}
+    {adresa}+ = {adresa}
+    {datum}+ = {datum}
+    {naziv_zahvata}+ = {naziv_zahvata}
+    {sifra_zuba}+ = {sifra_zuba}
+    {sifra_zuba}+ = {sifra_zuba}
+
+Posmatramo dvoclane skupve:
+Posto njih ima mnogo, iako po formalnom algoritmu treba da proveravamo svaki, ovde necemo to raditi
+Pogledajnmo npr za skup {id_pacijenta, datum}. u njegovo zatvorenje ulaze ta dva atributa
+plus oni stributi iz FZ3 plus oni atributi iz FZ1 zato sto znamo odatle da id_pacijenta odredjuje ime, prezime... iz FZ1
+    {id_pacijenta, datum}+ = {id_pacijenta, datum, sifra_zahvata, naziv_zahvata, sifra_zuba
+                             , iznos_racuna, ime, prezime, ptt, naziv_mesta, adresa}
+Ovo zatvorenje obuhvata sve atribute iz relacije R
+=> to je kandidat za kljuc
+
+Fomralno bi trebalod a ispitamo i ostale dvocalne skupove da vidimo da li su kandidati, ali u ovom primeru
+je ocigledno da nema jos kandidata
+Troclane i vise skupove ne ispitujemo zato sto nebi bio zadovoljen uslov minimalnosti za kljuc
+
+
+Sada kada smo nasli kadidat za kjuc gledamo FZ koje imamo:
+FZ1 ce biti parcijalna
+FZ2 je tranzitivna: nekljucni -> nekljucni
+FZ3 je superkljucna
+FZ4 je tranzitivna: nekljucni -> nekljucni
+
+
+Da bismo dosli u 2NF moramo da se oslobodimo parcijalnih FZ, tj ovde nam smeta FZ1
+radimo dekmpoziciju, pravimo relacije R1 i R2 od R:  (pogledaj pravila za dekompoziciju an slajdovima)
+    R1(id_pacijenta, ime, prezime, ptt, naziv_mesta, adresa)
+    R2(id_pacijenta, datum, sifra_zahvata, naziv_zahvata, sifra_zuba, iznos_racuna)
+
+NOTE: znaci mi nadalje ne razmatramo vise R, ona kao da ne psotoji, imamo samo R1 i R2
+      takve da vazi R1 x R2 = R !!
+        
+=> relacija sada jeste u 2NF
+
+
+Nije u 3NF zbog FZ2 i FZ4:
+Prvo se oslobadjamo FZ2, nastaju relacije R3 i R4 (posto sada imamo R1 i R2, vidimo da FZ2 
+vazi u R1 tako da nju dekomponujemo po onom pravilu)
+    R3(ptt, naziv_mesta)
+    R4(id_pacijenta, ime, prezime, ptt, adresa)
+    R1 = R3 x R4 
+
+Oslobadjamo se FZ4 (ona vazi u R2 tako da radimo R2 = R5 x R6):
+    R5(sifra_zahvata, naziv_zahvata)
+    R6(id_pacijenta, datum, sifra_zahvata, sifra_zuba, iznos_racuna)
+    R2 = R5 x R6
+
+Za sada: R = R3 x R4 x R5 x R6
+
+Trenutno je relacija u 3NF
+
+Posto nemamo nikakve dodatne zavisnosti koje bi nam smetale za BCNF(tj su nekljucni -> kljucni):
+=> relacija jeste u BCNF
+
+=> krajnje resenje: R = R3 x R4 x R5 x R6

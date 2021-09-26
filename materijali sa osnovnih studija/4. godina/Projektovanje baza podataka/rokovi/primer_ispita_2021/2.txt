@@ -1,0 +1,27 @@
+NOTE: ko zna da li je ovo dobro
+
+1)
+select b.naziv, p.datum_projekcije, p.vreme_projekcije
+from bioskop b, projekcija p, film f
+where b.id_bioskopa = p.id_bioskopa
+      and p.if_filma = f.id_filma 
+      and f.zanr = X 
+      and p.datum_projekcije between (Y, Z)
+
+Na p.datum_projekcije moze kalsterovani b stablo indeks jer je intervalni zahtev
+Mozemo hash indeks na neki od preostalih atributa, onaj koji je najselektivniji za konkretne podatke (?)
+
+2)
+select f.id 
+from film f, projekcija p 
+where p.if_filma = f.id_filma
+      and p.datum_projekcije = now()
+      and p.tip_filma = X 
+
+danasnji datum deluje kao da je jako selektivan, pa mozda za p.datum_projekcije mozemo da napravimo
+hash indeks i da on bude koriscen za spoljasnju petlju spajanja, moze da bude kalsterovan
+Za id_filma takodje moze hash indeks
+
+3)
+
+4)

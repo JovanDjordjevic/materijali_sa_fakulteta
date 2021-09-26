@@ -1,0 +1,59 @@
+Zadatak 2. Odrediti ključeve relacije R, a zatim i transformisati postupno relaciju R tako da bude u 2NF, pa u 3NF i na kraju u BCNF.
+
+R(sifra_zivotinje, ime, vrsta, datum_rođenja, mesto, datum_dolaska, datum_odlaska, zaduzena_osoba, komentar, proizvod, alternativni_proizvod)
+
+F = {
+(FZ1) sifra_zivotinje → ime, vrsta, datum_rođenja
+(FZ2) sifra_zivotinje, mesto, datum_dolaska → datum_odlaska, zaduzena_osoba, komentar
+(FZ3) proizvod → alternativni_proizvod
+}
+
+Rešenje:
+
+Pocinjemo od trazenja kandidata za priamrni kljuc, za pocetak gledamo zatvorenja skupova vlicine 1:
+    {sifra_zivotunje}+ = {sifra_zivotinje, ime, vrsta, datum_rođenja}
+    {proizvod}+ = {proizvod, alternativni_proizvod}
+ostali koji nisu ni u jednoj FZ odredjuju samo sebe
+
+Nijedan jednoclani skup nije kandidat za kljuc
+
+Sada bi trebalo da proverimo dvoclane, ali ovde se iz FZ2 vidi da ce nam trebati barem 3 atributa
+da bismo odredili datum_odlaska, dakle sigurno ne postoji niejedan kadidat za kljuc koji je duzine 2
+
+pogledamo zatvorenje za troclani skup:
+    {sifra_zivotinje, mesto, datum_dolaska}+ = {sifra_zivotinje, ime, vrsta, datum_rođenja, mesto, datum_dolaska, datum_odlaska, zaduzena_osoba, komentar, alternativni_proizvod}
+Vidimo da nam u njemu fali atribut 'proizvod' iz pcoetne relacije, dakle ovaj (a lako se vidi da nijedan drugi)
+troclani skup nije kadnidat za kljuc
+
+Jedini kandidat za kljuc je cetvoroclani skup {sifra_zivotinje, mesto, datum_dolaska, proizvod}
+Vidimo iz zatvorenja da obuhvata sve atribute:
+    {sifra_zivotinje, mesto, datum_dolaska, prozivod}+ = {sifra_zivotinje, ime, vrsta, datum_rođenja, mesto, datum_dolaska, datum_odlaska, zaduzena_osoba, komentar, proizvod, alternativni_proizvod}
+
+Ne proveramo petoclane i vise zato sto nebi zadovoljavali uslov minimalnosti
+=> kljuc nam je {sifra_zivotinje, mesto, datum_dolaska, proizvod}
+
+
+Posmatramo FZ koje imamo:
+FZ1 sa leve strane ima deo kljuca sto nam smeta za 2NF
+FZ2 isto
+FZ3 isto
+
+Relacija trenutno nije u 2NF jer nam smetaju FZ1,FZ2, FZ3. Oslobadjamo ih se bilo kojim redom:
+FZ1:
+    R1(sira_zivotinje, ime, vrsta, datum_rodjenja)
+    R2(sifra_zivotinje, mesto, datum_dolaska, datum_odlaska, zaduzena_osoba, komentar, proizvod, alternativni_proizvod)
+    R = R1 x R2
+
+FZ2: (NOTE: mi sad ne razdvajamo R nego R2 zato sto FZ2 sad vazi u njoj !!!!)
+    R3 (sifra_zivotinje, mesto, datum_dolaska, datum_odlaska, zaduzena_osoba, komentar)
+    R4 (sifra_zivotinje, mesto, datum_dolaska, proizvod, alternativni_proizvod)
+    R2 = R3 x R4
+FZ3: (odnosi se na R4)
+    R5(proizvod, alternativni_proizvod)
+    R6(sifra_zivotinje, mesto, datum_dolaska, proizvod)
+    R4 = R5 x R6
+
+trenutno: R = R1 x R3 x R5 x R6
+
+=> sada je u 2NF
+=> posto nemamo vise nijednu FZ koje ne potice od celog kljuca, vec sada je i u 3NF i u BCNF

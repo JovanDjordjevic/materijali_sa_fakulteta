@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <title>Dr <name>Jovan Mališić</name>, redovni profesor</title>
+    <meta http-equiv="Content-type"
+    content="text/html; charset=utf-8" />
+  </head>
+  <body background="../dtile.jpg" style="font-family: verdana">
+    <a href="../nastPoAbecedi.htm">
+      <font color="#550000" size="-1">POVRATAK</font>
+    </a>
+    <p>
+      <img src="foto.jpg" align="right" />
+      <font color="#990000" size="+2">Dr Jovan Mališić</font>
+      <br />
+      <font color="#550000" size="-1">redovni profesor u
+      penziji</font>
+    </p>
+    <p>
+      <font color="#550000" size="-1"><seg>Rođen je <dat>1937. godine</dat> u
+      <loc>Bošnjanu, opština Rača</loc>. </seg><seg>Osnovnu školu završio je u Bošnjanu,
+      gimnaziju u Rači, a matematičku grupu na
+      Prirodno-matematičkom fakultetu u Beogradu 1960. godine.
+      </seg><seg>Magistarski rad 
+      <i>Slučajni elementi sa vrednostima u prostoru Banaha</i>
+      odbranio je na PMF u Beogradu 1964. godine. </seg><seg>Doktorsku
+      disertaciju 
+      <i>Ekstrapolacija i drugi linearni problemi jedne klase
+      stacionarnih procesa sa neracionalnim spektralnim
+      gustinama</i> odbranio je na PMF 1973. godine. </seg><seg>Bio je na
+      naučnom usavršavanju na MGU, kod profesora A.M. Jagloma,
+      školske 1966/67. godine. </seg><seg>Za asistenta na Katedri matematike
+      izabran je 1961, za docenta 1974, a za vanrednog profesora
+      1988. godine. </seg><seg>Objavio je 35 naučnih radova koji pripadaju
+      oblasti slučajnih procesa i vremenskih serija, kao i primeni
+      statističkih metoda u meteorologiji i hidrologiji. </seg><seg>Sem toga,
+      učestvovao je u izradi većeg broja stručnih elaborata i
+      studija. </seg><seg>Autor je (ili koautor) 5 udžbenika za srednje škole,
+      12 udžbenika za osnovne studije i dva udžbenika za
+      poslediplomske studije. </seg><seg>Sa referatima je učestvovao na 13
+      domaćih i 16 međunarodnih naučnih skupova. </seg><seg>Predavao je
+      sledeće predmete: 
+      <i>Verovatnoća</i> I, 
+      <i>Teorija verovatnoće</i>, 
+      <i>Teorija verovatnoće sa primenama</i>, 
+      <i>Matematika</i> - opšti kurs, 
+      <i>Dinamičko programiranje</i>, 
+      <i>Statističke metode optimizacije dinamičkih sistema</i>, 
+      <i>Statističke metode u meteorologiji</i>, 
+      <i>Statistička kontrola kvaliteta</i>, 
+      <i>Slučajni procesi</i>, 
+      <i>Analiza vremenskih serija</i> - sve na osnovnim studijama
+      na PMF-u, kao i predmete: 
+      <i>Estimacija stacionarnih slučajnih procesa</i>, 
+      <i>Statistika slučajnih procesa</i>, 
+      <i>Statistička analiza vremenskih serija</i> - sve kao
+      specijalne kurseve na poslediplomskim studijama na
+      matematičkoj grupi PMF. </seg><seg>Predavao je i na poslediplomskim
+      studijama na Biološkom i Građevinskom fakultetu u Beogradu.
+      </seg><seg>Bio je rukovodilac za izradu 6 doktorskih disertacija i 6
+      magistarskih radova. </seg><seg>Bio je dekan OOUR za matematiku,
+      mehaniku i astronomiju PMF, sadašnjeg Matematičkog
+      fakulteta.</seg></font>
+    </p>
+    <p>
+      <a href="biblio.ps">
+        <font color="#990000" size="+1">Bibliografija</font>
+      </a>
+    </p>
+    <p>
+      <font color="#990000" size="+2">Radovi</font>
+    </p>
+    <p>
+      <font color="#550000" size="-1">
+        <a target="_self" href="rad1.pdf">
+          <i>ON EXPONENTIAL AUTOREGRESSIVE TIME SERIES MODELS</i>
+        </a>
+      </font>
+    </p>
+  </body>
+</html>

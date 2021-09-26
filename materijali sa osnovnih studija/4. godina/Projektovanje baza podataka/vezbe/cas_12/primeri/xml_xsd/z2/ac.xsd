@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ovde ce biti i a) i c)-->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="Klijenti">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- kada ne navedemo donju granicu, ona je podrazumevano 1 -->
+                <xs:element name="Klijent" type="KlijentTip" maxOccurs="unbounded">
+                    <!-- ovo za dodavanje jedisntvenosti je samo sintaksa, uvek je isto, to je nesto
+                    sto bismo inace samo guglali ili naucili napamet
+                    PAZIMO SAMO DA BUDE CHILD OD ELEMENTA! -->
+                    <xs:unique name="JeinstvenosZaImePrezime">
+                        <xs:selector xpath="Klijent"/>
+                        <xs:field xpath="ImePrezime"/>
+                    </xs:unique>
+                    <!-- c) end-->
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- klijent koji ce moci da ima 1 ili vise kartica
+        U proslom primeru smo modelovali atribute bas kao xml atribute, 
+        sad cemo da ih mdoelujemo kao elemente, radi demosntracije
+    -->
+    <xs:complexType name="KlijentTip">
+        <xs:sequence>
+            <xs:element name="JMBG" type="xs:string"/>
+            <xs:element name="ImePrezime" type="xs:string"/>
+            <xs:element name="PlatnaKartica" type="PlatnaKarticaTip" maxOccurs="unbounded"/>
+        </xs:sequence>
+    <xs:complexType>
+
+    <xs:complexType name="PlatnaKartica">
+        <xs:sequence>
+            <xs:element name="BrKartice" type="xs:string"/>
+            <xs:element name="TipKartice" type="xs:string"/>
+            <xs:element name="Stanje" type="xs:int"/>
+        </xs:sequence>
+    <xs:complexType>
+
+
+</xs:schema>

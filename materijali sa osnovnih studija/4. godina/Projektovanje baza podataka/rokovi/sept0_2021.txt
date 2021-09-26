@@ -1,0 +1,12 @@
+Teorija:
+1) Sve varijante ROWA protokola sa objasnjenjima
+2) Fizicka organizacija podataka u DB2 sistemu
+3) 6NF i forma domena i kljuca, razlike i definicije
+4) uloga grupisanja entiteta kod konceptualnog modeliranja uz objasnjenje procesa
+5) agregirani odnos vs ternarni odnos, objasniti dilemu
+6) sta je integritet a sta konzistentnost
+
+Zadaci:
+1) dat neki ER dijagram, treba ga konvertovani tu relacionu shemu
+2) zadatak gde treba ispisati neka tri triggera na datoj relacionoj shemi
+3) za neke date upite da se produskutuju optimalni indeksi

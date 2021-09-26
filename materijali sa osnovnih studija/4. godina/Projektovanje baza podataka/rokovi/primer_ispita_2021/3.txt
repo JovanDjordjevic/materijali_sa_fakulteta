@@ -1,0 +1,34 @@
+nezavisni entiteti:
+    Kandidat(id_kan*, god_rodj, ime, prezime)
+    PolitickaPartija(id_pp*, ime)
+    Opstina(id_ops*, naziv)
+    BirackoMesto(id_bm*, lokacija)
+    Kontrolor(id_kont*, ime, prezime)
+    Birac(jmbg*, ime, prezime, adresa)
+
+Zavisni i specijalizacije:
+    nema
+
+1,1 odnosi:
+    glasa_na:
+        Kandidat(id_kan*, god_rodj, ime, prezime, id_bm)
+            Kandidat[id_bm] <= BirackoMesto[id_bm]
+    pripada:
+        BirackoMesto(id_bm*, lokacija, id_ops)
+            BirackoMesto[id_ops] <= Opstina[id_ops]
+    
+0,1 odnosi:
+    Kandiduje(id_kan*, id_pp)
+        Kandiduje[id_kan] <= Kandidat[id_kan]
+        Kandidat[id_pp] <= PolitickaPartija[id_pp]
+    Kontrolise(id_kont*, id_bm)
+        Kontrolise[id_kont] <= Kontrolor[id_kont]
+        Kontrolise[id_bm] <= BirackoMesto[id_bm]
+    BiraNa(jmbg*, id_bm, krug)
+        BiraNa[jmbg] <= Birac[jmbg]
+        BiraNa[id_bm] <= BirackoMesto[id_bm]
+    KontrolisaoGlasnje(jmbg*, id_kont, napomena)
+        KontrolisaoGlasnje[jmbg] <= BiraNa[jmbg]
+        KontrolisaoGlasnje[id_kont] <= KOntrolise[id_kont]
+
+    

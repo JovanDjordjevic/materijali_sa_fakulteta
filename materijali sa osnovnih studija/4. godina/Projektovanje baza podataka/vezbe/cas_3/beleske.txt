@@ -1,0 +1,70 @@
+redosled prevodjenja:
+	nezavisni entiteti
+	zavisni entiteti i specijalizacije
+    NOTE: na nekim zadacima na slajdovima, kada se prevode zavisni entiteti, neki od njihovih atributa im ulazi u primarni kljuc,
+          a u ostalim pirmerima ne ulazi. Takodje u momirovom objasnjenju ispod nigde ne stoji da to treba da se radi, a ivana je na casu to radila
+          nisam siguran sta je tacno
+	relacije koje bar sa jedne strane imaju (1,1)
+	relacije koje bar sa jedne strane imaju (0,1)
+	relacije koje za gornju granicu imaju N
+
+Kada prevodimo relacije,  prevodimo prvo one cije su obe strane vec prevedene,
+pa nakon toga ako ovo prevodjenje ucini da se nadje neka nova relacija kojoj su
+obe strane rpevedene, onda prevodimo nju
+
+za prevodjenje (1,1), ako imamo 1,1 sa obe strane relacije, svejedno je koji cemo kljuc dodati u koju tabelu 
+(primetimo da ovde ne nastaje nova tabela vec se samo prosiruju tabele koje vec postoje
+
+za (0,1) od te relacije nastaje nova tabela u kojoj su njeni atributi ako ih ima i unija primarnih kljuceva sa obe strane relacije, 
+ali iz te unije za primarni kljuc te nove tabele smatrace se ono sto je sa one strane relacije koja ima (0,1)
+Kada je sa obe (0,1) isto se radi samo je svejedno koji od primarnih kljuceva iz unije cemo 
+odabrati za primarni kljuc u novoj tabeli 
+
+Za relacije sa gornjom granicom N pravimo novu tabelu slicno kao za (0,1) samo ovde za 
+primarni kljuc uziammo celu uniju a ne samo 1 od primarnih kljuceva
+
+Na slajdovima su resenja za prva 3 zadatka, a na vezbama Ivana radi 4,5,6
+
+
+### pravila.txt sa momirovog sajta ###
+
+Sablon prevodjenja (po koracima):
+K1. Prevode se svi nezavisni entiteti u posebne table:
+  - Svi atributi entiteta postaju polja tabele;
+  - Primarni kljuc entiteta postaje primarni kljuc tabele.
+K2. Prevode se zavisni entiteti i specijalizacije u posebne tabele:
+  - Svi atributi zavisnog/specijalizovanog entiteta postaju polja tabele;
+  - Dodaje kao strani kljuc tj. primarni kljuc entiteta koji identifikuje taj zavisan entitet
+    (odnosno, cini generalizaciju).
+K3. Agregirani entiteti i relacije se prevode u zavisnosti od kardinalnosati na sledeci nacin:
+  a) Ako je sa bar jedne strane kardinalnost (1, 1):
+    - Ne pravimo pravimo novu tabelu, vec uzimamo primarni kljuc iz tabele KA kojoj je 
+      kardinalnost (1, 1) i stavljamo ga, kao strani kljuc,  u tabelu OD koje je kardinalnost (1, 1);
+    - Atributi koji pripadaju relaciji se dodaju tabeli, zajedno sa stranim
+      kljucem, OD koje je kardinalnost (1, 1).
+    
+    E1 --(1,1)-- R --(?,?)-- E2
+        --KA-->     <--OD--
+        
+    Primarni kljuc od E2 stavljamo kao strani kljuc u E1.
+    Napomena: Samo u slucaju (1, 1) kardinalnosti ne prevodimo odnos u tabelu.
+  
+  b) Inace, ako je sa bar jedne strane kardinalnost (0, 1):
+    - Pravimo novu tabelu koja se sastoji od:
+      1. Primarnog kljuca entiteta od kojeg je kardinalnost (0, 1) - strani kljuc;
+      2. Primarnog kljuca entiteta ka kojem je kardinalnost (0, 1) - strani kljuc;
+      3. Svih atributa koji pripadaju tom odnosu na dijagramu.
+    - Primarni kljuc je strani kljuc od tabele od koje je kardinalnost (0, 1)
+    
+    E1 --(0,1)-- R --(?,?)-- E2
+        --KA-->     <--OD--
+        
+    Primarni kljuc je strani kljuc od E1.
+    
+  c) Inace, imamo vise-vise vezu:
+    - Pravimo novu tabelu koja se sastoji od:
+      1. Primarnog kljuca prvog entiteta - strani kljuc;
+      2. Primarnog kljuca drugog kljuca - strani kljuc
+      3. Svih atributa koji pripadaju toj relaciji;
+      
+    Primarni kljuc je unija stranih kljuceva.

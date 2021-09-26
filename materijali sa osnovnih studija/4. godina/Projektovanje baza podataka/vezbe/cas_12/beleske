@@ -1,0 +1,47 @@
+xml schema je zapravo xml dokument koji nam pomaze da validiramo neke nase xml
+podatke,
+tu mozemo da definisemo nase podatke, npr neka osoba:
+
+<osoba  name = "..">
+    <dete>
+    <dete>
+</osoba>
+
+NOTE: tagove mozemo sa <tag> </tag>   ili sa <tag... /> ako tg nema sadrzaj nego samo atribute
+
+
+u .xsd zapravo opisujemo tagove i nacin njihovog koriscenja u xml datoteci
+npr ako zelimo da napisemo ovako nesto u xml:  
+<employee>
+    <firstname>John</firstname>
+    <lastname>Smith</lastname>
+</employee>
+
+
+za to moramo prvo u semi da opisemo tag employee:
+
+<xs:element name="employee">                                       ime taga
+    <xs:complexType>                                               posto ce se sastojati od imena i prezimena to je complex tip
+        <xs:sequence>                                              ime i prezime su neka sekvenca
+            <xs:element name="firstname" type="xs:string"/>        prvo ide idem koje je string
+            <xs:element name="lastname" type="xs:string"/>         onda ide prezime koje je string
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+
+NOTE: vidi u prvom primeru kako se radi nasledjivanje!!!
+<xs:complexType name="ChildTip">
+    <xs:complexContent>
+        <xs:extension base="ParentTipUHijerarhiji">
+            ... 
+        </xs:extension>
+    </xs:complexContent>
+</xs:complexType
+
+
+NOTE: ogranicenje za jedisntvenost, ovo mora da se pise kao CHILD element od elementa na kome postavljamo ogranicenje
+<xs:unique name="ime_ogranicenja">
+    <xs:selector xpath="tip_elementa_koji_ogranicavamo"/>
+    <xs:field xpath="konkretni_atribut_u_tom_tipu_koji_ogranicavamo"/>
+</xs:unique>

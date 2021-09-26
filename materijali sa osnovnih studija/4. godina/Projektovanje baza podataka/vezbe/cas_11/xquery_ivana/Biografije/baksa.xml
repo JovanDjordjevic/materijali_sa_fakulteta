@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html>
+  <head>
+    <title>Dr <name>Aleksandar Bakša</name>, redovni profesor</title>
+    <meta http-equiv="Content-type"
+          content="text/html; charset=utf-8"/>
+  </head>
+  <body background="../dtile.jpg" style="font-family: verdana">
+    <a href="../nastPoAbecedi.htm">
+      <font color="#550000" size="-1">POVRATAK</font>
+    </a>
+    <p>
+      <img src="foto.jpg" align="right"/>
+      <font color="#990000" size="+2"><name>Dr Aleksandar Bakša</name></font>
+      <br/>
+      <font color="#550000" size="-1">redovni profesor u
+      penziji</font>
+    </p>
+    <p>
+      <font color="#550000" size="-1">
+	  <seg>Rođen je <dat>28.9.1937.</dat> godine u
+      <loc>Zagrebu</loc>. </seg><seg>Osnovnu školu i gimnaziju završio je u <loc>Beogradu</loc>. </seg><seg>Na
+      Prirodno-matematički fakultet Univerziteta u <loc>Beogradu</loc> (PMF)
+      upisao se 1958. godine i to na studijsku grupu za mehaniku.</seg><seg>
+      Studije je završio <dat>1962.</dat> i zaposlio se u Hemijsko-tehnološkoj
+      tehničkoj školi u <loc>Beogradu</loc>. </seg><seg>Za asistenta na studijskoj grupi
+      za mehaniku PMF u <loc>Beogradu</loc> izabran je <dat>1970.</dat> </seg><seg>Poslediplomske
+      studije na PMF završio je <dat>1974.</dat> godine odbranom magistarskog
+      rada pod naslovom 
+      <i>O optimalnoj stabilizaciji neholonomnih sistema</i>.</seg><seg>
+      Doktorsku disertaciju 
+      <i>Stabilnost kretanja neholonomnih sistema</i> odbranio je
+      na istom fakultetu <dat>1976.</dat> </seg><seg>Za docenta je izabran <dat>1976</dat>, za
+      vanrednog profesora <dat>1982.</dat> i za redovnog profesora <dat>1989.</dat>
+      godine. </seg><seg>Objavio je 19 naučnih radova, jedan univerzitetski
+      udžbenik, jednu monografiju (sa koautorom) i dva
+      srednjoškolska udžbenika. </seg><seg>Učestvovao je na više međunarodnih
+      i domaćih naučnih skupova, kongresa i konferencija. </seg><seg>Držao je
+      predavanja iz 
+      <i>Statike, Teorije mehanizama, Stabilnosti kretanja, Teorije
+      optimalnog upravljanja kretanjem i Racionalne mehanike</i>.</seg><seg>
+      Na poslediplomskim studijama držao je kurs iz 
+      <i>Analitičke mehanike</i>. </seg><seg>Bio je upravnik Instituta za
+      mehaniku i prodekan za nastavu OOUR-a za matematiku, mehaniku
+      i astronomiju. </seg><seg>Član je društva za mehaniku <loc>Srbije</loc>. </seg></font>
+    </p>
+    <p>
+      <a href="biblio.ps">
+        <font color="#990000" size="+1">Bibliografija</font>
+      </a>
+    </p>
+    <p>
+      <font color="#990000" size="+2">Radovi</font>
+    </p>
+    <p>
+      <font color="#550000" size="-1">
+        <a target="_top" href="r1s1m.htm">
+          <i>BRACHYSTOCHRONOUS MOVEMENT ON A MANIFOLD</i>
+        </a>
+      </font>
+    </p>
+    <p>
+      <font color="#550000" size="-1">
+        <a target="_top" href="r2s1m.htm">
+          <i>ON THE STABILITY OF A STATIONARY MOTION OF A RHEONOMIC
+          SYSTEM</i>
+        </a>
+      </font>
+    </p>
+  </body>
+</html>

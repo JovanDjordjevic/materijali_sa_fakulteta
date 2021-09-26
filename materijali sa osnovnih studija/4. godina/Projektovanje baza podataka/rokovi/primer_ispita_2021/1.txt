@@ -1,0 +1,42 @@
+Ili moje resenje nije dobro ili zvanicno resenje nije dobro
+
+R(sifra_p, ime, prezime, drzava_p, br_knjiga, sifra_k, naslov, oblast, sifra_i, naziv_i, status, drzava_i, rbr_i, godina_izd, izdanje, godina_i, tiraz)
+
+FZ1 : sifra_p -> ime, prezime, drzava_p, br_knjiga
+FZ2 : sifra_k -> naslov, oblast
+FZ3 : sifra_i -> naziv_i, status, drzava_i
+FZ4 : sifra_p, sifra_k, rbr_i -> godina_izd, sifra_i, izdanje
+FZ5 : sifra_k, sifra_i, izdanje -> godina_i, tiraz
+
+Kandidat za kljuc nam je {sifra_p, sifra_k, rbr_i }
+(razlog za ovo je sto kada odredjujemo zatvorenje za ovaj skup, videcemo da ce se u poretposledenjm koraku u zatvorenju pojaviti i trojka
+{sifra_k, sifra_i, izdanje} a onda posto je imamo u zatvorenju, mozemo iz FZ5 da zakljucimo da u zatvorenje ulaze i godina_i i tiraz)
+
+FZ1 : kljucni -> nekljucni
+FZ2 : kljucni -> nekljucni
+FZ3 : nekljucni -> kljucni              (na vezbama smo rekli da FZ nekljucni -> kljucn smetaju za BCNF ali u resenju ovo stoji da smeta za 2NF???)
+FZ4 : superkljucna, ne smeta nam
+FZ5 : kljucni i nekljucni -> nekljucni ( na vezbama smo imali samo nekljucni -> nekljucni u primerima, ali smeta i ovo za 3NF 
+                                         kada je leVo neki skup koji ima i kljucne i nekljucne atribute (?) )
+
+Za 2NF nam smetaju FZ1, FZ2 (?)
+Eliminisemo FZ1:
+    R1 = (sifra_p, ime, prezime, drzava_p, br_knjiga)
+    R2 = (sifra_p, sifra_k, naslov, oblast, sifra_i, naziv_i, status, drzava_i, rbr_i, godina_izd, izdanje, godina_i, tiraz)    
+    R = R1 x R2 
+
+Eliminisemo FZ2 iz R2:
+    R3 = (sifra_k, naslov, oblast)
+    R4 = (sifra_p, sifra_k, sifra_i, naziv_i, status, drzava_i, rbr_i, godina_izd, izdanje, godina_i, tiraz)  
+
+R = R1 x R3 x R4, sada je u 2NF
+Nije u 3NF jer nam smeta FZ5:
+    R5 = (sifra_k, sifra_i, izdanje, godina_i, tiraz)
+    R6 = (sifra_p, sifra_k, sifra_i, naziv_i, status, drzava_i, rbr_i, godina_izd, izdanje)
+
+R = R1 x R3 x R5 x R6 ,sada je u 3NF
+nije u BCNF zbog FZ3:
+    R7 = (sifra_i, naziv_i, status, drzava_i)
+    R8 = (sifra_p, sifra_k, sifra_i, rbr_i, godina_izd, izdanje)
+
+R = R1 x R3 x R5 x R7 x R8 ,sada je u BCNF

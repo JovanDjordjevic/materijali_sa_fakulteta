@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Svaki xml mora da pocne sa ovim ?xml verison tagom i ne sme da pocene sa komentarom
+    
+ovo je deo pod a), u xsd dokumentima definisemo strukturu i sadrzaj nekog
+xml dokumenta. Ovde mozemo da opisemo neke nase tagove/elemente i kako se oni korsite
+
+Posto mi ove zadatke radimo na papiru, ne moramo sve ovo napamet da ucimo, dovoljno
+je da znamo kako uospteno izgleda ovaj schema tag, ne ucimo ovaj link napamet npr 
+
+vidi u b.xml kako se koristi ovo sto smo pisali u a.xsd, ovde opisujemo element 'model' i 
+podelemente koje on mora da sadrzi
+
+sequence kaze da moraju bas tim redom da idu kojim se navode (?)
+choice  (?)
+all     (?)
+
+simpleType moze da bude list ili da sadrzi samog sebe(?)
+complexType moze da sadrzi druge kompleksne ili simple tipove (?)
+mi sa slike iz teksta zadatka vidimo da ce nas model biti complex tip 
+jer ima svasta nesto
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="model">
+        <xs:complexType>    <!--nas model je complex type, sastojace se iz niza (sequence) aviona
+                             i niza kompanija. Procenili smo da nam Letelica nije preterano bitna (?)-->
+            <xs:sequence>
+                <!-- ovde cemo za kompaniju ia vion da navedemo type= a onda cemo taj tip definisati ispod, da nebi ovde nepotrebno opterecivali zapis-->
+                <xs:element name="Kompanija" minOccurs="0" maxOccurs="unbounded" type="KompanijaTip"/> <!--kompanije se u ovoj sekvenci mogu naci 0 ili beskonacno puta-->
+                <xs:element name="Avion" minOccurs="0" maxOccurs="unbounded" type="AvionTip"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ovde cemo sada definisati kako izgleda tip kompanija-->
+    <xs:complexType name="KompanijaTip">
+        <!-- atribute sa slike PIB i Naziv mozemo da modeliramo kao xml atribute taga Kompanija ili
+        kao zasebne tagove, mi cemo ovde npr bas kao xml atribute
+        NOTE: za tip stavljamo xs:string iako postoji i xs:ID, asistnt je na vezbama rekao da xs:ID ima
+        neki specifican nacin kako se navodi pa koristimo samo string da nebi komplikovali-->
+        <xs:attribute name="PIB" type="xs:string" use="required"/>
+        <xs:attribute name="Naziv" type="xs:string"/> 
+    </xs:complexType>
+
+    <!-- iako smo rekli da nam nece biti deo modela,ali evo za letelicu
+    radimo ovo da bismo demosntrirali i ekstenziju tipova za Avion-->
+    <xs:complexType name="LetelicTip">
+        <xs:attribute name="LID" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <!--na dijagramu zadatka vidimo da avion nasledjuje letelicu, ovako u xml
+    navoidmo to nasledjivanje, avion ce morati da sadrzi sve sto letelica ima
+    obratimo paznju na sintaksu, imamo complexContent i extenion !!!-->
+    <xs:complexType name="AvionTip">
+        <xs:complexContent>
+            <xs:extension base="LetelicaTip">
+                <xs:attribute name="BrojSedista" type="xs:int"/>
+                <xs:attribute name="BrojMotora" type="xs:int"/>
+                <!-- moramo pored atributa da nekako modelujemo i one veze sa dijagrama, imamo (1,1) pa cemo 
+                to dodati ovde u avion (?)  da je bilo npr (0,1) nebi morali da budu required-->
+                <xs:attribute name="PIBproizvodjac" type="xs:string" use="required"/>
+                <xs:attribute name="PIBvlasnik" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

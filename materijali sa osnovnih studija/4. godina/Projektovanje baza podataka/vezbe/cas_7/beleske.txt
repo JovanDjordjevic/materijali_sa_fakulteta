@@ -1,0 +1,3 @@
+pogled uospte ne mora da sadrzi podatke koji su direktno upisani u bazuu, vec moze
+da ima i generisane.
+Azuriranje pogleda zapravo radi azuriranje tabele nad kojom je pogled napravljen

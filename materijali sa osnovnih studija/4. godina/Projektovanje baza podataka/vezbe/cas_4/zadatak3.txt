@@ -1,0 +1,48 @@
+Zadatak 3. Odrediti ključeve relacije R, a zatim i transformisati postupno relaciju R tako da bude u 2NF, pa u 3NF i na kraju u BCNF.
+
+R(BrojRacuna, RBTrans, Stanje, Status, SifraKlijenta, ImeKlijenta, Datum, Iznos, VrstaTrans, NazivVrsteTrans)
+
+F = {
+(FZ1) BrojRacuna, RBTrans → Stanje, Status, SifraKlijenta, ImeKlijenta, Datum, Iznos, VrstaTrans, NazivVrsteTrans
+(FZ2) BrojRacuna → Stanje, Status, SifraKlijenta, ImeKlijenta
+(FZ3) SifraKlijenta → ImeKlijenta
+(FZ4) VrstaTrans → NazivVrsteTrans
+}
+
+Rešenje 3.
+
+Kandidat za kljuc je ocigledno (iz FZ1) {BrojRacuna, RBTrans} (formalno treba da se provere i svi jednoclani
+kao u prosla 2 primera, ali mrzi me)
+
+Zadovoljava i jedinstvenost i minmalnost. Koju god drugu kombinaciju 2 atributa da uzmemo videcemo
+da ne zadovoljava ove uslove tako da je {BrojRacuna, RBTrans} jedini kandidat
+Skupove vecih kardinalnosti od 2 ne razmatramo jer ne zadovoljavaju minimalnost
+
+gledamo FZ koje imamo:
+FZ1 je superkljucna    (NOTE: superkljucnih se ne oslobadjamo zato sto nisu smetnja ni za jednu NF)
+FZ2 je parcijalna
+FZ3 je tranzitivna: nekljucni -> nekljucni
+FZ4 je tranzitivna: nekljucni -> nekljucni
+
+Za 2NF nam smeta FZ2 pa je eliminisemo:
+FZ2:
+    R1(BrojRacuna, Stanje, Status, SifraKlijenta, ImeKlijenta)
+    R2(BrojRacuna, RBTrans, Datum, Iznos, VrstaTrans, NazivVrsteTrans)
+    R = R1 x R2
+
+=> za sada je u 2NF
+
+Za 3NF nam smetaju FZ3 i FZ4  zatos to postoji tranzitivna zavisnost nekljucnog atributa preko
+nekljucnog atributa. Mozemo ih eliminisati bilo kojim redom
+FZ3:
+    R3(SifraKlijenta, ImeKlijenta)
+    R4(BrojRacuna, Stanje, Status, SifraKlijenta)
+    R1 = R3 x R4
+FZ4:
+    R5(VrstaTrans, NazivVrsteTrans)
+    R6(BrojRacuna, RBTrans, Datum, Iznos, VrstaTrans)
+    R2 = R5 x R6
+
+=> za sada imamo R = R3 x R4 x R5 x R6 i to je u 3NF
+
+Posto nema dodatnih tranzitivnih FZ => relacija je i u BCNF

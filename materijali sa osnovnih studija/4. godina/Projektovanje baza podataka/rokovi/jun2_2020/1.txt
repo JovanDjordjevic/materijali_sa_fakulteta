@@ -1,0 +1,35 @@
+Nezavisni entiteti:
+    Agencija(id*, ime, adresa, detalji_kontakta)
+    Vodic(id*, pol, ime, prezime, kvalifikacija, ostali_detalji)
+    OblastInteresovanja(kod*, opis)
+    TuristickaLokacija(id*, radno_vreme, naziv, opis, slika, adresa, lokacija, kako_stici)
+    Organizacije(id*, naziv, adresa)
+    TipOrganizacije(kod*, opis)
+
+Zavisni:
+    ima nivo_strucnosti ali ne moze odmah da se prevede
+
+1,1:
+    Organizacije(id*, naziv, adresa, kod)
+        Organizacije[kod] <= TipOrganizacije[kod]
+
+0,1:
+    (nije oznaceno ali pretpostavljam da kod Predstavlja, sa Vodic strane stoji (0,1))
+    Predstavlja(id_vodica*, id_agencije)
+        Predstavlja[id_vodica] <= Vodic[id]
+        Predstavlja[id_agencije] <= Agencija[id]
+
+N:
+    Rezervacija(id_lok*, id_org*, ime_kontakta, ostali_detalji, datum_ture, datum_rez)
+        Rezervacija[id_lok] <= TuristickaLokacija[id]
+        Rezervacija[id_org] <= Organizacije[id]
+    Nudi(id*, kod*)
+        Nudi[id] <= TuristickaLokacija[id]
+        Nudi[kod] <= OblastInteresovanja[kod]
+    Strucnost(id*, kod*)
+        Strucnost[id] <= Vodic[id]
+        Strucnost[kod] <= OblastInteresovanja[kod]
+    
+sad moze onaj zavisni:
+    NivooStrucnosti(id_s*, kod_s*, kod_n*, opis)
+        NivooStrucnosti[id_s, kod_s] <= Strucnost[is, kod]

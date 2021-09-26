@@ -1,0 +1,184 @@
+ovo radimo u mysql ponovo
+
+NOTE: ivana je na snimcima za ove vezbe prosla kroz slajdove i onda pisala u kodu, a momir je 
+      samo prosao teoriju na sljadovima i onda okacio kod u materijalima (kod njega su dostupni snimci samo
+      za vezbe 9 gde radi ovo, 10 i 11 nema)
+
+Na jednoj tabeli mozemo imati samo jedan indeks koji je klasterovan (zato sto ne mozemo u isto vreme imati
+istu tabelu rasporedjenu na 2 razlicita nacina)
+
+bstablo je dobro za intervalne upite (npr BETWEEN u sql). nacin na koji bstablo funkcionise nam 
+daje klasterovan indeks, tj u listovima je "sortirano" po kljucu (ne mora bas da bude sortiran u pravom smislu reci 
+ali je klasterovan) (bstablo inace okej radi i sa intervalima i sa jednakostima, pa kad ne znamo koji indeks
+da korsitimo, preporuka je da korsitimo bstablo)
+
+Hash indeksi su dobri kada u WHERE delu upitamo imamo neko poredjenje po jednakosti
+Kada imamo veliki domen za vrednosi nekog atributa po kome hocemod a indeksiramo
+ali imamo relativno malo elemenata u relaciji, onda je dobro da se koristi hash indeks jer se smanjuje sansa za kolizije
+
+U memoriji tabele su organizovane tako da se cuvaju u stranicama. Tj jednoj tabeli odgovara 1 ili vise stranica.
+U svakojs tranici se cuva neki broj redova tabele. Ako su redovi tabele dugacki (imaju mnog atributa), manje njih ce moci da stane u jednu stranicu.
+Ako su redovi tabele kratki vise njih ce moci da stane u stranicu.
+
+Retki indeksi su indeksi koji nam za datu vrednost kazu u kojoj stranici treba da trazimo taj podatak. 
+Redak indeks mora biti klasterovan i samim tim moze da postoji samo jedan po tabeli
+Gusti indeksi ne referisu na stranicu nego na neki konkretan red unutar stranice (i ne mora biti klasterovan)
+
+Ne treba praviti indekse ako oni nece doprineti ubrzanju izvrsavanja nekog upita
+Kada pravimo indekse trudimo se da oni poboljsavaju sto vise upita. Takodje, indeksi mogu da usporavaju
+operaciju azuriranja (jer se pored tabele moraju azurirati i indeksi), pa ako se to desava a bitno nam je da
+operacija azuriranja bude efikasna, mozda je dobro da tada ne pravimo indekse
+Oni atibuti koji se pominju u WHERE delu upita su kandidati za indeksiranje
+
+Kompozitni indeks je indeks koji se sastoji od vise atributa npr (ime, prezime). To moze imati smisla ako
+u WHERE delu imamo uslov koji sadrzi vise od jednog atributa. Jos jedan use-case za ovo je kada mozemo da za upit uopste
+ne pristupamo tabeli, tj kada nam je moguca index-only strategija za pretragu (tj kada nas ne interesuje konkretan neki red iz tabele
+nego npr samo njihov broj, na osnovu indeksa mozemo da odredimo pocetak i kraj intervala koji ima vrednost iz indeksa (?) i onda na osnovu ta 
+dva 'pokazivaca' samo probrojimo koliko elemenata ima izmedju (?))
+npr.    SELECT d.grad, COUNT(*)
+        FROM dosije AS d 
+        GROUP BY d.grad
+ovde brojimo gradove i mozemo index-only (?)
+(u nekim kasnijijm primerima na slajdovima je pokazivao kako se rade index only zahtevi, 
+svodi se da to prepoznajemo kada imamo neku funkciju tipa min, max, count, avg... u selectu. Tada cemo uzimati 
+kompozitne indekse u koje ce se sigurno ukljuciti to sto je min,max,count itd. funkcijama, plus mozda jos neki
+atribut iz WHERE uslova)
+
+Za neki uslov iz WHERE dela upita kazemo da ima slabu selektivnost ako on odbacuje mali broj podataka u odnosu na ukupni
+npr, za studente: ... WHERE prosek IS NULL or prosek >= 6.5 ima slabu selektivnost zato sto ocekujemo
+da ce bas veliki procenat studenata imati prosek veci od 6.5
+Kada imamo slabu selektivnost, mozda nam se vise isplati da uopste nemamo indekse nego da pretrazimo celu tabelu
+
+Klasterovani indeksi mogu najvise da doprinesu performansama i bitno je da odaberemo dobar posto mozemo da imamo samo 1
+Klasterovanje ima uticaja samo kod dobavljanja podataka, tj ako imamo neku index-only pretragu, klasterovani idneks nam 
+tu ne pomaze nista. Kada imamo vise atributa u uslovima u WHERE, za klasterovani indeks je dobro da uzmemo
+onaj koji daje vecu selektivnost (?)
+
+Hash indeks je bolji ako imamo SAMO upite gde se poredi jednakost, tj nemamo intervalne upite
+Takodje je bolji kada imamo ugnjezdene petlje spajanja, onda za unutrasnju petlju pravimo hash indeks
+npr.    SELECT *
+        FROM dosije AS d JOIN ispit AS i ON d.indeks=i.indeks
+ovde je dosije spoljasnja petlja, a ispit je unutrasnja petlja, i ovde je dobro da se
+za  atribut indeks iz ispita pravi hash mapa
+
+
+
+NOTE: ovo nadalje mozda nisam lepo skapirao i objasnio
+obrazlozenja za priemre date na slajdovima, tj kako razmisljamo:
+(generalno sve ovo sto mi kao razmatrano lako moze da padne u vodu
+u zavisnoti od konkretnih podataka koje imamo, u realnim situacijama bi
+zapravo radili prave analize vremena izvrsavanja
+Na ispitu ovi zadaci se svode na filozofiranje)
+
+primer 1:
+    SELECT E.ename, D.mgr
+    FROM Employees E, Departments D
+    WHERE D.dname=‘Toy’ AND E.dno=D.dno
+
+    kada ovako u FROM navedemo vise tabela, to je kao da samo imamo dekartov proizvod, tj ugnjezdenu 
+    for petlju i onda unutar te 2 petlje imamo kao neki 'if' gde se pita da li su zadovoljeni uslovi. Posto uslov ='Toy' 
+    ima jaku selektivnost, dobro bi bilo da za njega imamo hash indeks, a onda svakako za atribute iz unutrasnje petlje da 
+    takodje imamo hash indeks (?) (tj dovoljno je npr za D.dno, ne moramo za E.dno)
+
+
+primer 2:
+    SELECT E.ename, D.dname
+    FROM Employees E, Departments D
+    WHERE E.sal BETWEEN 10000 AND 20000
+          AND E.hobby=‘Stamps’ AND E.dno=D.dno
+
+    od konkretnih podataka u bazi zavisi koji uslov ce biti selektivniji. pretpostavili smo ovde da je
+    ovaj uslov za platu ima vecu selektivnost. Onaj uslov koji ima vecu selektivnost zelimo da 
+    stavimo da bude u spoljasnjoj petlji(jer se onda unutrasnja petlja pokrece za manji broj redova u tabeli)
+    Posto je uslov intervalni mozemo da korsitimo btree za atribut salary
+    (ako bi ovaj uslov za stamps bio selektivniji, za njega bismo mogli da imamo hash indeks)
+    Pored ovog btree indeksa, treba nam i hash indeks za atribut dno jer i u ovm pirmeru imamo ugnjezdenu petlju
+    spajanja
+
+
+primer 3:
+    SELECT E.dno
+    FROM Employees E
+    WHERE E.age > 40
+    
+    Klasterovan indeks B+ stablo nad age posto vidimo da imamo intervalni upit
+    
+    b) SELECT E.dno, COUNT(*)
+    FROM Employees E
+    WHERE E.age > 10
+    GROUP BY E.dno
+    
+    Kandidati za indeks su nam ovde i age i dno, ovaj age usov nije bas selektivan jer ce recimo 
+    90% zaposlenih biti stariji od 10 godina, pa nam je ovde bolje da napravimo klasterovan b stablo indeks
+    nad dno
+
+
+primer 4:
+    SELECT E.dno
+    FROM Employees E
+    WHERE E.hobby=‘Stamps’
+
+    Ovde moze hash indeks nad hobby
+
+    b) E.hobby=‘Stamps’ and E.eid=552
+
+    Ako nam je ovo uslov, rezultata ce biit 0 ili 1 redova, posto ce eid jednoznacno odrediti nekog zaposlenog
+    pa nam klasterovanje indeksa nije potrebno (ali mozda bi moglo da se stavi neki hash indeks na eid, npr gusti)
+
+
+primer 5:
+    SELECT E.ename, D.mgr
+    FROM Employees E, Departments D
+    WHERE D.dname=‘Toy’ AND E.dno=D.dno
+    
+    ovaj primer smo imali vec pre
+    
+    b) SELECT E.ename, D.mgr
+    FROM Employees E, Departments D
+    WHERE E.hobby=‘Stamps’ AND E.dno=D.dno
+    
+    skoro identican primer, samo sada primetimo da su u uslovu zamenjeni D i E, tj 
+    samo ce sada departments da bude u unutrasnjoj petlji (?)
+
+
+primer 6:
+    SELECT P.pid, A.componentid
+    FROM Parts P, Assembly A
+    WHERE P.pid = A.partid AND P.supplierid = ‘Acme’
+    
+    SELECT P.pid, A.componentid
+    FROM Parts P, Assembly A
+    WHERE P.pid = A.partid AND P.cost=10
+    
+    Pretpostavimo da mnogo delova ima cenu 10. Tada bismo napravili indeks nad cost i izdvojili
+    delove koji zadovoljavaju uslov. Ko-klasterovanjem izbegavamo pravljenje indeksa nad poljem
+    pid.
+    Sumarizovano ko-klasterovanje bi bilo:
+    - Može da ubrza spajanje, posebno spajanje strani ključ-ključ koje odgovara relacijama koje
+    imaju kardinalnost 1:N
+    - Sekvencijalna pretraga bilo koje od relacija postaje sporija, ažuriranje je sporije
+
+obrazlozenje:
+    ... (?)
+
+
+primer 7:
+    SELECT E.eid
+    FROM Employees E
+    WHERE E.age BETWEEN 20 AND 30
+    AND E.sal BETWEEN 3000 AND 5000
+
+    Posto vidimo da imamo intervalne uslove, ovde nam je mogucnost da napravimo btree klasterovani indeks nad
+    sal, age ili nad oba (ali pazimo kada pravimo kompozitni indeks da <age,salary> nije isto sto
+    i <salary, age>) Kada biramo taj kompozitni indeks <x,y> trudimo se da prvi element indeksa odgovara onom 
+    atributu koji ce nam dati vecu selektivnost
+
+    SELECT E.eid
+    FROM Employees E
+    WHERE E.age = 25
+    AND E.sal BETWEEN 3000 AND 5000
+
+    Kompozitni klasterovani indeks B+ stablo <age, sal> 
+
+
+---- nadalje me je jako mrzelo i preskocio sam ----

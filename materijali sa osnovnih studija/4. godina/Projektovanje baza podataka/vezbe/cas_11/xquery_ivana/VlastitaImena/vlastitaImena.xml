@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+
+
+<relationships>
+	<pivot num="400" essence="historical" type="city" wordNet="05558236n">
+		<canonical pivot="410" register="diachronic"/>
+		<concept language="english" prolexeme="500" />
+	</pivot>
+	<pivot num="600" essence="historical" type="country" wordNet="05557178n">
+		<concept language="english" prolexeme="800" />
+	</pivot>
+	<predication pivot1="400" pivot2="600"> 
+		<pReference language="english" predicate="500"/>
+	</predication>
+	<type name="Toponym"> 
+		<type name="Country"/> 
+		<type name="City"/> 
+	</type>
+	<wordNet > 
+		<Ili num="05558236n"/> 
+		<Ili num="05557178n"/> 
+	</wordNet>
+</relationships>
+
+<languages>
+<language name="english">
+<prolexemes>
+<prolexeme num="500" name="Zaharije" determination="no" inflection="89" pivot="400">
+</prolexeme>
+<prolexeme num="800" name="Aleksandar" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Dušan" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Mijalko" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Dragutin" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Dragomir" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Marko" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Branka" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Milan" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Andrija" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Mladen" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Enes" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Jovan" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Jelena" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Mihail" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Ilija" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Zoran" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Jovo" determination="no" inflection="89" pivot="600">
+</prolexeme>
+<prolexeme num="800" name="Bogdan" determination="no" inflection="89" pivot="600">
+</prolexeme>
+</prolexemes>
+<predicates> <predicate num="500" name="capital" grammar="12"/> </predicates>
+
+
+</language>
+</languages>
+</root>

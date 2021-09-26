@@ -1,0 +1,45 @@
+Nezavisni:
+	Zaposleni(JMBG* , ime, prezime, adresa, telefon, naziv_radnog_mesta, datum_zasn_rad)
+	Kupac(sifra*, naziv, adresa, telefon)
+	Narudzbenica(sifra*, datum, status)
+	Faktura(id*, rok, ukupan_iznos)
+	Uplatnica(id*, datum, nacin_placanja)
+	Artikal(sifra*, jed_mere,naziv, rabat, cena, zalihe, min_dop_zalihe)
+	Dobavljac(sifra*, telefon, naziv, adresa)
+
+Zavisni i specijalizacije:
+	Prodavac(JMBG*, provizija)
+		Prodavac[JMBG] <= Zaposleni[JMBG]
+	Otpremnica(sifra_narudzbenice*, datum)
+		Otpremnica[sifra_narudzbenice] <= Narudzbenica[sifra]
+	Nabavka(sifra_dobavljaca*, datum, iznos)
+		Nabavka[sifra_dobavljaca] <= Dobavljac[sifra]
+
+(1,1):								NOTE: U ovom koraku moje resenje se razlikue od onog sa slajdova, mislim da je njihovo pogresno
+	Kupac(sifra*, naziv, adresa, telefon, JMBG)
+		Kupac[JMBG] <= Prodavac[JMBG]
+	Narudzbenica(sifra*, datum, status, sifra_kupca)
+		Narudzbenica[sifra_kupca] <= Kupac[sfira]
+	Otpremnica(sifra_narudzbenice*, datum, JMBG)
+		Otpremnica[JMBG] <= Zaposleni[JMBG]
+	Faktura(id*, rok, ukupan_iznos, sifra_otpremnice)
+		Faktura[sifra_otpremnice] <= Otpremnica[sifra_narudzbenice]
+	Uplatnica(id*, datum, nacin_placanja, id_fakture)
+		Uplatnica[id_fakture] <= Faktura[id]
+
+(0,1):
+	nema 
+
+N:
+	Sadrzi(sifra_narudzbenice*, sifra_artikla*, cena, kolicina)
+		Sadrzi[sifra_narudzbenice] <= Narudzbenica[sifra]
+		Sadrzi[sifra_artikla] <= Artikal[sifra]
+	Dobavlja(sifra_dobavljaca*, sifra_artikla*)
+		Dobavlja[sifra_dobavljaca] <= Dobavljac[sifra]
+		Dobavlja[sifra_artikla] <= Artikal[sifra]
+	Isporuceno(sifra_otpremnice*, sifra_narudzbenice*, sifra_artikla*)
+		Isporuceno[sifra_otpremnice] <= Otpremnica[sifra_narudzbenice]
+		Isporuceno[sifra_narudzbenice*, sifra_artikla*] <= Sadrzi[sifra_narudzbenice*, sifra_artikla*]
+	Nabavlja(sifra_dobavljaca_nabavka*, sifra_dobavljaca*, sifra_artikla*)
+		Nabavlja[sifra_dobavljaca_nabavka] <= Nabavka[sifra_dobavljaca]
+		Nabavlja[sifra_dobavljaca*, sifra_artikla*] <= Dobavlja[sifra_dobavljaca*, sifra_artikla*]

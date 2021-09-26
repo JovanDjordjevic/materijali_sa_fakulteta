@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="primer5.xsd">
+  <person person_id="1">
+    <fname>Kapek</fname>
+    <lname>Sainnouine</lname>
+  </person>
+  <person person_id="2">
+    <fname>Sajon</fname>
+    <lname>Rondela</lname>
+  </person>
+  <person person_id="3">
+    <fname>Likame</fname>
+    <lname>Örrtmons</lname>
+  </person>
+  <person person_id="4">
+    <fname>Slar</fname>
+    <lname>Manlanth</lname>
+  </person>
+  <person person_id="5">
+    <fname>Stoma</fname>
+    <lname>Milu</lname>
+  </person>
+  <person person_id="6">
+    <fname>Nirtam</fname>
+    <lname>Sklöd</lname>
+  </person>
+  <person person_id="7">
+    <fname>Sungam</fname>
+    <lname>Dulbåd</lname>
+  </person>
+  <person person_id="8">
+    <fname>Sraref</fname>
+    <lname>Encmelt</lname>
+  </person>
+</list>

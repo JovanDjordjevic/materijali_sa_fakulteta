@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ovde smo odlucili da napravimo bioskop koji ima sale 
+a sale imaju projekcije a projekcije imaju strani kljuc na film-->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="model">
+        <xs:complexType>
+            <!-- sequence trazi da elementi budu onim redom kojim ih navedemo, a npr ovde demonstriramo
+            choice(ali pravilno je i sequence), choice dozvoljava da se bilo kojim redom pojavljuju elementi
+            takodje, ako zelimo da nam nesto (npr minOccurs) vazi za sve elemente u listi
+            mozemo da navedemo to u tagu za choice/sequence-->
+            <xs:choice minOccurs="0" maxOccurs="unbounded"> 
+                <xs:element name="Film" type="FilmTip"/>
+                <xs:element name="Bioskop" type="BioskopTip"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="FilmTip">
+        <xs:attribute name="FilmId" type="xs:string" use="required"/>
+        <xs:attribute name="Trajanje" type="xs:int"/>
+        <xs:attribute name="NazivFilma" type="xs:string"/>
+        <xs:attribute name="ImeRezisera" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="BioskopTip">
+        <!-- na slici nije navede primarni kljuc za bioskop, ali secamo se od ranije da je u tim
+        situacijama pozeljno da dodamo neki id jer ne mozemo da nemamo primarni kljuc-->
+        <xs:attribute name="BioskopID" type="xs:string" use="required"/>
+        <xs:attribute name="NazivBioskopa" type="xs:string"/>
+        <xs:attribute name="Lokacija" type="xs:string"/>
+        <xs:sequence>
+            <xs:element name="Sala" type="SalaTip" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SalaTip">
+        <!-- neka nam je bas naziv sale priamrni kljuc-->
+        <xs:attribute name="NazivSale" type="xs:string" use="required"/>
+        <!--ovako smo odlucili da modelujemo onaj agregirani entitet sa slike
+        ubacicemo niz tih projekcija u salu -->
+        <xs:sequence>
+            <xs:element name="Projekcija" type="ProjekcijaTip" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ProjekcijaTip"> 
+        <!-- ovde moramo da cuvamo strani kljuc na film-->
+        <xs:attribute name="FilmId" type="xs:string" use="required"/>
+        <!--dodali smo da je datum deo kljuca zato sto se bez toga moze desiti da
+        imamo 2 filma u istom bioskopu u istoj sali na isti datum-->
+        <xs:attribute name="DatumProjekcije" type="xs:string" use="required"/>
+        <xs:attribute name="BrojPosetilaca" type="xs:int"/>
+    </xs:complexType>
+    
+</xs:schema>

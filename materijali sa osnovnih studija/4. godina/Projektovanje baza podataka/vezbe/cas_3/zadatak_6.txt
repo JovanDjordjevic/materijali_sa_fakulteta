@@ -1,0 +1,45 @@
+nezavisni entieteti:
+    Trener(Sifra*, ime, rpezime, adresa)
+    Klub(sifra*, naziv)
+    Atleticar(sifra*, ime , prezime, adresa, datum_rodjenja)
+    Disciplina(sifra*, naziv, srpski_rekord, evropski_rekord)
+    Takmicenje(sifra*, naziv, mesto, zemlja, trajanje, datum_pocetka)
+
+zavisni enetieti:
+    Borba(sifra_takmicenja*, stepen*, datum, rezutlat, atribut)
+        Borba[sifra_takmicenja] <= Takmicenje[sifra_takmicenja]
+
+(1,1) relacije:
+    nemamo
+
+(0,1) relacije:
+        NOTE: 'UcestvovaoB' ne mozemo jos
+    AngazovanT(sifra_trenera*, sifra_kluba)
+        AngazovanT(sifra_trenera) <= Trener[Sifra]
+        AngazovanT(sifra_kluba) <= Klub[Sifra]
+    AngazovanA(sifra_atleticara*, sifra_kluba)
+        AngazovanA(sifra_atleticara) <= Atleticar[Sifra]
+        AngazovanA(sifra_kluba) <= Klub[Sifra]
+      
+relacije sa gornjom granicom N:
+    Trenira(sifra_trenera*, sifra_atleticara*, period)
+        Trenira[sifra_trenera] <= Trener[sifra]
+        Trenira[sifra_atleticara] <= Atleticar[sifra]
+    TakmiciSe(sifra_atleticara*, sifra_dscipline*, licni_rekord)
+        TakmiciSe[sifra_atleticara] <= Atleticar[Sifra]
+        TakmiciSe[sifra_dscipline] <= Disciplina[sifra]
+    NOTE: obratimo paznju ovde na primarni kljuc, posto je sa jedne strane relacije
+          zavisni atribut (i u tom slucaju uzimamo ceo njegov priamrni kljuc)!
+    Pripada(sifra_discipline*, sifra_takmicenja*, stepen*)
+        Pripada[sifra_dscipline] <= Disciplina[sifra]
+        Priapda[sifra_takmicenja, stepen] <= Borba[sifra_takmicenja, stepen]
+    UcestvovaoT(sifra_atleticara*, sifra_takmicenja*, broj, klub)
+        UcestvovaoT[sifra_atleticara] <= Atleticar[Sifra]
+        UcestvovaoT[sifra_takmicenja] <= Takmicenje[Sifra]
+
+sada mozemo 'UcestvovaoB': (obratimo paznju sta smo ubacili iz Borba i sta smo stavili kao priamrni kljuc, ovo iz borbe nismo ubacili u kljuc jer je 
+                            u pitanju relacija koja sa jedne strane ima (0,1) kardianlnost)
+    UcestvovaoB(sifra_atleticara*, sifra_takmicenja*, stepen, rezultat, mesto)
+        UcestvovaoB[sifra_atleticara, sifra_takmicenja] <= UcestvovaoT[sifra_atleticara, sifra_takmicenja]
+        UcestvovaoT[sifra_takmicenja, stepen] <= Borba[sifra_takmicenja, stepen]
+

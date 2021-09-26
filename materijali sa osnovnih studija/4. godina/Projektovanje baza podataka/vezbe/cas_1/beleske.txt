@@ -1,0 +1,5 @@
+Ako neka relacija treba da ucestvuje u novoj relaciji, onda od nje MORA da se napravi mesovit tip, tj mora da se desi agregacija. 
+
+Imamo jos i 2 preporuke kada da nesto agregiramo (NOTE: to su samo preporuke, nije obavezno, ali mi cemo na vezbama uglavnom ovo tretirati kao pravila, tj kad se ovo desi agregiracemo)
+- ako imamo "vise ka vise" vezu, tj da je sa obe strane relacije gornja granica kardinalnosti neko N, M..., onda agregiramo 
+- ako veza koju smo napravili treba da ima neke svoje atribute onda od nje pravimo agregirani objekat

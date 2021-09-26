@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Klijenti>
+    <!-- ovde vidimo kako izgleda kada atribute definisemo kao zasebne elemente
+    meni je npr lepse da budu bas xml atributi jer je onda zapis citljivij-->
+    <Klijent>
+        <JMBG>12345</JMBG>
+        <ImePrezime>Gavrilo Bozovic</ImePrezime>
+        <PlatnaKartica>
+            <BrojKartice>123</BrojKartice>
+            <TipKartice>Visa</TipKartice>
+            <Stanje>1230</Stanje>
+        </PlatnaKartica>
+        <PlatnaKartica>
+            <BrojKartice>12331</BrojKartice>
+            <TipKartice>master</TipKartice>
+            <Stanje>-100</Stanje>
+        </PlatnaKartica>
+    </Klijent>
+</Klijenti>

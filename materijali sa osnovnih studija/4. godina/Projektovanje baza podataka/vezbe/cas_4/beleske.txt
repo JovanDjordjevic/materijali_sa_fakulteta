@@ -1,0 +1,58 @@
+kada prevodimo ER u relacioni model, podaci koje dobijamo su vec normalizovani
+
+Vec kad je relacija u trecoj NF mozemo da kazemo da je normalizovana, ali ponekad se
+i u trecoj mogu javiti neke anomalije, tako da smo 100% sigurni da je normalizovana
+tek u Bojs Kodovoj normalnoj formi (?)
+
+anomalija azuriranja - kada menjamo podatak na jedno mestu, 
+                       on se mora izmeniti na svim mestima gde se pojavljuje
+anomalija unosenja   - podatak se sme uneti samo ako vec postoje neki podaci za koje je 
+                       on vezan (?)
+anomalija brisanja   - kada hocemo da obrisemo red iz tabele gubimo potencijalno
+                       informacije vezane za neke druge tabele (?)
+
+Redundantnost se resava tako sto jednu vecu tabelu u kojoj imamo redundantnost 
+zamenimo sa vise manjih tabela. Cela poenta je da grupisemo pdoatke na onaj nacin
+na koji nam prirodno ima smisla da budu grupisani 
+
+1. Normalna Forma:
+    Relacija je u 1NF ako: (za svaku normalnu formu moraju da vaze sve navedene stavke)
+        - svako polje sadrzi tacno jednu vrednost (koja moze biti i NULL)
+        - sve vrednosti atributa su istog tipa
+        - redovi su jedinstveni
+
+
+VIDI FUNKCIONALNE ZAVISNOSTI NA SLAJDOVIMA
+X -> Y se cita:  X odredjuje Y
+Vrste funkc zavisnosti:
+- superključna ili potpuna ukoliko je X ceo ključ relacije R (ove nam ne smetaju, ne moramo da ih se oslobodimo)
+- trivijalna ukoliko je Y podskup od X                       (ove nam ne smetaju, ne moramo da ih se oslobodimo)
+- parcijalna ukoliko je X pravi podskup ključa relacije R
+- tranzitivna ukoliko postoji podskup Z skupa atributa relacije R različit od X i Y
+  takav da važi X -> Z i Z-> Y.
+
+2. Normalna Forma:
+    Relacija je u 2NF ako:
+        - je u 1NF
+        - nijedan nekljucni atribut (to su atributi koji se ne nalaze ni u jednom kandidatu za kljuc)
+          nije funkcionalno zavistan od pravog podskupa kandidat kjuca (ovakve zavisnosti 
+          se inace nazivaju parcijalne FZ)
+    
+    Da bismo doveli relaciju u 2NF treba uraditi dekmpoziciju, tj za svaku FZ koja narusava 2NF
+    se izvrsava dekmpozicija menja se R sa 2 nove tabele)
+
+3. Normalna Forma:
+    Relacija je u 3NF ako:
+        - je u 2NF
+        - nijedan nekljucni atribut nije funkcionalno zavistan od nekog drugog (jednog)
+          ili vise) nekljucnog atributa
+    
+    I ovo se resava dekompozicijom
+
+Bojs-Kodova Normalna Forma:
+    Relacija je u BCNF ako:
+        - je u 3NF
+        - nijedan kljucni atribut nije funkc zavistanod nekog skupa atributa koji nije
+          ceo kljuc
+    
+    I ovo se resava dekompozicijom
