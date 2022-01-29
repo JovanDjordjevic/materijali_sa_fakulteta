@@ -1,8 +1,0 @@
-skidamo node.js za OS koji koristimo
-
-treba nam "code runner" ekstenzija za VS code
-pa koristimo to ili u terminalu sa "node ime_fajla.js" mozemo da pokrenemo
-
-JSON - JavaScript Object Notation
-koristi se najcesce kao neki format za prenos objekata/informacajia pri komunikaciji na internetu
-izgleda slicno kao javascript objekat
