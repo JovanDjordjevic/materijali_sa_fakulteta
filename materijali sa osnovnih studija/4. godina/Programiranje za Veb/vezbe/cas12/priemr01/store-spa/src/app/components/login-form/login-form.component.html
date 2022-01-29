@@ -1,0 +1,13 @@
+<form class="ui form" [formGroup]="loginForm" (ngSubmit)="login()">
+    <div class="required field">
+        <label> Username: </label>
+        <input type="text" formControlName="username">
+    </div>
+
+    <div class="required field">
+        <label> Password: </label>
+        <input type="text" formControlName="password">
+    </div>
+
+    <button class="ui fluid button" type="submit"> Login </button>
+</form>

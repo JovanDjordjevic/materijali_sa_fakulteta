@@ -1,0 +1,76 @@
+<!--  Izbrisani komentari od proslog casa
+-->
+
+<div class="ui grid">
+    <div class="four wide column"> 
+        <div class="ui card">  
+            <div class="ui dimmer active" [ngClass]="{active: this.shouldDisplayUserForm}">
+                <div class="ui text loader">Loading...</div>
+            </div>
+            <!-- levi deo je kartica u kojoj imamo sliku i content ispod nje-->
+            <div class="img"> 
+                <img [src]="this.user.imgUrl" alt="User profile picture">
+            </div>
+
+            <div class="content"> 
+                <p class="header"> {{this.user.name}} </p>
+                <p class="description">{{user.email}}</p>
+            </div>
+        </div>  
+
+        <ul>
+            <li *ngFor="let adr of addresses; let redniBroj = index; let paranIndeks = even"
+               [ngStyle]="{color: getColor(paranIndeks)}">
+                {{redniBroj + 1}}.{{adr}} <span *ngIf="!paranIndeks">(paran redni broj) </span>
+            </li>
+        </ul>
+
+        <div [ngSwitch]="orderNumber">
+            <div *ngSwitchCase="0"> This user has no orders</div>
+            <div *ngSwitchCase="1"> This user has one order</div>
+            <div *ngSwitchDefault> This user has many orders</div>    
+            
+        </div>
+    </div>
+
+    <!-- desni deo, forma za izmenu korisnickih podataka-->
+    <div class="twelve wide column">  
+        <button class="ui button" (click)="onChangeInfo()">Change profile info</button>
+
+        <!-- neophodno je da se svaki nas FormGroup objekat u kodu poveze sa odgovarajucim formularom iz htmla, posto ih tamo moze biti vise 
+        treba u htmlu da formular uradimo vezivanje atributa za formGroup,  [formGroup]="ime_formulara_u_kodu" 
+        Pored ovoga, moramo i svaku pojedinacni input da povezemo sa odgovarajucim poljem u userForm-u 
+        Da bismo zapravo uhvatili izmene nad formularom potrebno je da se reaguje na ngSubmit  (NE OBICAN SUBMIT!) dogadjaj nad celim formularom
+        pozivanjem neke nase funkcije koja radi obradu-->
+        <form class="ui form" [formGroup]="userForm" (ngSubmit)="onUserFormSubmit()" *ngIf="this.shouldDisplayUserForm; else changeUserInfo">
+            <!-- Da bismo povezali input sa poljem unutar userForm-a u kodu, potrebno je da koristimo 
+            novi atribut  formControlName="kako_se_zove_unutar_naseg_FormGroup_objekta"   umesto name="..." atributa -->
+            <label>Username</label>  
+            <input type="text" formControlName="username">
+
+            <label>Name</label>
+            <!-- na casu smo izbrisali i ostale jer nam vise nisu potrebni, analogno i za inpute ispod)
+            PRE:    <input type="text" name="name" [value]="user.name" (change)="onChangeName($event)"/> -->
+            <input type="text"  formControlName="name"/>
+
+            <label>Email</label>
+            <input type="email"  formControlName="email"/>
+
+            <!-- novo, deo za dodavanje slike-->
+            <div class="form-group">
+                <label>Choose file:</label>
+                <input type="file"  formControlName="imgUrl">
+            </div>
+
+            <!-- Moramo da izmenimo buttno, prvo ne moze da bude obican button, nego submit button
+            <button class="ui button" type="button" (click)="onSaveChanges()">Save changes</button> 
+            Pozvacemo onSaveChanges() funkciju u okviru  onUserFormSubmit() fukncije tako da nam ovde vise ne treba-->
+            <button class="ui button" type="submit">Save changes</button>  
+        </form>
+ 
+        <ng-template #changeUserInfo>
+            <p> Click above to change user info</p>
+        </ng-template>
+
+    </div>
+</div>

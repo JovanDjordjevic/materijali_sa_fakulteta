@@ -1,0 +1,41 @@
+<div class='color-container'>
+    <h2>Add new recepie</h2>
+    <hr>
+
+    <form class='form-group' [formGroup]='recepieForm' (ngSubmit)="onRecepieFormSubmit()">
+        <label>Name</label>
+        <input class='form-control' type="text" formControlName="name">
+
+        <label>Description</label>
+        <textarea class='form-control' type="text" formControlName="description"></textarea>
+
+        <fieldset>
+            <label>Complexity:</label>
+
+            <input type="radio" value="easy" formControlName="complexity">
+            <label>easy</label>
+
+            <input type="radio" value="medium" formControlName="complexity">
+            <label>medium</label>
+
+            <input type="radio" value="hard" formControlName="complexity">
+            <label>hard</label>
+        </fieldset>
+
+        <label>Nutrition</label>
+        <input class='form-control' type="text" formControlName="nutrition">
+
+        <input type="checkbox" formControlName="glutenFree">
+        <label>Is gluten free?</label>
+        <br>
+
+        <button class='btn save-button' type="submit">Save recepie</button>
+    </form>
+</div>
+
+<nav>
+    Check out our collection:
+    <a class='link' [routerLink]="['all']">All recepies</a>
+    <a class='link' [routerLink]="['criterion','glutenfree']">Gluten free recepies</a>
+    <a class='link' [routerLink]="['criterion', 'lowcalorie']">Low calorie recepies</a>
+</nav>

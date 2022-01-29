@@ -1,0 +1,11 @@
+<h1>Events in {{ currentMonthName }}</h1>
+
+<div *ngFor="let happening of allHappenings">
+    <div class="card">
+        <p class='date'>{{ happening.date }}</p>
+        <p class='title'>{{ happening.title }}</p>
+        <p class='time'>{{ happening.date }}</p>
+        <p class='duration'>{{ happening.duration }}</p>
+        <a [routerLink]="['/event', happening._id]">See details</a>
+    </div>
+</div>

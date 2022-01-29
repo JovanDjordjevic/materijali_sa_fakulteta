@@ -1,0 +1,14 @@
+
+<label>Choose a criterium for sorting</label>
+<br>
+
+<select id="sortFilter" class="form-control" (change)="onSortSelected()">
+    <option value="none"></option>
+    <option value="artist">Sort by artist</option>
+    <option value="title">Sort by title</option>
+    <option value="count">Sort by listen count</option>
+</select>
+
+<div *ngFor="let song of songs">
+    <app-song [song]='song'></app-song>
+</div>

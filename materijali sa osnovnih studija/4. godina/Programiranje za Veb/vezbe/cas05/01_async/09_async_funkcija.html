@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <title> Asinhrone funkcije </title>
+</head>
+<body>
+    <h3> async/await </h3>
+    <script type="text/javascript">
+
+        // kljucna rec async u sustini ne znaci nista ali je sintaksna obaveza ako cemo ispod koristiti await
+        // zatos to nije dozvoljeno da se await koristi u globalnmom opsegu (?)
+        // NOTE: ako ne koristimo ovu nasu funkciju da obmotamo korsicenje await, dobicemo gresku u konzoli
+        async function doStuff(){
+            const promise = new Promise(function (resolve, reject){
+                resolve("Obecanje ispuneno");
+            });
+        
+        
+            // await ceka da se obecanje ispuni i onda raspakuje vrednost iz promisa
+            // dakle ovaj value ovde nije promise vec njegova vrednost
+            const value = await promise;
+            document.body.appendChild(document.createTextNode(value));
+        }
+
+        doStuff();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<div>
+    Word: {{ word.word }}
+</div>
+<br>
+
+<div>
+    Word level: {{ word.level }}
+</div>
+<br>
+
+<div>
+    Examples:
+    <ul>
+        <li *ngFor="let example of word.examples">
+            {{ example }}
+        </li>
+    </ul>
+</div>
+
+<form [formGroup]="exampleForm" (ngSubmit)="onSubmitExample()">
+
+    <br>
+    <input type="text" formControlName="example">
+    <br>
+
+    <button class="btn-primary">Add new Example</button>
+</form>

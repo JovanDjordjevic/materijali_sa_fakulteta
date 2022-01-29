@@ -1,0 +1,126 @@
+angular je razvojno okruzenje za kreiranje klijentskih veb aplikacija
+i to 'single page' reaktivnih aplikacija
+
+struktuiranje smo do sad radili preko html i css ali u angularu cemo 
+imati i to plus jos neke naprednije stvari (obrada zahteva, animacije itd...)
+
+Postoje 2 verzije angulara, angular1 (zove se i angular.js)
+i angular2 (ovaj je moderniji i koristi se sad)
+
+za rad nam treba prvo angular cli (command line interface)
+    npm install -g @angular/cli
+
+Provera instalirane verzije:  ng --version
+
+Pravljenje novog projekta:
+    ng new ime_projekta
+npr:   ng new 
+Prilikom pravljenja projekta pitace nas da li da koristimo angular routing 
+(kazemo da) i da odabveremo style sheet (koristicemo css)
+
+koristicemo neku semantic UI biblioteku (generalno mozemo da korstimo i one biblioteke koje smo videli na UVIT-u, bootstrap, jquery itd
+ostavili su nam na prezentaciji uputstvo kako se instaliraju
+
+Pri kreiranju projekta desava se sledece:
+    - pravi se folder sa imenom projekta, u njemu su svi fajlovi
+    - instalirali su se neki razni moduli (iz package.json) koji su potrebni za angular
+      (NOTE: klijent i server su u sustini 2 node projekta tj svaki do  njih ce imati node-modules)
+      (iako imamo package.json, ovo nije node projekat, ali moramo da koristimo node za prevodjenje
+      typescript koda posto angular koristi typescript (?))
+    - dobijamo neke konfiguracione fajlove npr ove karma i jasmine koji su za neke frameworkove za testiranje
+    - tsconfig.json  je fajl koji sluzi za neka podesavanja za typescript (tipa za autocomplete itd.) 
+    - angular.json sadrzi razne dodatne informacije koje definisu neke opcije za angualr deo (?)
+      u njemu vidimo negde index i main
+    - main.ts (main skripta, od ove datoteke se zapocinje proces prevodjenja)
+    - styles.css (za dodavanje globalnih stilova koji vaze na nivou cele aplikacije (videcemo posle mozemo
+    da podesavamo stilove i na nivou komponenti))
+    - assets direktorijum (ovde ce biti svi resursi koji nisu kod (slike, muzika itd))
+    - ... jos manje bitnih stvari
+
+U jednom terminalu cemo da pokrenemo neki loalni server komandom:
+    ng serve 
+(kada zapravo odemo na adresu koju ovaj server daje, otvorice nam se neka default
+angular stranica koju smo dobili kada smo napravili projekat)
+U drugom terminalu cemo da radimo sam razvojno
+
+
+Sve sto se desava u okviru aplikacije desava se u okviru samo jedne html datoteke (?)
+i to je ovaj index.html, al to nije ono sto ce nam se prikazati na ekranu (?)
+(ako uradimo inspect element u browseru) sadrzaj koji vidimo zapravo dolazi od toga sto je u body ubacen
+<app-root> element. 
+... nisam bas ispratio ovde, pominje @NgModule dekorator vezano za app.module.ts
+    declaration: lista komponenti ...(?)
+    imports: reference na sve module od kojih zavisi nasa apliakcija 
+            (npr BrowserModule se korsiti zaprikaz stvari u browseru))
+            (mi cemo sve sto radimo da radimo u okviru AppModule tako da nam BrowserModule uvek treba)
+    providers: niz referenci na nekakve servise (tj neke funkcionalne aspekte nase aplikacije, tj 
+            neke stvari koje nisu vezane za prikaz stvari na ekranu (?))
+    bootstrap: skup svih kompoenenti koje se porkecu i koje su neophodne kada se ucita nas module
+               (u main.ts npr viidmo da hocemod a bootstrapujemo AppModule, tj gleda se ovaj niz
+               i builduju se stvari koje su neophodne da bi AppModule radio)
+
+primetimo da se onaj server koji smo pokrenuli sa    ng serve   automatski resetuje svaki put kada izmenimo nesto na projektu, slicno kao nodemon
+
+Komponenta je osnovna gradivna jedinica svih angular aplikacija. Cine hijerarhiju, a u korenu ce biti AppComponent (app-root (?))
+Sve komponente ce biti u okviru nekih drugih komponenti  (?)
+Za kreiranje komponente se koristi komanda:
+    ng generate component naziv_komponente        (moze i neka relativna putanja gde ce se napraviti komponenta)
+
+Kada napravimo angular komponentu uvek cemo dobiti ova 4 fajla:   (kada napravimo sam projekat vec ce psotojati ova 4 za AppComponent)
+    app.component.ts:
+        ovo je impelmentacija AppComponent klase
+        dekorator @Component ... (?)
+        selector kaze kako cemo iz koda referisati na komponentu, npr ovde pise app-root
+                a secamo se da ce u htmlu biti <app-root> (??)
+        tempalte i styles ... (?)
+
+    app.components.spec.ts:
+        ovo su neki jasmine testovi, necemo se baviti ovim
+
+    app.compoennts.html:
+        sadrzaj ovog fajla ce se u index.html ubaciti na mesto gde pozovemo <app-root> 
+        odatle dolazi sav sadrzaj koji ce se prikazati
+
+    app.components.css:
+        ovde su stilovi
+
+Kompoenente u angularu se sastoje iz 2 dela: modela i pogleda
+Model predstavlja TS kod i podatke u memoriji, tj funkcionalnosti koje se ticu samog modela podataka (?)
+Pogled predstavlja html sablon i css stilovi
+
+Vezivanje podataka je mehanizam kojim se neki podaci koji su dinamicki kreirani u modelu, prikazuju sablonu (tj pregledacu)
+usmerenost:
+    - u smeru od modela ka pogleedu (izmene u podacima uticu na prikaz sablona)
+    - u smeru od pogleda ka modelu (izmene u sablonu uticu na podatke)
+kardinalnost:
+    - jednosmerno - izmene na jednoj strani uticu na drugu stranu ali ne i obrnuto
+    - dvosmerno - promena na bilo kojoj strani utice na drugu stranu
+
+Ima razlicitih mehanizama za vezivanje, npr:
+- interpolacija niski (da nekako samo uhtml kodu referismo na promenljivu, to se radi sa  {{...promenljiva...}}  , to se zove sablonski izraz. On se izracuna i 
+  konvertuje u nisku i prikaze u sablonu  ). Oco je jednosmerno i to usmereno od modela ka pogledu
+- vezivanje atributa (isto je jednosmerno, od modela ka pogledu) koristi se kada atribute nekog html taga u nasem sablonu zelimo da postavimo u zavisnosti od
+  nekog podatka u kodu (bitno: ne kreiramo sami atribute, moraju da budu vec neki koji postoje za dati html tag), sintaksa je [ime_atributa]="..."
+- vezivanje dogadjaja (jdnosmerno od pogelda ka modelu). Vezujemo html dogadjaje sa nekom funkcijom koju implementiramo u okviru komponente
+  sintaksa je (dogadjaj)="pozivFunkcije()", mozemo da prosledimo kao argument i event objekat koji sadrzi neke korisne informacije o dogadjaju koji se desio, npr
+  referencu na html element u okviru koga se desio dogadjaj, to moze sa (dogadjaj)="pozivFunkcije($event)", recimo da je ovo bilo u okviru input taga, ceo primer bi bilo
+  <input (dogadjaj)="pozivFunkcije($event)"> i event bi imao referencu na taj input element
+- dvosmerno vezivanje (ovo se ne preporucuje da se NE koristi), sintaksa je [(ngModel)]="...", ovde ngModel dolazi iz angulara, i to je jedino sto moze da stoji u ovim zagradama
+  kao ... mora da bude naziv promenljive u kompoenenti. Ovako bi svaka izmena (npr u text boxu input elementa) uticala na tu promenljivu u kompoenenti, a svaka izmena
+  te promenljive u TS bi uticala na prikaz
+
+--- spa primer ----
+- prvo napravili komponentu za user profile:
+    ng generate component components/user-profile
+- ... menjali nesto
+- napravili models folder i u njemu user.model.ts
+- ...
+
+fajlovi gde su bile izmene:
+    app.compoennts.html
+    app.module.ts
+    user-profile.components.ts 
+    user-profile.compoennts.html 
+    user.model.ts 
+    index.html
+    (dodata slika u asset)

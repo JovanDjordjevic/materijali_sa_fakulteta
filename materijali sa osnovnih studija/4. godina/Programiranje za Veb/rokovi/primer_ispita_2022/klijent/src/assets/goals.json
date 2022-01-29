@@ -1,0 +1,36 @@
+[{
+  "_id": {
+    "$oid": "5ec3b95f9304dd56794be6a4"
+  },
+  "naziv": "Web programming",
+  "opis": "Želimo da učimo veb tehnologije :)",
+  "vaznost": 1
+},{
+  "_id": {
+    "$oid": "5ec3b9d0b53a1429ecbd9e2c"
+  },
+  "naziv": "Algorithms",
+  "opis": "Algoritmi su važni",
+  "vaznost": 2
+},{
+  "_id": {
+    "$oid": "5ec3b9f3b53a1429ecbd9e2d"
+  },
+  "naziv": "Cooking",
+  "opis": "Hajde da naučimo da pravimo čizkejk!",
+  "vaznost": 2
+},{
+  "_id": {
+    "$oid": "5ec3ba0db53a1429ecbd9e2e"
+  },
+  "naziv": "Python",
+  "opis": "Pajton je sjajan jezik za mašinsko učenje",
+  "vaznost": 2
+},{
+  "_id": {
+    "$oid": "5ec3ba37b53a1429ecbd9e2f"
+  },
+  "naziv": "Machine Learning",
+  "opis": "Da li možemo da naučimo neuronsku mrežu da smišlja nove recepte za kolače?",
+  "vaznost": 3
+}]

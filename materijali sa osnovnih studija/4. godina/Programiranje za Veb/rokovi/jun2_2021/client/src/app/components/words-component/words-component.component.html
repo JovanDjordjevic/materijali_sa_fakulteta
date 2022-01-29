@@ -1,0 +1,22 @@
+<h1>Dictionary</h1>
+
+<table class="table">
+    <tr>
+        <th>word</th>
+        <th>meaning</th>
+    </tr>
+    <tr *ngFor="let word of allWords">
+        <td> <a class="link-primary" [routerLink]="['/words/id', word._id]">{{ word.word }}</a></td>
+        <td>{{ word.meaning }}</td>
+    </tr>
+</table>
+
+<br>
+
+<div>
+    Show words by level: 
+    <a [routerLink]="['/words/level', 'A']">A</a> ,
+    <a [routerLink]="['/words/level', 'B']">B</a> ,
+    <a [routerLink]="['/words/level', 'C']">C</a>
+
+</div>

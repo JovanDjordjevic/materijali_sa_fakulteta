@@ -1,0 +1,58 @@
+[
+  {
+    "_id": { "$oid": "608d9d844a6532a1a7aa6e1a" },
+    "title": "Angular DOM manipulation",
+    "speaker": "Nil Kaufman",
+    "area": "Angular",
+    "duration": 1.5
+  },
+  {
+    "_id": { "$oid": "608d9de04a6532a1a7aa6e1b" },
+    "title": "SEO in Angular",
+    "speaker": "Martina Kraus",
+    "area": "Angular",
+    "duration": 0.45
+  },
+  {
+    "_id": { "$oid": "608d9e3f4a6532a1a7aa6e1c" },
+    "title": "Performance Tuning",
+    "speaker": "Michael Hladky",
+    "area": "Angular",
+    "duration": 2.5
+  },
+  {
+    "_id": { "$oid": "608d9ebf4a6532a1a7aa6e1d" },
+    "title": "Machine Lerning in Node.js",
+    "speaker": "Tamar Stern",
+    "area": "Node.js",
+    "duration": 2.5
+  },
+  {
+    "_id": { "$oid": "608d9f104a6532a1a7aa6e1e" },
+    "title": "Real-time Serverless Apps",
+    "speaker": "Rainer Stropek",
+    "area": "Node.js",
+    "duration": 1.5
+  },
+  {
+    "_id": { "$oid": "608d9f4f4a6532a1a7aa6e1f" },
+    "title": "Automated Testing",
+    "speaker": "Karin Angel",
+    "area": "Node.js",
+    "duration": 1.1
+  },
+  {
+    "_id": { "$oid": "608da07a4a6532a1a7aa6e20" },
+    "title": "JavaScript Ecosystem",
+    "speaker": "Ann-Cathrin Klose",
+    "area": "JavaScript practices and tools",
+    "duration": 2.3
+  },
+  {
+    "_id": { "$oid": "608da0e64a6532a1a7aa6e21" },
+    "title": "Secure That App!",
+    "speaker": "Ana Cidre",
+    "area": "JavaScript practices and tools",
+    "duration": 0.45
+  }
+]

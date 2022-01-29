@@ -1,0 +1,20 @@
+<h1>Dictionary - {{ this.level }} level words</h1>
+
+<div *ngIf='linkError' [ngStyle]="{color : 'red'}">
+    Supported levels are A, B or C!
+</div>
+
+<div *ngIf='!linkError'>
+    <table class="table">
+        <tr>
+            <th>word</th>
+            <th>meaning</th>
+        </tr>
+        <tr *ngFor="let word of allWords">
+            <td> <a class="link-primary" [routerLink]="['/words/id', word._id]">{{ word.word }}</a></td>
+            <td>{{ word.meaning }}</td>
+        </tr>
+    </table>
+</div>
+
+<a class="link-primary" [routerLink]="['/']">Show all words</a>

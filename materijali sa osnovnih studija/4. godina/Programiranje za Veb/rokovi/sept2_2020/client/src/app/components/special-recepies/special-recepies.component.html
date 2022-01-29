@@ -1,0 +1,12 @@
+<h2>List of {{ criterion }} recepies</h2>
+
+<div class='alert' *ngIf='linkError'> 
+    This filtering has not been supported yet!
+</div>
+
+<div *ngIf='!linkError'> 
+    <div *ngFor="let recepie of specialRecepies">
+        {{ recepie.name }}
+        <hr>
+    </div>
+</div>

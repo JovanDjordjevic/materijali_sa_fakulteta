@@ -1,0 +1,42 @@
+<div class='alert alert-danger' *ngIf='linkError'>
+    No Statistics for this city
+</div>
+
+<div *ngIf='!linkError'>
+    <form [formGroup]="temperatureForm" (ngSubmit)="onSubmitTemperatureForm()">
+
+        <fieldset>
+            <label>Temperature restrictions</label>
+            <br>
+
+            <input type="radio" value="start" formControlName="filter">
+            <label>filter from start</label>
+
+            <input type="radio" value="end" formControlName="filter">
+            <label>filter from end</label>
+        </fieldset>
+
+        <label>Number of values</label>
+        <br>
+        <input type="number" formControlName="num">
+        <br>
+
+        <button class="btn btn-primary" type="submit">Show filtered temperatures</button>
+        <button *ngIf='resetButtonEnabled' (click)='onClickResetTemperatures()'>Reset temperatures</button>
+    </form>
+
+    <h3>Temperature Statistics for {{ meteo.city }} in {{ meteo.country }}</h3>
+
+    <table class='table table-striped'>
+        <thead>
+        </thead>
+        <tbody>
+            <tr *ngFor="let temp of displayedTemperatures">
+                <td>{{ temp }} </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class='link' (click)="onClickSaveResults()">Save filtered results</a> 
+    <span *ngIf="updateSuccess"> Update completed successfully!</span>
+</div>

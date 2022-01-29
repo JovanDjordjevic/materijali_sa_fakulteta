@@ -1,0 +1,18 @@
+<table class='table table-striped text-center'>
+    <thead>
+        <th>City</th>
+        <th>Country</th>
+        <th>Min Temp</th>
+        <th>Max Temp</th>
+        <th>Avg temp</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let meteo of allMeteo">
+            <td><a [routerLink]="['details', meteo.city]">{{ meteo.city }}</a></td>
+            <td>{{ meteo.country }}</td>
+            <td>{{ meteo.temperatures | minTemp }}</td>
+            <td>{{ meteo.temperatures | maxTemp }}</td>
+            <td>{{ meteo.temperatures | avgTemp }}</td>
+        </tr>
+    </tbody>
+</table>

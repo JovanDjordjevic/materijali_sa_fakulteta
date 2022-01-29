@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <title> Asinhrone funkcije </title>
+</head>
+<body>
+    <h3> Obrada izuzetaka u async funkcijama </h3>
+    <script type="text/javascript">
+
+        async function doStuff(){
+
+            function getPromise(){
+                return new Promise(function (resolve, reject){
+                    throw new Error("obecanje nije ispunjeno");
+                });
+            }
+
+            // rekli smo pre da ne mzoem da korsitimo try catch blokz a hvatanje asinhronih gresaka, ali
+            // ovako ipak moze, tj await i async regulisu sve za nas u pozadini i ovo izgleda kao bilo koji drugi
+            // sinhron kod iako je asinhron
+            try{
+                const value = await getPromise();
+                document.body.appendChild(document.createTextNode(value));
+            } catch(err) {
+                document.body.appendChild(document.createTextNode(err));
+            }
+        }
+
+        doStuff();
+
+    </script>
+</body>
+</html>

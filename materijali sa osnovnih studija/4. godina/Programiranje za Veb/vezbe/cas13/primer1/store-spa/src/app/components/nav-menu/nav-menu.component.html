@@ -1,0 +1,23 @@
+<div class="ui segment">
+    <div class="ui secondary menu">
+        <!-- u routerLink atribut dajemo neku putanju. Ta putanja pokusava da se matchuje sa nekom navedenom putanjom
+        u onom routes nizu iz app-routig modula
+        routerLinkActive nam daje da trenutno aktivnom elementu dodelimo neka css svojstva (ovo active sto smo stavili dolazi is semantic ui)
+        Note: ovo se ne odnosi samo na ovaj element, nego i na sve elemente koji za prefiks imaju putanju ovog elemeneta, da bi to ispravili, koristimo
+        routerLinkActiveOptions artibut, i tu navedemo da hocemo samo za ovu konkretnu putanju-->
+        <a class="item" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Store</a>
+        
+        <!-- ovaj ngif sluzi samo da kaze da li se sam link prikazuje ili ne, a ono sto smo radili sa guardovima sluzi za restrikciju pristupa -->
+        <a class="item" *ngIf="user" routerLink="/user" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">User</a>
+
+        <a class="item" *ngIf="user" routerLink="/user" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Create product</a>
+
+
+        <div class="right menu">
+            <a class="item" [routerLink]="getLoginOrLogoutRouterLink()" routerLinkActive="active">
+                {{getLoginOrLogoutRouterString()}}
+            </a>
+        </div>
+        
+    </div>
+</div>

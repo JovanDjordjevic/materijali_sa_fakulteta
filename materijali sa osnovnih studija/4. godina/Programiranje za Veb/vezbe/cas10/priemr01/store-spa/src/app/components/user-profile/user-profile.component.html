@@ -1,0 +1,86 @@
+<!--  Izbrisani komentari od proslog casa
+-->
+
+<div class="ui grid">
+    <div class="four wide column"> 
+        <div class="ui card">  
+            <!-- pokazivanje atributske direktive. Hocemo da dok je izmena podataka korisnika u toku, kartica bude zatamnjena i da pise loading
+            dimmer ce da se primeni na elemtn u okviru kog se nalazi (dakle ovde na div iznad koji je ui card, koji obuhvata i sliku i content)
+            u class="..." smo naveli koje sve klase ovaj element ima, i onda hocemo da sa angular direktivom menjamo te klase u zavisnosti od necega
+            sintaksa za ngClass je ovako sa [] i onda u "" navodimo niz parova kljuc:vrednsot gde je kljuc ime klase koju podesavamo
+            -->
+            <div class="ui dimmer active" [ngClass]="{active: this.shouldDisplayUserForm}">
+                <div class="ui text loader">Loading...</div>
+            </div>
+            <!-- levi deo je kartica u kojoj imamo sliku i content ispod nje-->
+            <div class="img"> 
+                <img [src]="this.user.imgUrl" alt="User profile picture">
+            </div>
+
+            <div class="content"> 
+                <p class="header"> {{this.user.name}} </p>
+                <p class="description">{{user.email}}</p>
+            </div>
+        </div>  
+
+        <!-- recimo da hocemo da ispod kartice bude prikazana neka lista adresa-->
+        <ul>
+            <!-- NOTE: ngFor direktiva ide u element koji se ponavlja, ne u roditeljski. Ovde u listi, ono sto se ponavlja je list item <li> tako da tu stavljamo ngFor
+            sintaksa je slicna kao za for petlju, adr ce nam biti nesto na sta mozemo da referisemo bilo gde u okviru ovog konkretnog <li> elementa
+            Ako hocemo nekako da pratimo i indeks elementa u nizu, npr da bi ga ispisali, dodajemo i ovo   let _ = index   
+            index je neka promenljiva koja se u pozadini vrti pri iteraciji. index inace krece od 0
+            Razne neke promenljive se tu vrte u pozadini, npr imamo i 'even' koji je true samo kada je index paran i slicno... -->
+
+            <!-- na ovim adresama cemo da pokazmo i ngStyle direktivu. Ovi elementi u listi se prave dinamicki pa ne mzoemo za svaki zasebno da hardcodujemo neki stil
+            npr hocemo da u zavisnosti od parnosti indeksa bude razlicita boja. ngsStyle ima slicnu sintaksu kao ngClass, kljuc je neko svojstvo stila, a vrednost nesto 
+            sto ce da se dodeli tome-->
+            <li *ngFor="let adr of addresses; let redniBroj = index; let paranIndeks = even"
+               [ngStyle]="{color: getColor(paranIndeks)}">
+                {{redniBroj + 1}}.{{adr}} <span *ngIf="!paranIndeks">(paran redni broj) </span>
+            </li>
+        </ul>
+
+        <!-- recimo da hocemo i da se prokaze koliko porudzbina ima ovaj korisnik
+        NOTE: ngSwitch ima sintaksu kao vezivanje atributa a ne sa * kao ostali do sad!!!!
+        [ngSwitch]="pomenljiva_po_kojoj_switchujemo"
+        Svaki case za switch ide u zaseban div koji je oznaces sa *ngSwitchCase
+        -->
+        <div [ngSwitch]="orderNumber">
+            <div *ngSwitchCase="0"> This user has no orders</div>
+            <div *ngSwitchCase="1"> This user has one order</div>
+            <div *ngSwitchDefault> This user has many orders</div>    <!-- default za switch-->
+            
+        </div>
+    </div>
+
+    <!-- desni deo, forma za izmenu korisnickih podataka-->
+    <div class="twelve wide column">  
+        <button class="ui button" (click)="onChangeInfo()">Change profile info</button>
+
+        <!-- ovo je deo koji hocemo da se ne prikazuje uvek. To radimo sa ngIf direktivom, sintaksa je
+        *ngIf="neki_sablonski_logicki_izraz"    
+        Takodje treba da se obrise u i ono sto smo radili sa inputFieldClass jer nam vise ne treba
+        podsecanje: taj logicki ziraz dolazi iz implementacije ove komponente u TS fajlu. Moze da se pise i bez this 
+        NOTE: pre nego sto smo uveli ng-template ispod, ovde je stajalo:  *ngIf="this.shouldDisplayUserForm"   
+        Ako hocemo da se prikaze nesto ako shouldDisplayUserForm nije zadovoljen, moze da se navede ; else .... 
+        NOTE: kada referisemo na changeUserInfo ovako u izrazu, ne treba nam #. To stavljamo samo kad je u html-u (kao ispod) -->
+        <form class="ui form" *ngIf="this.shouldDisplayUserForm; else changeUserInfo">
+            <label>Name</label>
+            <input type="text" name="name" [value]="user.name" (change)="onChangeName($event)"/>
+
+            <label>Email</label>
+            <input type="email" name="email"  [value]="user.email"/>
+
+              <button class="ui button" type="button" (click)="onSaveChanges()">Save changes</button> 
+        </form>
+ 
+        <!-- posto se sada form ne prikazuje dok se ne klikne na dugme, mozemo da imamo nesto sto ce se prikazivati 
+        umesto te forme, to radimo sa ng-template. To je u sustini samo neki div u kog mozemo da stavljamo sta go
+        Taj template mora na neki nacin da se poveze sa direktivnom, to radimo tako sto uvedemo neki 'template reference variable'
+        on se navodi ovako sa # i onda se na njega referise iznad gde koristimo direktivu-->
+        <ng-template #changeUserInfo>
+            <p> Click above to change user info</p>
+        </ng-template>
+
+    </div>
+</div>

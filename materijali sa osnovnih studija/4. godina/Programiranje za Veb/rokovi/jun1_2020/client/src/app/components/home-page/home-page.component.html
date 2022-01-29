@@ -1,0 +1,41 @@
+<form class='form-control' [formGroup]="emailForm" (ngSubmit)="onEmailFormSubmit()">
+
+    <label>Unesite email:</label>
+    <br>
+
+    <input class='form-control' type="text" formControlName="email">
+    <br>
+
+    <button class="btn btn-success btn-block" type="submit">Pretrazi</button>
+</form>
+
+<div>
+    <p *ngIf="!emailError">
+        Unesite email u polje iznad i pritisnite dugme za pretragu
+    </p>
+    
+    <p *ngIf="emailError">
+        Ne postoji uplata sa datim email-om
+    </p>
+</div>
+
+<div *ngIf="requestSuccessful">
+    <p>
+        Ime i prezime: {{ payment.name }} {{ payment.surname }} <br>
+        Email: {{ payment.email }} <br>
+    </p>
+    <button class="btn btn-dark" [routerLink]="['payment', payment._id]">Prikazi sve uplate</button>
+
+    <form [formGroup]="amountForm" (ngSubmit)="onAmountFormSubmit()">
+        <input type="text" formControlName="id" hidden>
+
+        <label> Nov iznos za uplatu: </label>
+        <br>
+
+        <input class='form-control' type="number" formControlName="amount">
+        <br>
+
+        <button class="btn btn-primary" type="submit">Dodaj novu uplatu</button>
+    </form>
+</div>
+

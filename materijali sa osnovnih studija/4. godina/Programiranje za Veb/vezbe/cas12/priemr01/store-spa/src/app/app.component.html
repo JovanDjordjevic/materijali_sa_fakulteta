@@ -1,0 +1,22 @@
+<div class="ui container">
+  <h1>StoreSpa </h1>
+  <div class="ui top attached tabular menu"> 
+    <a class="item active" data-tab="user-profile">User profile</a>  
+    <a class="item" data-tab="products">Products</a>
+    <a class="item" data-tab="add-a-product"  *ngIf="user !== null">Add a product</a>     <!-- dodat ngIf-->
+  </div>
+
+  <div class="ui bottom attached tab segment active" data-tab="user-profile">
+    <!-- dodajemo za login-->
+    <app-user-info></app-user-info>
+  </div>
+
+  <div class="ui bottom attached tab segment" data-tab="products">
+    <app-product-list [products]="this.productsFromRoot"></app-product-list>
+  </div>
+
+  <div class="ui bottom attached tab segment" data-tab="add-a-product" *ngIf="user !== null">   <!-- dodat ngIf-->
+    <app-create-product (productCreated)="onProductCreated($event)"></app-create-product>
+  </div>
+  
+</div>

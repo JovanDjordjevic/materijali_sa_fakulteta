@@ -1,0 +1,11 @@
+<div class="container">
+    <p class="title">{{ happening.title }}</p>
+    <p class="todo">TODO</p>
+    <ul>
+        <li *ngFor="let step of happening.todo">
+            {{ step }}
+        </li>
+    </ul>
+
+    <app-to-do-component [id]="happening._id" (updatedTodos)="onUpdatedTodos($event)"></app-to-do-component>
+</div>

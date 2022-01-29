@@ -1,0 +1,45 @@
+
+    {
+        "username": "john",
+        "emaile": "john@matf.bg.ac.rs",
+        "passworde": "john123",
+        "statuse": "active",
+        "age": 21,
+        "programmingSkills": [
+            "JS",
+            "Python"
+        ]
+    }
+    {
+        "username": "pavle",
+        "emaile": "pavle@matf.bg.ac.rs",
+        "passworde": "pabvle123",
+        "statuse": "active",
+        "age": 24,
+        "programmingSkills": [
+            "JS"
+        ]
+    }
+    {
+        "username": "maja",
+        "emaile": "maja@matf.bg.ac.rs",
+        "passworde": "maja123",
+        "statuse": "inactive",
+        "age": 29,
+        "programmingSkills": [
+            "C",
+            "C++"
+        ]
+    }
+    {
+        "username": "klara",
+        "emaile": "klara@matf.bg.ac.rs",
+        "passworde": "klara123",
+        "statuse": "active",
+        "age": 21,
+        "programmingSkills": [
+            "JS",
+            "C",
+            "JS"
+        ]
+    }

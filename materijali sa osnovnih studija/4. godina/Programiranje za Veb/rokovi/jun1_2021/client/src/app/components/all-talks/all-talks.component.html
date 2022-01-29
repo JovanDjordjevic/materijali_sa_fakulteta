@@ -1,0 +1,13 @@
+<div>
+    <label>Choose  the area of interest:</label>
+    <select class='form-control' id="areaSelector" (change)="onAreaSelected()">
+        <option value="All">All</option>
+        <option value="Angular">{{ AreaEnum.Angular }}</option>
+        <option value="Node">{{ AreaEnum.Node }}</option>
+        <option value="JS">{{ AreaEnum.JS }}</option>
+    </select>
+</div>
+
+<div *ngFor="let talk of filteredTalks">
+    <app-talk-component [talk]='talk'></app-talk-component>
+</div>

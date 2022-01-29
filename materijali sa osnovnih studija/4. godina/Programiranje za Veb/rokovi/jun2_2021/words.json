@@ -1,0 +1,83 @@
+[
+  {
+    "_id": { "$oid": "60da44d499c5da7ce267fa42" },
+    "word": "explore",
+    "meaning": "to search and discover (about something)",
+    "level": "B",
+    "examples": [
+      "The best way to explore the countryside is on foot.",
+      "The children has gone exploring in the woods."
+    ]
+  },
+  {
+    "_id": { "$oid": "60da475199c5da7ce267fa43" },
+    "word": "brownout",
+    "meaning": "an occasion when less electric power than usual is supplied to an area",
+    "level": "C",
+    "examples": [
+      "Peak usage periods, such as extream cold weather, have been known to spark brownouts."
+    ]
+  },
+  {
+    "_id": { "$oid": "60da481399c5da7ce267fa44" },
+    "word": "coherent",
+    "meaning": "having its parts related in an organized and reasonable way",
+    "level": "C",
+    "examples": ["I should warn you, she is not always coherent."]
+  },
+  {
+    "_id": { "$oid": "60da486b99c5da7ce267fa45" },
+    "word": "data",
+    "meaning": "information collected for use",
+    "level": "B",
+    "examples": []
+  },
+  {
+    "_id": { "$oid": "60da490699c5da7ce267fa46" },
+    "word": "affect",
+    "meaning": "to have an influence on someone or something",
+    "level": "B",
+    "examples": [
+      "Both buildings were badly affected by the fire.",
+      "The divorce affected every aspect of her life.",
+      "It's a disease that affects mainly older people.",
+      "I was deeply affected by the film."
+    ]
+  },
+  {
+    "_id": { "$oid": "60da498599c5da7ce267fa47" },
+    "word": "book",
+    "meaning": "a written text that can be published in printed or electronic form",
+    "level": "A",
+    "examples": [
+      "Have you read any good books recently?",
+      "He has a new book out."
+    ]
+  },
+  {
+    "_id": { "$oid": "60da49f199c5da7ce267fa48" },
+    "word": "cloud",
+    "meaning": "a gray or white mass in the sky made up of very samll floating drops of water",
+    "level": "A",
+    "examples": ["Do you think those are rain clouds on the horizon?"]
+  },
+  {
+    "_id": { "$oid": "60da4a5d99c5da7ce267fa49" },
+    "word": "honey",
+    "meaning": "a sweet, sticky, yellow substance made by bees and used as food",
+    "level": "A",
+    "examples": []
+  },
+  {
+    "_id": { "$oid": "60da4af199c5da7ce267fa4a" },
+    "word": "music",
+    "meaning": "a pattern of sounds made by musical instruments, voices, or computers",
+    "level": "A",
+    "examples": [
+      "What kind of music do you listen to?",
+      "I studied music at college.",
+      "She started composing music when she was 14.",
+      "A beautiful piece of music!"
+    ]
+  }
+]

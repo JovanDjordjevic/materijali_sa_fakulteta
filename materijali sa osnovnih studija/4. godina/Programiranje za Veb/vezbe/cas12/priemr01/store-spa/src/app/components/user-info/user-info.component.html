@@ -1,0 +1,9 @@
+<!-- ovaj user prosledjujemo niz hijerarhiju iz user-info u user profile -->
+<app-user-profile [user]="this.user" *ngIf="user !== null; else showLoginAndRegistration"></app-user-profile>
+
+<!-- ovaj ng-template je alternativa za ngIf-->
+<ng-template #showLoginAndRegistration>
+    <button class="ui fluid button" (click)="switchBetweenLoginAndRegistration()">Switch to {{this.isLogin ? "register" : "login"}}</button>
+    <app-login-form *ngIf="isLogin"></app-login-form>
+    <app-register-form *ngIf="!isLogin"></app-register-form>
+</ng-template>

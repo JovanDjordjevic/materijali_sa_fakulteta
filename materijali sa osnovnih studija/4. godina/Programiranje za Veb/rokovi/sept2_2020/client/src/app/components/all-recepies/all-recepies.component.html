@@ -1,0 +1,7 @@
+<h2>List of recepies</h2>
+
+<div *ngFor="let recepie of allRecepies" [ngClass]="{light : recepie.nutrition < 400}" (click)="showDetailsAndSetCurrentRecepie(recepie)">
+    {{ recepie.name }} <span *ngIf='recepie.glutenFree'>*</span>
+</div>
+
+<app-details *ngIf="displayDetails" (click)="hideDetails()" [recepie]="currentRecepie"></app-details>

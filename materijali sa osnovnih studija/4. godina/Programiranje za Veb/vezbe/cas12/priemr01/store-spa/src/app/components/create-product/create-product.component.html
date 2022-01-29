@@ -1,0 +1,82 @@
+<h3>Create a product</h3>
+
+<!-- Vezujemo formular za ono sto mu odgovara u kodu i da reagujemo na ngSubmit 
+Treba za sve inpute da uradimo i formControlName -->
+<form class="ui form" [formGroup]="createProductForm" (ngSubmit)="onCreateProductFormSubmit()">
+    <!-- (ovaj korak smo uradili nakon naseg custom validatora) Za prikaz gresaka koristicemo semantic ui klasu error, ali nju ne mozemo samo da 
+    navedemo u class="..." sa ostalima vec hocemo da se dinamicki menja, to radimo sa ngClass direktivom od proslog casa 
+    ako ovaj error bude true, polje ce da se zacrveni-->
+    <div class="required fluid field" [ngClass]="{error: nameHasErrors()}">
+        <label>Name</label>
+        <!-- <input type="text" name="name" #inputName>-->
+        <input type="text" formControlName="name">
+    </div>
+    <!-- ovaj deo smo dodali da se u njemu prikazuju eventualne greske -->
+    <div class="ui negative message" *ngIf="nameHasErrors()">
+        <ul>
+            <li *ngFor="let msg of nameErrors()">
+                {{msg}}
+            </li>
+        </ul>
+    </div>
+
+    <div class="ui required right labeled fluid input">
+        <label class="ui label">$</label>
+        <!-- <input type="number" name="price" #inputPrice>  -->
+        <input type="number" formControlName="price"> 
+        <div class="ui basic label">.00</div>
+    </div>
+
+    <div class="required fluid field">
+        <label>Description</label>
+        <!-- <textarea type="number" name="description" rows="5" #inputDescription> </textarea> -->
+        <textarea type="number" formControlName="description" rows="5"> </textarea>
+    </div>
+
+    <div class="inline field">
+        <div class="ui toggle checkbox">
+            <!-- <input type="checkbox" class="hidden" name="forSale" #inputForSale> -->
+            <input type="checkbox" class="hidden" formControlName="forSale">
+            <label> For sale</label>
+        </div>
+    </div>
+
+    <!-- dodajemo onu grupu radio dugmica 
+        Kada radimo sa grupom elemenata (?) kao sto je radio group kao ovde, svi elementi unutar njega
+        moraju da imaju isto ime u formControlName
+    -->
+    <div class="required grouped fields">
+        <label>Select the state of your product</label>
+        <div class="field">
+            <div class="ui radio checkbox">
+                <input type="radio" class="hidden" [value]="ProductStateEnum.New" formControlName="state">
+                <label>{{ProductStateEnum.New}}</label>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="ui radio checkbox">
+                <input type="radio" class="hidden" [value]="ProductStateEnum.BarelyUsed" formControlName="state">
+                <label>{{ProductStateEnum.BarelyUsed}}</label>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="ui radio checkbox">
+                <input type="radio" class="hidden" [value]="ProductStateEnum.ModeratelyUsed" formControlName="state">
+                <label>{{ProductStateEnum.ModeratelyUsed}}</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- dodajemo jedan element za dodavanje slike-->
+    <div class="required fluid field">
+        <label> Product images:</label>
+        <!-- Ovde zelimo da moze da se okaci vise slika, ako samo napisemo <input type="file"> kao za user-profile to nece raditi
+        Moramo da dodamo multiple:-->
+        <input type="file" multiple>
+    </div>
+
+    <!-- Menjamo i da dugme bude submit dugme -->
+    <button class="ui fluid button" type="submit" (click)="addNewProduct()">Add a product</button>
+</form>

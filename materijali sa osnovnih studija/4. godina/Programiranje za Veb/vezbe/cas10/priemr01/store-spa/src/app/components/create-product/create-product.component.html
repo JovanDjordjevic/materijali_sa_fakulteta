@@ -1,0 +1,32 @@
+<h3>Create a product</h3>
+
+<!-- Na nekom od sledecih casova ce pokazati kako se na lep nacin barata sa podacima iz formulara, za sada
+cemo da korsitimo one referencne promenljive (?)   sa # za svaki input, za njih treba da napravimo i polja u TS -->
+
+<form class="ui form">
+    <div class="required fluid field">
+        <label>Name</label>
+        <input type="text" name="name" #inputName>
+    </div>
+
+    <div class="ui required right labeled fluid input">
+        <label class="ui label">$</label>
+        <input type="number" name="price" #inputPrice> 
+        <div class="ui basic label">.00</div>
+    </div>
+
+    <div class="required fluid field">
+        <label>Description</label>
+        <textarea type="number" name="description" rows="5" #inputDescription> </textarea>
+    </div>
+
+    <div class="inline field">
+        <div class="ui toggle checkbox">
+            <input type="checkbox" class="hidden" name="forSale" #inputForSale>
+            <label> For sale</label>
+        </div>
+    </div>
+
+    <!-- Za ovo dugme vezujemo metod click koji ce poslati unesene podatke uz hijerarhiju -->
+    <button class="ui fluid button" type="button" (click)="addNewProduct()">Add a product</button>
+</form>

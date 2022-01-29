@@ -1,0 +1,25 @@
+<form class="form-group" [formGroup]="talkForm" (ngSubmit)="onTalkFormSubmit()">
+
+    <label class="form-label">Title</label>
+    <input type="text" class="form-control" formControlName='title'>
+
+    <label class="form-label">Speaker</label>
+    <input type="text" class="form-control" formControlName='speaker'>
+
+    <label class="form-label">Area</label>
+    <fieldset>
+        <input type="radio" [value]="AreaEnum.Angular" formControlName="area">
+        <label>{{ AreaEnum.Angular }}</label>
+
+        <input type="radio" [value]="AreaEnum.Node" formControlName="area">
+        <label>{{ AreaEnum.Node }}</label>
+
+        <input type="radio" [value]="AreaEnum.JS" formControlName="area">
+        <label>{{ AreaEnum.JS }}</label>
+    </fieldset>
+
+    <label class="form-label">Duration</label>
+    <input type="number" class="form-control" formControlName='duration'>
+
+    <button class='btn btn-primary' type="submit">Rgister talk!</button>
+</form>

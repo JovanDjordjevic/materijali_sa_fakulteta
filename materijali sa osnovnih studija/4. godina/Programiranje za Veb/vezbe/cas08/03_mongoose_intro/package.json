@@ -1,0 +1,14 @@
+{
+  "name": "03_mongoose_intro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "03_mongoose_intro.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^6.0.13"
+  }
+}

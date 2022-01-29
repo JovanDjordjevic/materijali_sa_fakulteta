@@ -1,0 +1,33 @@
+
+<div class="image">
+    <img [src]="product.imgUrl" alt="Product image">
+</div>
+
+<div class="content">
+    <!-- putanja moze da se navede kao niz ovako, kao string prvo navedemo onaj deo koji se ne menja, a onda posle toga navedemo
+    onaj : parametar koji se ocekuje. Automatski ce se ovo spojiti sa / (tj elementi niza ce se spojiti tako)-->
+    <a class="header" [routerLink]="['products', product._id]"> {{product.name}} </a>
+
+    <div class="meta">
+        Price: ${{product.price}}
+    </div>
+
+    <div class="description">
+        <p> {{product.description}} </p>
+    </div>
+
+    <div class="extra">
+        <p> Check <a> {{product.owner?.username}}'s page</a>!</p>
+
+        
+        <div [ngSwitch]="product.popularity">
+            <span *ngSwitchCase="PopularityEnum.VeryPopular" class="ui red tag label">{{product.popularity}}</span>
+            <span *ngSwitchCase="PopularityEnum.Popular" class="ui green tag label">{{product.popularity}}</span>
+            <span *ngSwitchCase="PopularityEnum.Average" class="ui blue tag label">{{product.popularity}}</span>
+            <span *ngSwitchDefault class="ui tag label">{{product.popularity}}</span>
+        </div>
+    </div>
+
+    <button class="ui button" *ngIf="product.forSale">Buy</button>
+</div>
+

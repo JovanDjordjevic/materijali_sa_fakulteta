@@ -1,0 +1,26 @@
+<div>
+    <h2>Product Details</h2>
+
+    <!-- dodajemo ovo | async jer je product observable
+    NOTE: svaki put kada ulancamo taj |async, izvrsice se ono sto daje observable, u nasem slucaju, izvrsice se ceo 
+    zahtev (i to 4 puta isti zahtev) sto ne zelimo, vec hocemo da se samo izvrsi jednom
+        <h3>{{ (product|async)?.name}}</h3>
+        <p> {{ (product|async)?.description }}</p>
+        <p> {{ (product|async)?.timestamp }}</p>
+        <h4>{{ (product|async)?.price}}</h4>   
+    Fix je da ovako ubacimo u div i da u njemu pozovemo zahtev, i da sa 'as' to sacuvamo kao neku lokalnu promenljivu     
+    Osim toga, ne moramo vise ni da korsitimo ? ispod jer ako je prod=null, to ispod se nece ni prikazati zbog ngIf
+    -->
+    <div *ngIf='product | async as prod'>
+        <h3>{{ prod.name}}</h3>
+        <p> {{ prod.description }}</p>
+        <!-- koristimo date filter-->
+        <p> {{ prod.timestamp | date : 'MM/dd/yyyy'}}</p>
+        <!-- koristimo ugradjeni currency filter, slicno kao ovo sto smo radili za async,
+        posle currency su neki opcioni parametri, ima objasnjenje u dokumentacji
+        opcioni parametri se navode ovako razdvojeni sa : npr:
+        param1:param2:....:paramn -->
+        <h4>{{ prod.price | currency :'EUR'}}</h4>
+    </div>
+    
+</div>

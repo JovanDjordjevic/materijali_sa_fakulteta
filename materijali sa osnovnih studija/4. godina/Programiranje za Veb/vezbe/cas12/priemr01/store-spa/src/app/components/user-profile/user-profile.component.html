@@ -1,0 +1,65 @@
+<!--  Izbrisani komentari od proslog casa
+-->
+
+<div class="ui grid">
+    <div class="four wide column"> 
+        <div class="ui card">  
+            <div class="ui dimmer active" [ngClass]="{active: this.shouldDisplayUserForm}">
+                <div class="ui text loader">Loading...</div>
+            </div>
+            <!-- levi deo je kartica u kojoj imamo sliku i content ispod nje-->
+            <div class="img"> 
+                <img [src]="getUserImageUrl()" alt="User profile picture">
+            </div>
+
+            <div class="content"> 
+                <p class="header"> {{this.user.name}} </p>
+                <p class="description">{{user.email}}</p>
+            </div>
+
+            <!-- dodato dugme za logout-->
+            <button class="ui fluid button" (click)="logout()">Logout</button>
+        </div>  
+
+        <ul>
+            <li *ngFor="let adr of addresses; let redniBroj = index; let paranIndeks = even"
+               [ngStyle]="{color: getColor(paranIndeks)}">
+                {{redniBroj + 1}}.{{adr}} <span *ngIf="!paranIndeks">(paran redni broj) </span>
+            </li>
+        </ul>
+
+        <div [ngSwitch]="orderNumber">
+            <div *ngSwitchCase="0"> This user has no orders</div>
+            <div *ngSwitchCase="1"> This user has one order</div>
+            <div *ngSwitchDefault> This user has many orders</div>    
+            
+        </div>
+    </div>
+
+    <!-- desni deo, forma za izmenu korisnickih podataka-->
+    <div class="twelve wide column">  
+        <button class="ui button" (click)="onChangeInfo()">Change profile info</button>
+        <form class="ui form" [formGroup]="userForm" (ngSubmit)="onUserFormSubmit()" *ngIf="this.shouldDisplayUserForm; else changeUserInfo">
+            <label>Username</label>  
+            <input type="text" formControlName="username">
+
+            <label>Name</label>
+            <input type="text"  formControlName="name"/>
+
+            <label>Email</label>
+            <input type="email"  formControlName="email"/>
+
+            <div class="form-group">
+                <label>Choose file:</label>
+                <input type="file"  formControlName="imgUrl">
+            </div>
+
+            <button class="ui button" type="submit">Save changes</button>  
+        </form>
+ 
+        <ng-template #changeUserInfo>
+            <p> Click above to change user info</p>
+        </ng-template>
+
+    </div>
+</div>

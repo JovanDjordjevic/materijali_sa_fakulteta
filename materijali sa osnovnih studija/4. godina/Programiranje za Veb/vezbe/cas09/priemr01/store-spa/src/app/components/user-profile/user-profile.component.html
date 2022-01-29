@@ -1,0 +1,47 @@
+<!-- Ovo u komentaru je stajalo kada smo napravili komponentu
+    <p>user-profile works!</p>
+Sada brisemo to i definisemo sami kako nasa komponenta izgleda u html-u
+-->
+
+<!-- ui grid je iz semantic UI biblioteke, slicno kao u bootstrapu, imamo neku rmezu (u bootstrapu je bilo 12 kolona a ovde je 16)
+Hocemo nekako da popunimo elementima tako da ukupna sirina bude 16 
+Za pocetak cemo sve da hardcodujemo, a kasnije cemo umesto ovih div-ova zapravo dodavati nove komponente-->
+<div class="ui grid">
+    <div class="four wide column">  <!-- recimo da hocemo levo da imamo onaj deo sa slikom -->
+        <div class="ui card">  <!--ugradjena klasa koja ce nam dati da imamo deo za sliku i tekst ispod -->
+            <div class="img">  <!-- slika (zelimo da se prikaze ona koju smo ubacili u assets folder)
+                    Putanjama je koren src direktorijum-->
+                    <!-- ovde za src imamo primer vezivanja atributa-->
+                <img [src]="this.user.imgUrl" alt="User profile picture">
+            </div>
+
+            <div class="content">  <!-- sadrzaj kartice-->
+                <!-- demonstracija interpolacije niski (moglo je da stoji i samo user.name). this se u ovom kontekstu odnosi na typescript klasu koja ima isti
+                prefiks kao ovaj html sablon (ovde se this odnosi na user-profile.components.ts (?)), user je ono svojstvo koje smo napisali, a posto je to klasa
+                zelimo njeno polje name-->
+                <p class="header"> {{this.user.name}} </p>
+                <p class="description">{{user.email}}</p>
+            </div>
+        </div>  
+    </div>
+
+    <div class="twelve wide column">  <!-- ovo je desni deo sa karticom -->
+        <button class="ui button" (click)="onChangeInfo()">Change profile info</button> <!-- primer za vezivanje dogadjaja-->
+
+        <form class="ui form">
+            <label>Name</label>
+            <input type="text" name="name" [class]="this.inputFieldClass" [value]="user.name" (change)="onChangeName($event)"/> <!-- recimo da hocemo da se u  menja ime
+                                                                     korisnika na stranici kako mi unosumo u info, za to nam je koristan change dogadjaj 
+                                                                     koji se desi kada se izgubi fokus sa ovog elementa, tj kad se klikne negde drugde-->
+                                                <!-- ovo [value]="user.name" smo napravili da nam polja budu vec popunjena-->
+            <label>Email</label>
+            <input type="email" name="email" [class]="this.inputFieldClass" [value]="user.email" 
+                   (keyup)="onChangeEmail($event)" [(ngModel)]="user.email"/> <!-- slicna stvar samo sto se keyup dogadjaj ispaljuje svaki put kada se pritisnut taster otpusti
+                        efekat ce biti da se mail polje bas menja u real time-u kako kucamo. Ovde smo pokazali i dvosmerno vezivanje (iako je preporuceno da se ne koristi
+                        Za njega mora u koreni app.module.ts da se ukljuci FormsModule). Za demosntraciju ovoga treba da izbrisemo (keyup)="onChangeEmail($event)" i videcemo
+                        da nam dvosmerno povezivanje daje isti rezultat -->
+        </form>
+ 
+        <button class="ui button" type="button" (click)="onSaveChanges()">Save changes</button> 
+    </div>
+</div>

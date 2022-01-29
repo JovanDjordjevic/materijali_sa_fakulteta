@@ -1,0 +1,6 @@
+<h3> Product list</h3>
+
+<div class="ui divided items">
+    <!-- svakoj ovo product info kompoennti cemo da prosledjujemo po jedan element iz niza products-->
+    <app-product-info class="ui item" *ngFor="let p of products" [product]="p"> </app-product-info>
+</div>

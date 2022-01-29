@@ -1,0 +1,7 @@
+<h3> Product list</h3>
+
+<div class="ui divided items">
+    <!-- u angularu imamo jedan filter | async koji nam omogucava da automatski vrsimo onu subscribe operaciju nad observable tokom
+    da ne moramo mi da se mucimo sa tim. To moramo da dodamo ovde posto je products sada observable-->
+    <app-product-info class="ui item" *ngFor="let p of products | async" [product]="p"> </app-product-info>
+</div>

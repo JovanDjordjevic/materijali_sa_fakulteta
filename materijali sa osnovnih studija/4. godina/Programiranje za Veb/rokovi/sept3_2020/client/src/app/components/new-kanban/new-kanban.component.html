@@ -1,0 +1,13 @@
+<form class='form-group' [formGroup]='kanbanForm' (ngSubmit)="onSubmitKanbanForm()"> 
+    <label>Title</label>
+    <input class='form-control' type="text" formControlName="title">
+    
+
+    <label>Description</label>
+    <textarea class='form-control' type="text" formControlName="description"></textarea>
+    
+    <label>Number of subtasks</label>
+    <input class='form-control' type="number" formControlName="numOfSubtasks">
+
+    <button class='btn btn-primary' type="submit">Create a Kanban</button>
+</form>

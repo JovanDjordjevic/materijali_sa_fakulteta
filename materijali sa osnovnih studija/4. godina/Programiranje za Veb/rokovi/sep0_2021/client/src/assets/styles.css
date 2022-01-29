@@ -1,0 +1,90 @@
+* {
+  font-family: sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #74E8A8;
+}
+
+.event {
+  margin: 50pt auto;
+  width: 800pt;
+  height: 120pt;
+  position: relative;
+}
+
+.event::after {
+  content: "";
+  display: block;
+  background: linear-gradient(to right, #74E8A8, #8CFFE1);
+  height: 20pt;
+  width: 800pt;
+  border-radius: 0 0 0 20pt;
+  position: relative;
+  top: 0pt;
+}
+
+.date {
+  background-color: #74E8A8;
+  color: white;
+  font-size: 30pt;
+  padding-top: 30pt;
+  float: left;
+  border-radius: 20pt;
+  height: 100pt;
+  width: 100pt;
+  position: absolute;
+  bottom: 0pt;
+  margin: 0;
+}
+
+.title {
+  text-align: center;
+  font-size: 20pt;
+  text-decoration: underline;
+  color: #74E6E8;
+}
+
+.title::before, .title::after {
+  content: '🎉';
+}
+
+.time {
+  text-align: center;
+}
+
+.time::before, .time::after {
+  content: '🗓️';
+}
+
+.duration {
+  text-align: center;
+}
+
+.duration::before, .duration::after {
+  content: '⏳';
+}
+
+a {
+  float: right;
+  border-radius: 5pt;
+  background-color: #8CFFE1;
+  height: 50pt;
+  font-size: 15pt;
+  font-style: italic;
+  padding: 15pt;
+  position: relative;
+  bottom: 40pt;
+}
+
+a {
+  text-decoration: none !important;
+  color: black !important;
+}
+
+.todo {
+  font-size: 20pt;
+  font-style: italic;
+  color: plum;
+}

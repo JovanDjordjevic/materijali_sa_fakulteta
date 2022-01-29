@@ -1,0 +1,87 @@
+pravljenje express projekta:
+    1) pravimo node projekat, kao na proslom casu
+    2) instaliramo express sa:  npm install express
+       (posto smo ovo uradili u okviru node projekta, ovo nece biti isntaliramo globalno nego samo za ovaj projekat
+       bice dodatno u package.json itd, isto kao na proslom casu)
+    3) pisemo program...
+
+    ----- za 01_demo primer -----
+    Kada smo hteli da testiramo ono sto smo napisali, pokrenuli smo server iz terminala:
+        node demo.js 
+    i onda smo pokusali iz web pregledaca da pristupimo serveru, tako sto smo u adress baru kucali  localhost:5000
+    alternativa je da koristimo programe tipa postman ili netcat (ima oba i za windows)
+    pristupanje serveru pomocu netcata:
+        nc adress port 
+        npr:  nc localhost 5000
+
+    NOTE: kada hocemo da saljemo zahtev iz netcata, moramo bas da navedemo i protokol, npr, za demo aplikaciju, komanda je 
+    TIP_ZAHTEVA putanja protokol/verzija
+    npr: GET / HTTP/1.1
+    inace ako uradimo nesto tipa:   GET /nepostojeca/putanja HTTP/1.1   dobicemo 404 error sto i ima smisla
+    
+----- za 02_app primer -----
+pred expressa instalirali smo i uuid modul:    npm install uuid
+vidi models/users.js 
+
+users.js nam predstavlja kao neku bazu (posto jos na vezbama nismo radili prave baze)
+
+u nekakav readme fajl obicno se opsisuje API (rutiranje (?)), tj koji konkretno zahtevi mogu da se salju, na
+koju putanju, sa kojim parametrima itd, vidi taj readme fajl u okviru foldera zadatka
+u {} se obicno oznace parametri
+Opisi su oblika:
+    METOD    putanja    opis
+(primetimo da ne mozemo da imamo 2 ista rutiranja, tj da imaju istu putanju i isti metod)
+
+Za ovaj primerm smo kao dev dependancy instalirali i nodemon   (   npm install -sav-dev nodemon)
+on sluzi da za nas automatski restartuje server kada napravimo neku izmenu na njemu (i to ne samo app.js, nego i ako
+se desi promena na bilo kom fajlu koji app.js ukljucuje, npr users) (naravno ovo moze i rucno, ali smo lenji)
+
+u package.json, mozemod a dodamo script:
+"nodemon" : "nodemon app.js"    
+i onda da to pokrecemo sa:    npm run nodemon
+
+NOTE: iako ova skripta samo pokrece   nodemon app.js, 
+meni ovo ne radi kada samo to kucam rucno, nego samo kada ga izvrsavam kao npm script (verovatno mora da se doda u PATH)
+
+na vezbama je sve one zahteve koji koriste telo, slala iz postman alata 
+u Body, odabere 'raw' format i rucno je upisala podatke, zavisno koji zahtev hoce:
+npr za ubacivanje korisnika je napisala neki json objekat koji predstavlja novog usera (bez ID i statusa jer nas API to sam upisuje):
+    {
+        username: 'mika',
+        email: 'mika@matf.bg.ac.rs',
+        password: 'mika123'                 NOTE: pazimo samo da ovde NEMA zarez kada saljemo request
+    },
+npr za menjanje passworda bice:
+    {
+        username: 'mika',
+        oldPass: 'mika123',
+        newPass: '123mika'                 NOTE: pazimo samo da ovde NEMA zarez kada saljemo request
+    },
+
+ovaj primer je tokom rada bas jako refaktorisan, ako ne moze da se isprati iz komentara, vidi snimak
+
+na pocetku smo sve implementirali u okviru app.js,
+nakon toga smo pokretanje servera izdvojili u server.js i rutiranje zahteva smo razdvojili
+hocemo da struktura foldera u projektu otprilike odgovara putanjama koje smo odredili u apiju 
+posto smo rekli da ce nam zahtevi biti slani na putanju api/users, u okviru 'routes' foldera koji smo napravili
+pravimo 'api' folder i u njemo users.js, a tu ce biti implementirani zahtevi koji idu na putanju api/users
+slicno i za ostale zahteve (kada budu uvedeni)
+
+nakon ovog razdvajanja nije nam se svidelo sto users.js radi registruje putanje i implementira funkcije
+ruteri ne moraju da znaju sta su neke konkretne funkcije, vec samo da znaju koja ce se funkcija pozvati, tako da 
+cemo i to da razdvajamo
+To radimo preko kontrolera, u kom ce biti implementacije funkcija, a u routes cemo da ostavimo samo definicije. Pravimo folder u kom ce ti kontroleri stajati. 
+
+znaci na kraju primera, organizacija nam je sledeca:
+    model        - tu su nam podaci (ovo ce na kasnijim vezbama biti neka baza (?))
+    server.js    - kreira i pokrece server
+    app.js       - pravi/pokrece aplikaciju, postavlja sve funkcije za obradu zahteva i registruje sve rutere
+    ruteri       - registrujemo sve sufikse zahteva (?) i registrujemo koje funkcije se pozivaju pri zahtevu na toj putanji
+    kontroleri   - implementacija funkcija koje se pozivaju pri zahtevima
+
+takodje, ne pokrece se vise sa:   node app.js   nego sa    node server.js
+NOTE: negde sam izgleda nesto pogresio pri refaktorisanju i ovaj primer mi vise ne radi lepo
+
+
+na kraju casa je na brzinu informativno pomenula json web tokene koji se koriste za autentifikaciju, cini mi se da ne treba za ispit
+paket za to moze da se instalira sa:   npm install jsonwebtoken
