@@ -1,0 +1,54 @@
+node okruzenje koristimo uglavnom za serverske aplikacije, gde nemamo GUI
+naravno, nije on ogranicen samo za to, postoje i neke biblioteke koje nam omogucavaju da
+pravimo i GUI aplikacije itd
+
+
+
+-------- vezano za 02_npm_projekat: --------
+
+uz node.js dobijamo i npm - node package manager
+kada zelimo da pravimo neki nas node projekat, mozda nam treba neki ektsterni dependency, 
+za to nam je korisno da konfigurisemo nas projekat pomocu npm
+inicijalizujemo projekat komandom:
+    npm init 
+tu mozemo da podesimo tipa ime paketa itd itd
+
+rezutat ovog inita ce biti package.json fajl koji sadrzi ono sto smo podesili
+i dodatno sadrzi polje 'scripts' koje je lista svih skriptova/komandi koje mozemo da pokrenemo
+po defultu, to polje ce izgledati nekako ovako:
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    }
+Imamo taj neki 'test' script koji mozemo da pokrenemo komandom:    npm run test
+
+Kada nam treba neki paket, instaliramo ga sa:    npm install ime_paketa
+Za primer na vezbama smo uradili:   npm instlal lodash
+
+(ako smo u npm projektu, tj pokrenuli smo npm init i dobili package.json) ovo ce uraditi neke stvari:
+1) U package.json cemo dobiti polje 'dependencies' koje je lista paketa koji su nam potrebni i njihove verzije
+2) napraice se node_modules direktorijum koji sadrzi sve izvrsne kodove paketa/biblioteka koje smo instalirali
+   njih u nas program ukljucujemo sa require
+   node_modules nije nesto sto cemo ikada kaciti u nas (npr git) repozitorijum, vec treba da se ignorise
+   a kada skinemo repozitorijum treba samo u njemu da uradimo komandu:   npm install
+   i ona ce ocitati i skinuti sve module navedene u package.json
+   Na vezbama smo ovo isprobali tako sto smo obrisali node_modules folder i pokrenuli    npm isntall
+3) napravice se package-lock.json koji sadrzi neke detaljnije informacije o paketima koji su instalirani
+
+postoje neki moduli koji su nam korsini samo prilikom razvoja aplikacije, npr nodemon paket (koristicemo ga na nekim kasnijim vezbama)
+da bi instlairali paket kao takav privremen, komanda koju radimo je
+    npm instlal --save-dev ime_paketa       (npm install --save-dev nodemon)
+
+Kada ovo uraidmo videcemo da se u package.json nije dodalo nista u dependencies ali se napravilo novo polje
+devDependencies u koje ce biti smesten nas paket
+
+
+
+-------- vezano za 03_node_typescript: --------
+samo mali primercic kako bismo napravili ts script koji se onda pokrece u okviru nekog client browsera (?)
+
+i ovde smo napravili node projekat kao u proslom primeru
+
+u package.json, u scripts polju smo dodali "build" sa odgovarajucom komandom
+da bi preveo nas TS kod u JS kod:
+    "build": "tsc --outDir build src/index.ts"
+opcija --outDir ime_direktorijuma ce JS fajl koji se napravi da smesti u taj novi direktorijum

@@ -1,0 +1,172 @@
+[{
+  "_id": {
+    "$oid": "5ec3bbf59304dd56794be6a6"
+  },
+  "cilj": {
+    "$oid": "5ec3b95f9304dd56794be6a4"
+  },
+  "redniBroj": 1,
+  "opis": "Uraditi zadatke iz JavaScript-a"
+},{
+  "_id": {
+    "$oid": "5ec3bc22b53a1429ecbd9e30"
+  },
+  "cilj": {
+    "$oid": "5ec3b95f9304dd56794be6a4"
+  },
+  "redniBroj": 2,
+  "opis": "Uraditi zadatke iz TypeScript-a"
+},{
+  "_id": {
+    "$oid": "5ec3bc2fb53a1429ecbd9e31"
+  },
+  "cilj": {
+    "$oid": "5ec3b95f9304dd56794be6a4"
+  },
+  "redniBroj": 3,
+  "opis": "Uraditi zadatke iz RxJS-a"
+},{
+  "_id": {
+    "$oid": "5ec3bc42b53a1429ecbd9e32"
+  },
+  "cilj": {
+    "$oid": "5ec3b95f9304dd56794be6a4"
+  },
+  "redniBroj": 4,
+  "opis": "Uraditi zadatke iz Angular-a"
+},{
+  "_id": {
+    "$oid": "5ec3bc4fb53a1429ecbd9e33"
+  },
+  "cilj": {
+    "$oid": "5ec3b95f9304dd56794be6a4"
+  },
+  "redniBroj": 5,
+  "opis": "Uraditi zadatke iz Node.js-a"
+},{
+  "_id": {
+    "$oid": "5ec3bc67b53a1429ecbd9e34"
+  },
+  "cilj": {
+    "$oid": "5ec3b95f9304dd56794be6a4"
+  },
+  "redniBroj": 6,
+  "opis": "Uraditi zadatke iz MongoDB-a"
+},{
+  "_id": {
+    "$oid": "5ec3bc7fb53a1429ecbd9e35"
+  },
+  "cilj": {
+    "$oid": "5ec3b9d0b53a1429ecbd9e2c"
+  },
+  "redniBroj": 1,
+  "opis": "Pročitati o strukturama podataka"
+},{
+  "_id": {
+    "$oid": "5ec3bc92b53a1429ecbd9e36"
+  },
+  "cilj": {
+    "$oid": "5ec3b9d0b53a1429ecbd9e2c"
+  },
+  "redniBroj": 2,
+  "opis": "Pročitati o složenosti izvršavanja operacija"
+},{
+  "_id": {
+    "$oid": "5ec3bcacb53a1429ecbd9e37"
+  },
+  "cilj": {
+    "$oid": "5ec3b9f3b53a1429ecbd9e2d"
+  },
+  "redniBroj": 1,
+  "opis": "Kupiti sastojke za čizkejk"
+},{
+  "_id": {
+    "$oid": "5ec3bd0ab53a1429ecbd9e38"
+  },
+  "cilj": {
+    "$oid": "5ec3b9f3b53a1429ecbd9e2d"
+  },
+  "redniBroj": 2,
+  "opis": "Šta dalje?"
+},{
+  "_id": {
+    "$oid": "5ec3bd3cb53a1429ecbd9e39"
+  },
+  "cilj": {
+    "$oid": "5ec3ba0db53a1429ecbd9e2e"
+  },
+  "redniBroj": 1,
+  "opis": "Naučiti osnove ovog zabavnog programskog jezika"
+},{
+  "_id": {
+    "$oid": "5ec3bda8b53a1429ecbd9e3a"
+  },
+  "cilj": {
+    "$oid": "5ec3ba37b53a1429ecbd9e2f"
+  },
+  "redniBroj": 1,
+  "opis": "Naučiti linearnu algebru"
+},{
+  "_id": {
+    "$oid": "5ec3bdb8b53a1429ecbd9e3b"
+  },
+  "cilj": {
+    "$oid": "5ec3ba37b53a1429ecbd9e2f"
+  },
+  "redniBroj": 2,
+  "opis": "Naučiti realnu analizu"
+},{
+  "_id": {
+    "$oid": "5ec3bdc8b53a1429ecbd9e3c"
+  },
+  "cilj": {
+    "$oid": "5ec3ba37b53a1429ecbd9e2f"
+  },
+  "redniBroj": 3,
+  "opis": "Naučiti verovatnoću i statistiku"
+},{
+  "_id": {
+    "$oid": "5ec3bdd6b53a1429ecbd9e3d"
+  },
+  "cilj": {
+    "$oid": "5ec3ba37b53a1429ecbd9e2f"
+  },
+  "redniBroj": 4,
+  "opis": "Pročitati o linearnim modelima"
+},{
+  "_id": {
+    "$oid": "5ec3bdf9b53a1429ecbd9e3e"
+  },
+  "cilj": {
+    "$oid": "5ec3ba37b53a1429ecbd9e2f"
+  },
+  "redniBroj": 5,
+  "opis": "Aha, postoji i klaifikacija. Pročitati više i o tome"
+},{
+  "_id": {
+    "$oid": "5ec3be0eb53a1429ecbd9e3f"
+  },
+  "cilj": {
+    "$oid": "5ec3ba37b53a1429ecbd9e2f"
+  },
+  "redniBroj": 6,
+  "opis": "Čekaj, šta je klasterovanje?"
+},{
+  "_id": {
+    "$oid": "5ec3be23b53a1429ecbd9e40"
+  },
+  "cilj": {
+    "$oid": "5ec3ba37b53a1429ecbd9e2f"
+  },
+  "redniBroj": 7,
+  "opis": "Konačno mogu da učim neuronske mreže!"
+},{
+  "_id": {
+    "$oid": "5ec3be41b53a1429ecbd9e41"
+  },
+  "cilj": {
+    "$oid": "5ec3ba37b53a1429ecbd9e2f"
+  },
+  "redniBroj": 8,
+  "opis": "Neko je pomenuo GAN-ove. Sad moram i to da pogledam..."
+}]

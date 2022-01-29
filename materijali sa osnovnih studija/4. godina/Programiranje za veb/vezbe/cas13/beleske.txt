@@ -1,0 +1,34 @@
+Prekopirao sam zvanicni kod od proslog casa i na to kucao ono sto je dodala
+
+Na ovom casu radimo rutiranje i filtere
+
+Kada prvimo angular app, postavljaju nam se  neak paitanja, npr ono da li zelimo rutiranje 
+Ako zelimo, napravice nam se app-routing.module.ts, otvori to i citaj komentare
+
+Vidi u registration-form.component i u login-form ovaj router servis koji smo ubrizgali
+
+izbrisali smo user info komponentu jer nam vise ne treba
+
+Zelimo da se neke komponente uopste ne prikazuju ako korisnik nije ulogovan, na prvi pogled nam deluje da to moe sa ngIf jednostavno
+ali problem sa tim je sto iakos e ona ne prikazuje, do te komponente se moze doci putm url-a. Resenje za ovo je da se korsite guardovi
+(mozemo da vidimo koji sve postoje u dokumentaciji za Router pa u Structures, mi cemod a korsitimo samo ovaj CanActivate)
+Guardovi se prave sa CLI komandom:
+    ng generte guard ime_guarda...
+npr kod nas:    ng generate guard guards/user-authenticated
+Trazice nam koji guard hocemo, ima da se bira jedan od nekoliko, mi cemo ovaj CanActivate
+
+Koristili smo nov servis u product-details
+
+ime_promenljive!    znaci da mi kazemo da ona nece nikada biti null
+ime_promenljive?.svojstvo   pristupa svojstvu ako ime_pronmenljive nije null objekat, ili vratni null ako jeste null
+
+vidi u product-info htmlu kako smo napravili onu kompleksniju putanju
+
+
+
+Filteri su nacin da npr lokalizujemo neku vrednost, npr u nasem primeru hocemo da se valuta prikaze pravilno
+Za neke valute oznaka je ispred, za neke iza itd. Mi ne zelimo da brinemo o tome nego da pustimo da to radi angular
+Koristimo CurrecyPipe (cidi u product-details)  (ima raznih filtera/pajpova, npr za datume itd)
+Mozemo i sami da pravimo filtere kroz CLI:
+    ng generate pipe ime_pajpa
+npr. ng generate pipe pipes/productSum

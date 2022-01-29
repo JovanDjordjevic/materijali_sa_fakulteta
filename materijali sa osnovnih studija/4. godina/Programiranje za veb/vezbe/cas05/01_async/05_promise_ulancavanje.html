@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <title> Asinhrono prigramiranje </title>
+</head>
+<body>
+    <h3> Promise ulancavanje then </h3>
+    <script type="text/javascript">
+
+        const promise = new Promise(function(resolve, reject){
+            // desice se ispis: 0, 1, 2, undefined
+            resolve(0);
+        });
+
+
+        // mozemo da ulancavamo vise then. Primetimo da se svi izvrsavaju iako nismo sami napravili vise promise objekata
+        // Ideja je da then i catch uvek vracaju promise objekat, i kada mi ovako kazemo return, 
+        // on ce to nase value + 1 nekako da upakuje u promise objekat koji ce onda sledeci then da otpakuje itd
+        promise
+            .then(function(value){
+                document.body.appendChild(document.createTextNode(value + ", "));
+                return value + 1;
+            })
+            .then(function(value){
+                document.body.appendChild(document.createTextNode(value + ", "));
+                return value + 1;
+            })
+            .then(function(value){
+                // primetimo da ovde nismo sami stavili return
+                document.body.appendChild(document.createTextNode(value + ", "));
+                // u JS po defaultu kada neka funkcija nema eksplicitan return, dodace se 'retun undefined'
+                // tj posto then mora da vrati promise, ovde ce implicitno biti vracen promise u kom je
+                // vrednost undefined
+            })
+            .then(function(value){
+                // i ovde ce sada biti ispisan taj undefined
+                document.body.appendChild(document.createTextNode(value));
+            })
+            // do ovog catcha se nece ni stici jer se nigde ne poziva reject, samo smo ga napisali cisto onako
+            .catch(function(reason){
+                document.body.appendChild(document.createTextNode("-->catch: " + reason));
+            })
+
+    </script>
+</body>
+</html>

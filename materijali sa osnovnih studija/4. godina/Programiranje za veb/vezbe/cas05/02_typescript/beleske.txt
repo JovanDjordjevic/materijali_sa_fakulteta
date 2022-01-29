@@ -1,0 +1,16 @@
+npm - node package manager, preko njega mozemod a skinemo i isntaliramo razne 
+      pakete i biblioteke, moze preko njega da se skine i typescript
+        nmp install -g typescript
+      (-g je opcija za globalno)
+
+tsc - transfilator (alat koji sluzi za prevodjenje iz jednog jezika u drugi)
+      ovo dodje kao neki compiler posto ce za nas proveriti sintaksu, ali ne 
+      dobijamo izvrsni fajl nego isti nas fajl samo u JS jeziku
+
+da bi pokrenuli ts kod, moramo prvo da ga prevedemo u js pomocu tsc 
+NOTE: ja na windowsu kada pokusam da pokrenem samo    tsc primer.ts     dobijam "tsc.ps1 cannot be loaded because running scripts is disabled on this system..."
+resenje je ili da se ovo enabluje sto me mrzi ili da se poziva sa:
+    tsc.cmd primer.ts
+Rezultat ovoga je primer.js koji onda mozemo da pokrenemo npr sa:     node primer.js
+
+Sva pravila koja postoje u okviru 'use strict' moda u JS, postoje i u TS

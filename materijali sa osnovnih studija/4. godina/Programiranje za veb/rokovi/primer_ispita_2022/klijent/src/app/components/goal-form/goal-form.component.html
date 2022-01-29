@@ -1,0 +1,49 @@
+<form [formGroup]="goalForm" (ngSubmit)="onSubmitGoalForm()">
+    <div>
+        <label>Name:</label>
+        <br>
+        <input type="text" formControlName="name">
+    </div>
+
+    <div>
+        <label>Description:</label>
+        <br>
+        <textarea formControlName="description"></textarea>
+    </div>
+
+    <div>
+        <input type="radio" name="importance" [value]="ImportanceEnum.VeryImportant" formControlName="importance">
+        <label>{{ ImportanceEnum.VeryImportant }}</label>
+
+        <input type="radio" name="importance" [value]="ImportanceEnum.MildlyImportant" formControlName="importance">
+        <label>{{ ImportanceEnum.MildlyImportant }}</label>
+
+        <input type="radio" name="importance" [value]="ImportanceEnum.LessImportant" formControlName="importance">
+        <label>{{ ImportanceEnum.LessImportant }}</label>
+    </div>
+    
+    <div>
+        <label>Step 1:</label> 
+        <input type="text" formControlName="step1">
+        <br>
+        
+        <label>Step 2:</label> 
+        <input type="text" formControlName="step2">
+        <br>
+
+        <label>Step 3:</label> 
+        <input type="text" formControlName="step3">
+        <br>
+
+        <label>Step 4:</label> 
+        <input type="text" formControlName="step4">
+        <br>
+
+        <label>Step 5:</label> 
+        <input type="text" formControlName="step5">
+    </div>
+
+    <button type="submit"> Save </button>
+
+    <button routerLink="/" routerLinkActive="active"> Close </button>
+</form>

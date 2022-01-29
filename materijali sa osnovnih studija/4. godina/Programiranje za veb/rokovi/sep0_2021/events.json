@@ -1,0 +1,43 @@
+[{
+  "_id": {
+    "$oid": "611e5539bbac5393bc0a8c6f"
+  },
+  "title": "JavaScript conference 2021",
+  "date": {
+    "$date": "2021-09-19T12:00:00.048Z"
+  },
+  "duration": 360,
+  "todo": [
+    "Code examples",
+    "Prepare a presentation",
+    "Practice a presentation"
+  ]
+},{
+  "_id": {
+    "$oid": "611e5828bbac5393bc0a8c70"
+  },
+  "title": "A state of modern web",
+  "date": {
+    "$date": "2021-09-25T09:00:00.048Z"
+  },
+  "duration": 120,
+  "todo": [
+    "Research web subjects",
+    "Collect data for infographics",
+    "Send a mail to designer",
+    "Submit infographics to webinar admins"
+  ]
+},{
+  "_id": {
+    "$oid": "611e58c7bbac5393bc0a8c71"
+  },
+  "title": "Node Congress",
+  "date": {
+    "$date": "2021-02-18T16:00:00.048Z"
+  },
+  "duration": 180,
+  "todo": [
+    "Join the conference",
+    "Set the reminder in the calendar"
+  ]
+}]

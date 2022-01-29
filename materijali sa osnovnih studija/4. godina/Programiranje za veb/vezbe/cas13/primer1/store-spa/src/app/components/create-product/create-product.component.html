@@ -1,0 +1,70 @@
+<h3> Create a product </h3>
+
+<form class="ui form" [formGroup]="createProductForm" (ngSubmit)="onCreateProductFormSubmit()">
+    <div class="required fluid field" [ngClass]="{error: nameHasErrors()}">
+        <label>Name</label>
+        <input type="text" formControlName="name">
+    </div>
+    <div class="ui negative message" *ngIf="nameHasErrors()">
+        <ul>
+            <li *ngFor="let errorMessage of nameErrors()">{{ errorMessage }}</li>
+        </ul>
+    </div>
+
+    <div class="ui required right labeled fluid input" [ngClass]="{error: priceHasErrors()}">
+        <label class="ui label">$</label>
+        <input type="number" formControlName="price">
+        <div class="ui basic label">.00</div>
+    </div>
+    <div class="ui negative message" *ngIf="priceHasErrors()">
+        <ul>
+            <li *ngFor="let errorMessage of priceErrors()">{{ errorMessage }}</li>
+        </ul>
+    </div>
+
+    <div class="required fluid field" [ngClass]="{error: descriptionHasErrors()}">
+        <label>Description</label>
+        <textarea name="description" rows="5" formControlName="description"></textarea>
+    </div>
+    <div class="ui negative message" *ngIf="descriptionHasErrors()">
+        <ul>
+            <li *ngFor="let errorMessage of descriptionErrors()">{{ errorMessage }}</li>
+        </ul>
+    </div>
+
+    <div class="inline field" [ngClass]="{error: forSaleHasErrors()}">
+        <div class="ui toggle checkbox">
+            <input type="checkbox" class="hidden" formControlName="forSale">
+            <label>For sale</label> 
+        </div>
+    </div>
+
+    <div class="required grouped fields" [ngClass]="{error: stateHasErrors()}">
+        <label>Select the state of your product:</label>
+        <div class="field">
+            <div class="ui radio checkbox">
+                <input type="radio" class="hidden" [value]="ProductStateEnum.New" formControlName="state">
+                <label>{{ProductStateEnum.New}}</label>
+            </div>
+        </div>
+        <div class="field">
+            <div class="ui radio checkbox">
+                <input type="radio" class="hidden" [value]="ProductStateEnum.BarelyUsed" formControlName="state">
+                <label>{{ProductStateEnum.BarelyUsed}}</label>
+            </div>
+        </div>
+        <div class="field">
+            <div class="ui radio checkbox">
+                <input type="radio" class="hidden" [value]="ProductStateEnum.ModeratelyUsed" formControlName="state">
+                <label>{{ProductStateEnum.ModeratelyUsed}}</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="required fluid field">
+        <label>Product images:</label>
+        <input type="file" multiple >
+    </div>
+
+    <button class="ui fluid button" type="submit">Add a product</button>
+</form>

@@ -23,6 +23,7 @@ Moji materijali sa fakulteta
 		- Funkcionalno programiranje
 		- Osnove matematickog modeliranja
 		- Primena projektivne geometrije u racunarstvu
+		- Programiranje za veb
 		- Projektovanje baza podataka
 		- Racunarske mreze
 		- Razvoj softvera

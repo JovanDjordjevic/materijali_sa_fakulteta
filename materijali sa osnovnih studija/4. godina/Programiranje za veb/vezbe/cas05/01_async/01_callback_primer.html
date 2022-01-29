@@ -1,0 +1,28 @@
+<!--slican primer kao sa proslog casa, samo da vidimo redosled poziva funkcija
+Posle ovoga je radila opet isti primer gde dohvata one studente kao sa proslog casa
+Napravila je jos 2-3 priemra unapred da pokaze ugnjezdene callback funkcije i objasnila da je to tesko za
+debagovanje i to se zove callback hell
+mrzi me da kucam te primere....
+
+NOTE: na casu nije sama kucala nista i mozda nije ni pokazala sve
+pogledaj na githubu kada okaci da li fali nesto !-->
+
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <title> Asinhrono programiranje </title>
+</head>
+<body>
+    <h3> setTimeout </h3>
+    <script type="text/javascript">
+        document.body.appendChild(document.createTextNode(" 1 "));
+
+        setTimeout(function(){
+            document.body.appendChild(document.createTextNode(" 2 "));
+        }, 2000);
+
+        document.body.appendChild(document.createTextNode(" 3 "));
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!-- NOTE: rad sa ecma modulima moramo da simulramo sa html fajlom -->
+
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <title> Moduli </title>
+</head>
+<body>
+    <!-- tag koji nam daje da izvrsavamo neki script
+    kada radimo sa obicnim js fajlovima, mozmeo da stavimo type='text/javasctipt'
+    kada radimo sa modulima, moramo da stavimo type="module"
+    -->
+    <script type="module">
+        // NOTE: ako samo pokusamo ovako da importujemo, kada otvorimo html fajl, u dev konzoli cemo videti gresku
+        // Access to script at 'file:///C:/Users/Jovan/Desktop/PZV/vezbe/cas04/05_01_ecma_module.js' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: http, data, chrome, chrome-extension, chrome-untrusted, https.
+        // kada radimo sa ECMA modulima, ne mozemo da koristimo file protokol vec mora da se isporuci preko nekog servera (?)
+        // u VS code mozemo da isntaliramo 'Live Server ekstenziju'
+        // kada je instaliramo videcemo dole desno u plavom baru 'Go Live'
+        // kada kliknemo na to, otvorice nam se ovaj html fajl, ali ne sa onom adresom koju je imao pre nego nesto ovako: http://127.0.0.1:5500/cas04/05_02_ecma_demo.html
+        // ovo je pokrenulo neki lokalni server preko koga je modul isporucen
+        import {add, PI} from './05_01_ecma_module.js';
+        console.log(PI);
+        console.log(add(5, 6));
+    </script>
+</body>
+</html>

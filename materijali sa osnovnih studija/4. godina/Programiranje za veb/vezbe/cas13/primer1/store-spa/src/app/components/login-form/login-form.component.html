@@ -1,0 +1,16 @@
+<form class="ui form" [formGroup]="loginForm" (ngSubmit)="login()">
+    <div class="required field">
+        <label>Username</label>
+        <input type="text" formControlName="username">
+    </div>
+
+    <div class="required field">
+        <label>Password</label>
+        <input type="text" formControlName="password">
+    </div>
+
+    <button class="ui fluid button" type="submit">Login</button>
+
+    <!-- dodali-->
+    <a routerLink="/register">If you don't have an account, click here</a>
+</form>

@@ -1,0 +1,20 @@
+# Angular 
+cd klijent 
+npm install
+cd ..
+
+# Node.js
+cd server
+npm install
+cd ..
+
+# MongoDB
+mongoimport --db pveb_primer_ispita --collection goals --file goals.json --jsonArray
+mongoimport --db pveb_primer_ispita --collection steps --file steps.json --jsonArray
+
+# Kopiranje podataka na klijent 
+mv goals.json klijent/src/assets/
+mv steps.json klijent/src/assets/
+
+# Otvori uputstvo 
+qpdfview uputstvo.pdf & 
