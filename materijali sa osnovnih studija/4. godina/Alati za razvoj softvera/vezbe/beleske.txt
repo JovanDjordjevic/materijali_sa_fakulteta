@@ -1,0 +1,338 @@
+neke pomenute komande:
+
+---------- git ----------
+na windowsu nemamo man stranice, ali mozemo da koristimo
+	git help ime_komande
+i to otvori dokumentaciju na netu
+
+HEAD dodje kao pokazivac na trenutni komit
+
+kada je radio aliase, --global je da taj alias vazi globalno na racunaru za svakui projekat
+a ako nema global, onda vazi samo u repozitorijumu u kom se nalazimo
+
+na vezbama koriscen:
+git config --global alias.hist "log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
+
+ako slucajno dodamo nesto sa git add X sto nismo hteli, mozmeo da izbacimo iz
+staging area sa git reset X
+
+isti taj reset mozemo da koristimo i za brisanje commitova
+
+brisanje grana u git bash na windowsu izgleda ne rpavi razliku izmedju -d i -D
+
+guglaj razlike izmedju reset, revert i restore
+stephencharlesweiss.com/git-restore-reset-revert
+
+amend moze da se koristi za bilo koji commit, ne samo na poslednji
+ali nije preporucljivo da se to radi
+
+diff nije git komanda (?)
+radimo npr:   diff input.txt output.txt
+
+(ima i ovaj link https://training.github.com/downloads/github-git-cheat-sheet/)
+
+git reset ime_fajla [koji_commit]    (reset samo sklanja sa staging area a restore zapravo i izbrise izmene (?))
+
+git revert [koji_commit] (izbrisu se promene iz commita i to se dodaje kao novi commit, tj radi inverziju commita, dakle ovo NE menja git drvo us mislu ne menja fajlove (?). 
+ 						 Ako hocemo da se izmeni i drvo radimo git reset --hard [commit] ali to nije preporuceno)
+
+git log [--pretty=oneline] [--graph]
+
+git reflog   (jos jedan tip loga, ako slucajno nesto obrisemo sa reset --hard sto nismo hteli, mozemo ovde da dodjemo i da nadjemo taj commit i checkoutujemo ga)
+
+git config [--global] core.editor [ime_editora]
+
+git config [--global] alias.ime_aliasa komanda_za_koju_je_alias    
+npr: git config --global alias.hist "log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
+
+git tag ime_taga     (postavlja tag na trenutnu commit)
+
+git checkout [hash_commita | ime_grane | HEAD | HEAD~nesto | neki_tag]    (kada navedemo hash kod to je apsolutni skok, a ovako sa head je relativni skok
+
+git commit --amend ...  (ako smo nasli gresku u poslednjem commitu mozemo da ga zamenimo sa ammend. Ovo ne treba da radimo nakon pusha, nego samo za lokalne izmene jer ovo menja git stablo)
+
+git branch -b ime_grane (napravi granu i odmah je checkoutuje)
+	   -r (vidimo remote grane)
+	   -d ime_grane (brisanje grane koja jeste mergovana
+   	   -D ime_grane (brisanje grane koja nije mergovana
+	(takodje ne mozemo da brisemo grane na kojima se trenutno nalazimo)
+
+git show-branch (ispis grana i njihovih commitova)
+
+git rebase [-i] ime_grane .... (podseti se ovoga....)
+	u okviru interactive rebase toola postoji i squash opcija koja spaja kcomitove u 1
+
+git cherry-pick 1_ili_vise_commitova   (dodaje te cherry pickovane na trenutnu granu na kojoj smo)
+
+git remote (lista svih remoteova)
+git remote -v (svi remoteovi i njiihovi urlovi)
+
+git pull je zapravo =  git fetch + git merge  (fetch dohvati zimene sa remote, i onda ih merge merguje u trenutni working directory)
+
+git push   moze da se uradi samo ako je remote na koji pushujemo 'bare' repozitorijum
+Ako je nas remote neki repo koji nije bare, mzoemo u tom remoteu da uradimo
+	git config --bool core.bare true      ili alternativno
+	u .git/config zamenimo bare=false sa bare=true
+	Bare repo ne sme da ima nijednu granu koja je aktivna/checkoutovana, tj treba da ga tretiramo kao da ima samo .git sadrzaj
+	Bare repo moze da se napravi i sa    
+	git --bare init
+
+
+
+---------- gdb cas -----------
+
+makefile:
+[result] : [dependencies]
+	[commands]
+
+$@ je referenca na [result] (tj ako ima vise stvari u result, onda je referenca na prvu stvar)
+$^ je referenca na [dependencies]
+$< je referenca na prvu vrednost iz [dependencies]
+
+----------
+primer makefilea sa release/debug grananjem
+		CXX      = g++ 
+		CXXFLAGS = -std=c++17 -Wall -Wextra
+		TARGET   = stack.out
+		DEBFLAGS = -g
+		RELFLAGS = -O2
+
+		ifneq ($(BUILD),release)
+			BUILD = debug
+			FLAGS = $(DEBFLAGS)
+		else
+			FLAGS = $(RELFLAGS)
+		endif
+
+		$(BUILD)_$(TARGET): main.cpp
+			$(CXX) $(CXXFLAGS) $(FLAGS) -o $@ $<
+
+		.PHONY: release debug clean
+
+		release debug:
+			$(MAKE) BUILD=$@
+
+		clean:
+			rm -r release_$(TARGET) debug_$(TARGET)
+
+Ovo pozivamo sa:  make debug    (ili make BUILD=debug)
+		ili		  make release 	(ili make BUILD=release)
+
+make help	- ispisuje svasta kada koristimo sa cmake (?)
+----------
+
+
+gdb:
+run ili r [opcioni_argumenti_komandne_linije]	- pokrene
+
+quit ili q	- prekid  (moze i ctrl+d)
+
+break ili b [ime_funkcije]	- postavi breakpoint
+
+next ili n 	- izvrsi liniju i stane pre sledece
+
+continue ili c	- nastavi do sledeceg breakpointa
+
+list ili l	- da vidimo okolinu koda linije na kojoj smo stali
+
+print ili p [expression]	- odstampa vrednost za expression
+
+step	- ulazi se u funkc na kojoj smo stali
+
+display [promenljiva]	- prikaz pri svakom nextu
+
+undisplay [var_id]		- da se ne prikazuje vise, NOTE: ovde nije vise ime promenljive nego onaj $id
+
+info breakpoint		- info o svim breakpointovima
+
+watch [var]		- postavlja watchpoint na promenljivu 
+
+info watchpoint		- info o svim watchpointovima
+
+ima i info [args | display | locals | threads ...]
+
+delete X	- brise breakpoint (ili watchpoint) X (to X je indeks koji vidimo iz info)
+enable X	- ukljuci -||-
+disable X	- iskljuci -||-
+
+clear	- brise sve breakpointove
+
+where ili backtrace		- ispise nam trenutni stek poziva
+						  sa   up    ili   down    mozemo da se krecemo po steku
+						  (down je ka vrhu steka, tj najnovijoj funkc, up je ka dnu steka)
+
+whatis [promenljiva]	- vrati nam  tip promenljive
+
+
+
+
+---------- callgrind -----------
+
+koraci za vizuelizaciju:
+	1) prevedemo program sa -g 
+	2) valgrind --tool=callgrind --callgrind-out-file=ime_out_fajla.out ./nas_out_fajl.out
+	3) kcachegrind ime_out_fajla.out
+
+memcheck moze npr ovako:
+	1) prevedemo program sa -g
+	2) valgrind --leak-check=full --show-leak-kinds=all --log-file=ime_fajla.txt ./nas_out_fajl.out
+
+
+
+---------- qt i qmake -----------
+connect(sender, signal, reciever, slot)
+npr  connect(ui->pbrnIncrement, &QPushButton::clicked, this, &MainWindow::inc)
+
+qmake:
+	CONFIG += console    (ovo mora uvek (?))    (moze i CONFIG = debug (nije pokazao sta radi))
+	SOURCES += ...
+	HEADERS += ...
+	TARGET = ime_executablea
+	
+	win32 {			- ovako radimo ono sto je u ... samo ako smo na windowsu,  za linux bi bilu   'unix' umesto 'win32
+		...
+	}
+
+	!exists(ime_fajla) {			 - primer za exists
+		error("neka poruka...")
+	}
+
+qmake ime_fajla.pro		- ovo generise makefile, mozemo da kazemo i    -o Makefile 
+
+
+
+---------- cmake -----------
+dereferenciranje promenljivih se radi sa $(ime_promenljive)       (NOTE U JEDNOM PRIMERU JE IMAO ${} I TO JE RADILO, GUGLAJ)
+neke od komanda ispod mogu da postave neke od ovih promenljivih
+sve promenkljive u cmake su niske
+
+pokretanje:		cmake [opcije] [putanja_do_CMakeLists.txt]
+		npr: 	cmake -G "Unix Makefiles" ..
+			ovo -G "nesto" postavlja navodi koji se generator koristi, tj koji build sistem ce se napraviti
+			ako ne navedemo sami nesto (kao sto smo gore naveli da hocemo makefile, koristice se CMAKE_GENERATOR env promenljiva, a ako
+			ona ne postoji koristice se default generator)
+
+Kada se napravi build, u CMakeCache.txt se izlsitavaju sve promenljive koje cmake korsiti, ovde mozemo da menjamo svasta, npr
+CMAKE_CXX_COMPILER mozemo da zamenimo takod a vodi do nekog konkretnog kompajlera npr clang++ a ne do onog koji cmake nadje 
+
+cmake_minimum_required(VERSION broj_verzije)
+
+project(ime_naseg_projekta VERSION verzija_projekta)		- psotavlja PROJECT_NAME promenljivu
+
+add_executable(ime_izvrsnog_fala potrebni_izvorni_fajlovi)
+
+set(ime_promenljive vrednsot)	- npr set(CMAKE_CXX_STANDARD 17)
+								- npr set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra")	- konkatenacija na vec postojecu
+								- npr set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g -Wall -Wextra")
+								- npr set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2")
+								(ovo za release i debug pozivamo sa cmake -DCMAKE_BUILD_TYPE=[release ili debug] -G ...ono od pre.. )
+
+add_library(ime_biblioteke [opciono_tip_biblioteke] lista_hpp_i_cpp_fajlova)	- tip moze biti MODULE (naznacava da je biblioteka koja predstavlja neki plugin i ne treba da se linkuje)
+																								STATIC (ovo je default, kod biblioteke se direktno povezuje sa programom tako sto se kopira tokom kompilacije)
+																								SHARED (kod biblioteke se referencira tokom izvrsavanja, ovo su dll-ovi (?))
+
+target_link_libraries(ime_izvrsnog_fajla_za_koji_se_linkuje PRIVATE ime_biblioteke)		- ovo mora da se doda nakon add_executable ako imamo i biblioteku u projektu
+
+add_subdirectory(ime_direktorijuma)		- u korenom cmakeLists mozemo da dodamo ovo, i onda u tom poddirektorijumu da opet imamo cmakelists ime_direktorijuma
+
+target_include_directories(ime_biblioteke PUBLIC putanja(?))	- ovako mozemo da definisemo include putanju do biblioteke, ako stavimo ovo, u kodu projekta cemo 
+																  moci tu bibl. da includujemo sa #inlcude<> umesto sa #include"", tj ovako ne moramo da brinemo o relativnim putanjama
+																npr:   target_include_directories(string_lib PUBLIC "$(CMAKE_CURRENT_SOURCE_DIR)")
+																opcije:  PUBLIC, PRIVATE, INTERFACE. Kada cmake pravi ciljni izvrsni fajl, on koristi INCLUDE_DIRECTORIES,
+																COMPILE_DEFINITIONS i COMPILE_OPTIONS promenljive. Ako stavimo PRIVATE, cmake dopunjuje ove promenljive, slicno iza INTERFACE samo sa
+																prefikson INTERFACE_*, PUBLIC je kombiancija PRIVATE i INTERFACE
+																	https://leimao.github.io/blog/CMake-Public-Private-Interface/
+																	https://cmake.org/cmake/help/latest/command/target_include_directories.html
+
+enable_testing()	- ukljucujemo podrsku za testove (obavezno posle project() )
+add_test(NAME ime_testa COMMAND komanda_koja_pokrece_test(?)) 	- ovo mora posle add_executable ()
+
+
+
+---------- clangtools -----------
+
+clang-tidy ime_fajla --checks=[chekovi] [--fix] -- --std=...	- ovo --fix je da automatski i primeni, -- pre --std ne znams ta radi
+
+clang-tidy --list-checks -checks='*' 	- izlista sve koji postoje
+
+ako imamo cmake, pokrenemo ga sa cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ...... i onda nakon make
+mozemo da radimo 	run-clang-tidy [opcije od pre...]		i to prodje kroz sve fajlove u celom projektu (?) 
+
+neki checkovi koje smo koristili:	modernize-*
+									modernize-use-nullptr
+									modernize-use-auto
+									modernize-use-using
+									readability-container-size-empty
+									performance-implicit-conversion-in-loop
+									performance-inefficient-string-concatenation
+									llvm-namespace-comment
+
+
+U folderu iz kog pokrecemo clang-ridy mozemo da napravimo .clang-tidy fajl u koji upisemo neke informacije o 
+npm imenovanju promenljivih i slicno i to ce automatski primeniti kada pokrenemo clang-tidy
+primer sa vezbi:
+	Checks: '-*,readability-identifier-naming'
+	CheckOptions:
+	- { key: readability-identifier-naming.ClassCase,     value: CamelCase  }
+	- { key: readability-identifier-naming.VariableCase,  value: camelBack }
+	- { key: readability-identifier-naming.FunctionCase,  value: camelBack }
+	- { key: readability-identifier-naming.MemberPrefix,  value: m_         }
+	- { key: readability-identifier-naming.ParameterCase, value: camelBack }
+
+
+clang-format ime_fajla [-i]			- -i je inplace(da ne napravi novi fajl koji je formatiran)
+
+za clang-format mozemo da korsitimo neke vec postojece sstilove ili sami da napravimo svoj
+u okviru   .clang-format   datoteke, slicno kao za clang-tidy. Tu su sve linije oblika KEY: VALUE 
+
+
+
+---------- docker -----------
+
+NOTE: mora da se koristi " umesto '  svugde !!!! (?)
+
+docker build [-t ime_koje_dajemo_slici] putanja_do_dockerfile
+	npr: docker build -t test_image .
+
+docker image ls		- izlista sve slike koje imamo
+
+docker run [opcije] [ime_slike:tag]		- pokretanje slike. Ako slika ne postoji kod nas, ali postoji na internetu, 
+	izvrsice se		docker pull		tj skinuce se slika
+	npr: docker run --name neko_novo_ime hello_world_image:latest
+
+Kada nam treba  particija memorije koja se deli izmedju korisnika i containera, navodi se kao [VOLUME]:[PATH] radimo
+	docker run -v $PWD/data:/data ime_kontejnera, $PWD je trenutna radna putanja, ne moze samo da se navede relativna
+			ta adresa je bas ono sto dobijemo kada pozovemo 'pwd' komandu u terminalu, (on je na vezbama bas ovako i pisao, nije morao rucno celu adresu)
+			ono sto ce se desiti je da se na toj putanji napravi folder data nakon sto pokrenemo kontejner. Ime foldera putanje itd treba da se
+			poklapaju sa onim sto zapravo radimo u programu ciji kontejner pokrecemo
+
+docker ps [-a] 	- izlista sve aktivne kontejnere. -a izlista i one koji nisu aktivni
+
+Ako hocemo da pokrenemo neki kontejner koji je vec pokrenut nekad pre, to moze i sa 	docker start ime_kontejnera 
+tj ne mora docer run.... (ako uvek radimo docker run, moramo da izbrisemo iz ove liste sto daje ps taj kontejner)
+
+...kacenje na dockerhub...
+
+docker image rm [ime_slike] [-f] 	- brisanje slike sa sistema, -f je force ako nam trazi
+
+docker rm [ime]	- brise iz one liste sto se dobije sa docker ps -a (?)
+
+docker inspect ime_kontejnera		- sve info o kontejneru
+
+... nesto sa preslikavanjem portova u flaskserver primeru ...
+... env.txt fajl ....
+
+FROM 	- ime slike od koje krecemo
+COPY
+WORKDIR
+RUN 		- radi komantdu koju damo
+ENTRYPOINT    - kao prefiks, a onda argumente dodajemo u cmd npr ["./a.out"] a ond u CMD ['argumenti_komandne_linije']
+CMD			- podrazumevani sufiks, ako navedemo samo 	docker run [ime_Slie] to je isto kao da smo kucali   docker run ime_slike [CMD]
+			ako navedemo nesto, npd   docker run image_name 4	poziva se komanda [ENTRYPOINT] [ARGS] i CMD se zanemaruje
+			entr moze i da se navede eksplicitno (meni ovo nije radilo kad sam vezbao) sa 	docker run ime_slike --entrypoint neka_komanda
+
+u docker run:
+	-network	- network mode, npr:	-network="host"
+	-p 		- preslikavanje portova	npr: 	-p "5005:5000"
+	-e  	- env promenljiva npr: 		-e NEKA_ENV_PROMENLJIVA=vrednost
+	-v		- volume, npr:	-v ${PWD}/data:/data

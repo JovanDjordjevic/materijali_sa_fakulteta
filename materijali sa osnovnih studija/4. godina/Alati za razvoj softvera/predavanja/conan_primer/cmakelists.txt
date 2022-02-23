@@ -1,0 +1,9 @@
+cmake_minimum_required (VERSION 2.0)
+
+project(prog CXX)
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
+add_executable(prog main.cpp)
+target_link_libraries(prog ${CONAN_LIBS})

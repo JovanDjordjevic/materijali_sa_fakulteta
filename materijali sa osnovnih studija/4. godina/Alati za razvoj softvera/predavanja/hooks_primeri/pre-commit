@@ -1,0 +1,12 @@
+#!/user/bin/env python 3
+
+import subprocess
+
+output = subprocess.check_output(['git', 'clang-format', '--diff'])
+
+# znamo napamet da je ovo poruka koju clang format napise ako ne izmeni nista
+if 'clang-format did not modify any files'.encode() not in output and 'no modified files'.encode() not in output:
+	print("Run git clang-format, git add, commit")
+	exit(1)
+else:
+	exit(0)

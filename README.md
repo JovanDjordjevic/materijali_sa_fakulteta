@@ -20,6 +20,7 @@ Moji materijali sa fakulteta
 		- Uvod u numericku matematiku
 		- Vestacka inteligencija
 	* ### Cetvrta godina godina<br>
+		- Alati za razvoj softvera
 		- Funkcionalno programiranje
 		- Osnove matematickog modeliranja
 		- Primena projektivne geometrije u racunarstvu
