@@ -1,0 +1,38 @@
+NTOE: ove cele vezbe nisam bas pratio lepo
+
+nisam bas slusao objasnjenje za branch and bound ali
+lici na min-max pomalo
+
+na materijalima na githubu ima i problem n-dama
+nije kucao kod, kaze nije mnogo zanimljiv
+prokomentiarisao ga je na trecem casu ali nisam bas pratio
+
+
+----------------
+p metahgeuristike:
+
+genetski alg:
+...sve isto rekao kao na VI, nista novo
+
+inace kod svakog optimizacionig algoritma mozemod a pricamo o tome sta
+je u njemu intenzifikacija i diverzifikacija, npr za genetski:
+intenzifikacija je ukrstanje (idemo ka sve boljem i boljem resenju)
+diverzifikacija je mutacija 
+
+Genetski alg pseudokod:
+    jedinka: resenje - kodiranje: 110010101001
+
+    roditelj1 - 110010101011
+    roditelj2 - 001011011100
+
+    dete1 - 110010101100
+    dete2 - 001011011011
+
+    population = [jedinka...]
+    while not stop_condition();
+        if elitism:
+            u novu populaciju iskopiraj nekoliko najboljih jedinki    (za slucaj da se slucajno desi da deca imaju manji fitnes nego roditelj)
+        izaveri jedinke za reporodukciju
+        ukrstanje
+        mutacija
+        nova populacija

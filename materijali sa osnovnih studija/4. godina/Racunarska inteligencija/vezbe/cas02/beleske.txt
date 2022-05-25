@@ -1,0 +1,98 @@
+razlika izmedju fuzzy logike i one 'obicne' na koju smo navikli je sto u fuzzy
+nemamo samo 2 moguce vrednosti (true i false), tj nemamo skup {0, 1}
+nego [0, 1]
+
+grafici za fazi logiku su neprekidni(?) i neki cesti su: (lepo je objasnio na snimku)
+Z oblik, S oblik, trapez oblik, trougao oblik, singlton,
+gausovo zvono (normalna raspodela)
+
+U obicnoj logici, za skup A, i neki element x imamo karakteristicnu funkicju
+mi_A(x) koja je = 1 ako x pripada A, a 0 ako ne pripada
+
+mi_A_unija_B(x) = mi_A(x) || mi_B(x)
+mi_A_presek_B(x) = mi_A(x) && mi_B(x)
+mi_A_komplement(x) = !mi_A(x)
+
+Za fazi skupove bi bilo:
+mi_A_unija_B(x) = max( mi_A(x) , mi_B(x) )
+mi_A_presek_B(x) = min( mi_A(x) , mi_B(x) )
+mi_A_komplement(x) = 1 - mi_A(x)
+
+(U fazi logici A presek A_komplement nije uvek prazan skup)
+
+
+neko stepenovanje i korenovanja nisam ispratio ovde(?)
+time dajemo veci/manji znacaj necemu (?)
+
+
+Kako ovo koristimo u racunaru iako tu imamo obicnu logiku (?)
+Recimo da imam,o neki broj kao ulaz.
+    - Prvo ga 'fazifikujemo', tj izracunamo stepen pripadnosti nekom itnervalu
+      (recimo da je ulaz neka temperatura od  18 stepeni, i da ona moze biti
+      u skupu hladno, umereno toplo, (imamo mi_hladno(temp), mi_umereno(temp), mi_toplo(temp) )
+    - Dalje na osnovu nekih unapred smisljenih pravila (npr ako je hladno i oblacno)
+      izvodimo neki zakljucak (pada kisa) koji je takodje fazi vrednost (npr malo kise, mnogo kise, srednje kise)
+    - Na kraju radimo 'defazifikaciju', gde se iz fazi vrednosti vratimo na obican broj kao
+      izlaznu vrednost. Vidi u primeru ispod, mozemo npr da radimo tezinski prosek
+
+reprezentativni primerak za skup oznacava se sa 'c'
+on ne zavisi od vrendosti vec samo od oblika funkcije mi (?)
+npr za Z oblik funkije, to je poslendja tacka gde je y=1, kod S oblika
+to je prva tacka gde je y=1, kod trougla je to jedina tacka gde je y=1, 
+kod trapeza je srednja tacka na onoj pravoj gde je y=1
+
+
+
+
+Primer:
+hocemo da procenimo kolika je vrednost nekog automobila, a ulazne promenljive
+su nam potrosnja (litara na sto kilometara) i pouzdanost automobila (broj kvarova na 100 000km)
+Neka auto koji procenjujemo trosi 9 litara na 100km i ima 8 kvarova na 100 000km
+
+(vidi na snimku grafike za funkcije pripadnosti )
+Pripadnost skupovima za potrosnju: Mala potrosnja (=1 od 0 do 3, od 3 do 10 opada)
+Srednja potrosnja(raste od 7 do 10, =1 od 10 do 12, opada od 12 do 15), velika potrosnja(raste od 12 do 15
+i posle toga je =1)
+Pouzdanost: visoka(=1 od 0 do 5, opada od 5 do 10), niska pouzdanost(reaste od 8 do 15, posle toga je =1)
+
+Fazifikacija: (koristio je slicnost trouglova, vidi snimak)
+    mi_mala_potrosnja(9) = (10 - 9) / (10 - 3) = 0.14
+    mi_srednja_potrosnja(9) = (9 - 7) / (10 - 7) = 0.67
+    mi_velika_potrosnja(9) = 0
+
+    mi_visoka_pouzdanost(8) = (10 - 8) / (10 - 5) = 0.4
+    mi_niska_pouzdanost(8) = 0
+
+Recimo da za vrednost imao ovakav grafik: mala vrednost(=1 do 7000, opada od 7k do 15k),
+srednja(raste od 7k do 15k, =1 od 15 do 25k, opada od 25k do 40k), velika vrednost (raste od 25k do 40k, posle toga je =1)
+
+Recimo da su pravila: (u ovom primeru imamo 6 pravila koja pokrivajus ve mogucsnoti, ali to ne mora uvek da bude slucaj)
+    1) ako je mala potrosnja i  visoka pouzdanost => vrednost je velika
+    2) mala potrosnja && niska pouzdanost => srednja vrednost
+    3) srednjs potrosnja && visoka pouzdanost => srednja vrednost
+    4) srednja potrosnja && niska poizdanost => srenja vrednsot 
+    5) velika potrosnja && visoka pouzdanost => srednja vrednost 
+    6) velika potrosnja && niska pouzdanost => mala vrednost
+
+(gledamo koliko puta se pojavljuje mala vrednost sa desne strane i pokupimo sva ta pravila)
+( za malu i veliku vrednost ovde imamo po 1 pravilo)
+mi_mala_vrednost = min( mi_velika_potrosnja, mi_niska_pouzdanost)
+                 = min(0, 0) = 0
+mi_velika_vrednost = min(mi_mala_potrosnja, mi_visoka_pouzdanost) 
+                   = min(0.14, 0.4) = 0.14 
+
+(za srednju vrednost imamo 4 pravila, tako da imamo kao neku disjunkciju,
+u fazi logici to se prevodi u maksimum)
+m_srednja_vrednost = max( min(), min(), min(), min() )
+                   = max( 0, 0.4, 0, 0 ) = 0.4
+
+
+Mozemo da izracunamo reprezentativne tacke za svaki onaj skup vrednosti:
+c(mi_mala_vrednost) = 7
+c(srednja_vrednost) = 20
+c(veklik_vrednost) = 40
+defazifikacija:
+    Mozemo da to uradimo kao tezinski prosek
+    vrednost = (c(mala) * mi_mala + c(srednja) * mi_srednja + c(velika) * mi_srednja) / (mi_mala + mi_srednja + mi_velika)
+    = (7*0 + 20*0.4 + 40*0.14) / (0 + 0.4 + 0.14) = 12.5
+ 

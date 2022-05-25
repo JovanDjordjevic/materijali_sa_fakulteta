@@ -1,0 +1,63 @@
+prosle nedelje smo radili PSO,
+pricamo sada o koloniji mrava, NE kucamo kod (Ne dolazi ovo na prakticnom delu ispita)
+
+Mravi traze najkraci put od mravinjaka do hrane, iza sebe ostavljaju trag fereomona koji ostalim mravima signalizira gde je taj mrav isao
+Drugi mravi mogu da prate tog prvog ili da traze sami svoj put
+Ispotavice se da ce najkraci put biti onaj sa najvecim tragom feromona
+
+Ovakav neki pristup mozemo da koristimo za trazenje nekakvih najkracih puteva,
+npr za najkraci hamiltonov ciklus u problemu trgovackog putnika
+(nema bas smisla ovim resavati neke jednostavne probleme  tipa najkraci put izmedju 2 cvora jer za njih imamo 
+egzaktne algoritme kao dijkstrin koji rade dobro i znamo koliko ce da se izvrsavaju)
+
+imamo graf G, i imamo dij-rastojanje od i do j
+
+Odabracemo nekih k cvorova i na njih cemo da stavimo mrave i pustimo ih da idu random i sotavljaju feromone za sobom, i nadamo se da ce se naci put
+pravimo jos jednu matricu, npr zovemo je T i tij-to je broj feromona na grani
+Kada mrav predje preko grane, uvecava se broj feromona na grani, a tokom vremena se broj feromona sve vreme smanjjuje jer feromoni isparavaju
+
+tij = (1 - ro)*tij + delta_tij   ro-parametar za isparavanje feromona, ro je u intervalu [0,1]
+                                 delta_tij = sum_k(delta_tij_k)
+delta_tij_k = 1 / Lk    delte_tij_k - doprinos jednog mrava promeni feromona na grani ij (?)
+                           Lk - velicina puta koju mrav prelazi   (Ako je Lk veliko, ostavice malo feromona, 
+                               ako predje mali put ostavice mnogo feromona 
+                        
+mrav iz nekog cvora moze da ide sa nekom verovatnocom u neku granu
+(nisam bas skapirao ovu fomrulu, vidi snimak, oko 15og minuta
+pij - verovatnoca da se ide granom ij (?)
+pij = (tij * 1/dij) / (sum_m(tim * 1/dim) )    (vidi snimak za objasnjenje)
+    Hocemo da ima vecu verovatnocu sto vise feromona ta grana ima, ovo deljenje ispod je pravljenje neke raspodele (?)
+    
+    
+---------------------------------------------------------
+Neuronske mreze
+
+Krecemo od potpuno povezanih neuronskig mreza (FCNN - fully connected NN)
+Svaki cvor u trenutnom sloju je povezan sa svakim iz sledeceg
+Svaka grana izmedju neurona ima neku tezinu w1, w2, ... wn
+Neuron ima nekakvih n ulaza x1,x2...xn i te tezine, on sa njima uradi ovako nesto:
+w1*x1 + w2*x2 + ...wn*xn + b (to b je neki slobodan clan, slicno kao kod linearne regresije)
+tj to je kao skalarni proizvod vektora W i X
+Na to sto dobije primeni se neka aktivaciona funkcija g i izlaz iz tog neurona je onda   g(W*X + b)
+
+Na nivou celog sloja, svaki neuron radi skalarni proizvod X sa svojim W, dakle imamo n tih W
+tj radimo mnozenje matrica gde je u  levoj svaki red jedan vektor tezina Wi,  a u desnoj je vektor kolona X
+
+h1 = g(W1*x + b1)    (ovde se W1 misli matrica svih tezina iz prvog sloja itd nadalje)
+h2 = g(W2*h1 + b2) = h2 = g(W2 * g(W1*x + b1) + b2)
+itd...
+
+Cela neuronska mreza moze da se predstavi ovako
+    h0 = x
+    hi = g(Wi * hi-1 + bi)
+Cela neuronska mreza je zapravo neka kompozicija nelinearnih funkcija
+
+Hocemo da korisimo neuronsku mrezu za klasifikaciju/regresiju
+Hocemo nekako da podesimo tezine w u mrezi tako da ona dobro pogadja klase. To se zove obucavanje neurosnke mreze.
+Treba nam neka funkcija greske L koju cemo da minimizujemo, L-u treba da prosledimo stvarnu klasu i predvidjenu i da ona oceni koliko gresimo
+Te parametre mozemo da nadjemo na koji god hocemo nacin, tj da korisitmo koju god hocemo optimizacionu metodu
+npr gradijentni sput/genetski alg itd
+u kerasu smo videli razne varijante npr adam, nesterov itd
+
+pravilo lanca - kako trazimo izvod kompozicije funkcija, tj gradijent, podseti se iz A3, ne treba nam tacno da znamo sta je to, samo ideju, to biblioteke koje koristimo rade za nas, zajedno sa svim dosadnim poslovima
+Algoritam koji racuna gradijent se zove back propagation

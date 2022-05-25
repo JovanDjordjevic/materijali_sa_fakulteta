@@ -26,5 +26,6 @@ Moji materijali sa fakulteta
 		- Primena projektivne geometrije u racunarstvu
 		- Programiranje za veb
 		- Projektovanje baza podataka
+		- Racunarska inteligencija
 		- Racunarske mreze
 		- Razvoj softvera

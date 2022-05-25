@@ -1,0 +1,30 @@
+samo na ovim vezbama ce da pominje neke formule, 
+podsecamo se linearne algebre
+nece se od nas traziti nikada to. Eventualno 1-2 neke formule
+
+ako je determinanta matrice razlicita od 0 onda je amtrica invertibilna
+ako je determinanta =0 to znaci da smo se presliakli u manju dimenziju (npr iz kvadrata u 2d u tacku),
+a iz takve transformacije ne mozemo da se vratimo u pocetno stanje
+
+
+
+ceo drugi cas je izvodio neke matematike, nisam slusao nista...
+
+
+
+RMSE - root mean squared error
+MSE = 1/n (SUM_1_do_n(yi - f(xi))^2 )
+RMSE = sqrt(MSE)
+outlieri dosta uticu na RMSE
+
+MAE - mean absolute error (na nju manje uticu outlieri)
+MAE = 1/n (SUM_1_do_n( abs(yi - f(xi)) ))
+
+R^2 mera, zove se i koeficijent determinacije (?)
+R^2 = 1 - MSE/varijansa(y)          (varijansa je isto sto i disperzija)
+varijansa(y) = 1/n (SUM_1_do_n( y - y_sr )^ 2)    (y_sr je srednja vrednsot y)
+
+Mozemo da kazemo da R2 predstavlja udeo objasnjene varijanse, hocmeo da 
+bude sto blize 1. Najgluplji model koji mzoemo da napravimo, za koji je R2 = 0
+je model koji uvek vraca srednju vrednost,bez obzira na x, onda je MSE = varijansa(y)
+

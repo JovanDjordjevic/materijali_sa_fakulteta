@@ -1,0 +1,44 @@
+Ovaj cas radimo opet neku p metaheuristiku - PSO (particle swarm optimization)
+optimizacija rojem cestica. Za razliku od geneteskog ova metaheuristika nema veze sa evolucijom, nego
+sa swarm intelligence (intligencija rojeva)
+Hocemo na neki nacin da imitiramo poansanje insekata u grupi. Pojedinacni mrav nije pametan, ali kolektivno 
+su sposobni za kompleksnije stvari
+U pocetku se mislilo bas na insekte ali vremenom je ovo preraslo u "group intelligence"  (neka grupa zivotinja,
+ne nuzno insekti)
+
+Recimo da imamo neko jato ptica nekako rasporedjenih, i neke komadice hrane nekako rasporedjene. Svaka ptica
+hoce da nadje hranu, ali posto ih ima mnogo treba nekako da saradjuju. Ptica koja vidi hranu javlja ostalima 
+u kom pravcu je hrana i onda ostale (koje bi mozda i isle u drugom smeru) krecu ka hrani. 
+Ako postoji jos neki npr veci izvor hrane (kao neki globalni optimum), ptice koje onaj prvi  (lokalni) povuce ka 
+sebi, nece ici bas u smeru tog lokalnog nego negde izmedju lokalnog pravca i onog pravca u kom bi inace isle
+
+Imamo neku funkciju ciji minimum trazimo
+Svaka cestica/ptica/stagod ima svoju inerciju koje je vuce u nekom pravcu
+Ima i svoje neko lokalno optimalno resenje
+Ima i neko globalno najbolje resenje (za ceo roj u tom trenutku)
+Ove 3 stvari su neki vektori kojii odredjuju pravac u kom se cestica krece. Za ove vektore bitni su na pravac i 
+smer, a intenzitet cemo da kontrolisemo nekim parametrom (npr c_i za inerciju, c_l za lokalno i c_g za globalno,
+tj pravicemo da ti vektori budu duzina kao parametri)
+Novi smer cestice se odredjuje tako sto se saberu ova 3 vektora (i o postaje inercija u sledecem koraku)
+
+Na pocetku lokalno najbolje resenje za svaku cesticu je ono u kom se trenutno nalazi, a za globalno se postavlja 
+trenutno najmanje od svih tih pcoetnih vrednosti
+Ako je c_l=0, tj lokalno resenje nema uticaja na novi smer tojest odmah ce sve cestice da krenu ka pocetnom 
+globalnom sto mozda nije dobro. Ako c_l nije 0, cestice ce istraziti i svoju okolinu gde mozda postoji bolje 
+globalno resenje iako je lokalno losije
+Ako je c_g=0, cestice ne saradjuju i svaka nalazi samo svoj lokalni minimum i to je to
+Samo kombinacijom ova 2 mozemo da za sve cestice tezimo nekom globalnom minimumu
+
+Korak koji se pravi ce uvek biti isti ako su c_l i c_h fiksirane velicine. To resavamo tako stp uzmmeo 2 neka
+random broja iz [0,1] i mnozimo to sa c_ parametrima. Ovakvom randomizacijom dobijamo raznolikost prilikom 
+pretrage
+
+
+Pseudokod:
+swarm = [Particle() ...]
+while not stop_condition:
+    for particle in swarm:
+    r_l, r_g = random iz [0,1]
+    izracunaj_novu_brzinu   v = c_i*inercija + r_l*c_l*lokalno + r_g*c_g*globalno 
+    izracunaj_novu_poziciju   p = p + v
+resenje = globalno

@@ -1,0 +1,21 @@
+konvolutine mreze na vezbama radi na google collabu zato sto ima pristup grafickoj kartici
+
+ime neka teorema koja kaze: pri nekim uslovima (ne znamo kojim) za bilo koji ulaz u mrezu, jedan sloj moze da
+aproksimira dobro (primetimo da se nigde ne kaze koliko neurona ima taj sloj, moze da ih bude proizvoljno mnogo)
+
+Mi uvodimo vise slojeva jer nam je lakse
+Mozemo da kazemo da su ulazni podaci neki atributi, svaki sloj pravi neke nove atribute itd
+Ovo se ne vidi bas lepo na FCNN iako se to desava, ali se bas lepo vidi u konvolutivnim mrezama
+
+To pravljenje novih atributa desava se u kroaku konvolucije, vidi u knjizi iz VI objasnjenje, mrzi me da pisem
+formule itd
+Konv. mreza zapravo uci filtere (kernele), tj tezine tako da oni budu dobri, a to proveravamo na izlazu mreze kao klasifikaciju
+Na jednom sloju kazemo koliko filtera ucimo na tom sloju
+Rezultat sloja je onoliko novih matrica manjih dimenzija koliko ima filtera, dakle 5 filtera => 5 novih slika
+Primenjuje se i pooling (maxpooling, minpooling, srednja vrednost itd) da bi smanjili dodatno dimenziju ulaza u naredni sloj (ne mora uvek) 
+Cesto izlaz i konvolutivne mreze bude neka potpuno povezana mreza
+
+
+da bi izbegli overfit u mrezi, korsitimo regularizaciju ... (?)
+Svaki puta kada pokrenemo model, dropout ce ubiti drugi neki set neurona, tj ispada kao da treniramo
+vise razlicitih modela, tj to dodje kao neki ansambl

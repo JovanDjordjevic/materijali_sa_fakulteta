@@ -1,0 +1,94 @@
+do sada kada smo resavali UFLP imali smo
+I korisnika, J resursa, Cij, fj
+to je bio U - uncapacitated problem
+
+
+
+SSCFLP - single source capacitated FLP 
+Ovo je opstiji problem od UFLP
+
+recimo da svaka bolnica iz naseg problema ima neki kapacitet
+imamo vektor Sj koji kaze kapacitet resursja J
+di - potraznja korisnika (neka nam sada korisnik nije konkretna osoba neko neko
+naselje da bi bilo smisla)
+
+Hocemo da vidimo kako bi modelovali ovo kao problem linearnog programiranja
+f koju hocemo da minimizujemo je i dalje ona suma od proslog casa
+    f = sum_j(yj*fj) + sum_i( sum_j(xij * Cij))
+menjaju se ogranicenja:
+    sum_j(xij) = 1  za svako i iz I     - isto kao problem
+    sum_i(xij*di) <= Sj*yj za svako j iz J   - suma potraznje korisnika mora da bude manja od 
+                                               ukupnog kapaciteta uspostavljenih resursa
+    (ovo je bilo za UFLP ->   xij <= yj za svako i, za svako j)
+
+
+
+MSCFLP - multiple source capacitated FLP
+ovde npr ne moraju svi ljudi iz jednog naselja da idu u istu bolnicu
+recimo 50% jednih ide u jednu, 50% u drugu bolnicu, ali i dalje svi moraju 
+da budu pridruzeni nekoj bolnici
+
+ovde xij ne mora vise da bude binarna promenljiva nego
+sada moze da bude iz intervala [0,1] (tj covek i je bolnici j pridruen sa
+nekom verovatnocom (?))
+
+ovaj uslov:   sum_j(xij) = 1  za svako i iz I 
+sada znaci da smo korisnika u potpunsoti pridruzili nekim resursima, ne nuzno jednom (?)
+
+ovaj uslov:    sum_i(xij*di) <= Sj*yj za svako j iz J 
+i dalje ostaje isti samo sto xij sada ima drugacije znacenje
+
+tj svi uslovi se kodiraju isto, promenjen je samo interval za xij, ali to je 
+zbog toga postao skroz novi problem u odnosu na prosli
+
+------------------------------------------------------------------------------
+
+gradijentni spust:
+    Imamo neku neprekidnu funkciju f 
+    Odaberemo neku  pocetnutacku na njoj, i u njoj izracunamo gradijent (vektor parcijalnih izvoda)
+    to je vektor koji ce pokazivati ka najbrzem usponu u toj tacki
+    (NOTE: gradijent pokazuje na levo ili na desno na grafiku, a ne u porizvoljnom smeru
+    kada nam je funkcija u 2d (?))
+    posto gradijent ide 'na gore' uzimamo sa minusom, tj menjamo smer
+    izracunamo sledecu tacku i tako u krug
+
+    Intenzitet gradijenta ce odgovarati 'strmoci' na grafik, ako je strmo,
+    gradijent ce imati veci intenzitet. Porblems a tim je sto ako smo blizu 'ivice'
+    korak za koji se pomeramo ce biti ogroman i mozda ga tim pomeranjem preskocimo
+    resenje je da se sto vise iteracija desava, to treba manje i manje korake da pravimo
+    obvicno racunamo to kao:
+        x_new = x - alph(i)*gradient(x)
+    alpha je 'learning rate' i on zavisi od broja iteracija i
+    cesto se za alfa uzima 1/I
+    U nasim primerima cemo za alfa da uzimamo neku konstantu da ne komplikujemo
+
+    Ako je razlika vrednosti funkcija cilja u trenutrnom i proslom x
+    manja od nekog epsilon mozemo da stanemo
+
+    Alg ce se zaustaviti u nekom lokalnom minimumu, to mu je mana
+    Jak lokalni minimum je takav da je f u svim tackama okolo strogo vece od f u toj tacki
+    slab lokalni minimum je slicno, samose dozvoljava da je >=
+    Takodje moze da se zaglavi na platou (tu je gradijent =0)
+
+    na trecem casu je razmatrao neka poboljsanja, nisam odmah krenuo da pratim
+    metoda sa inercijama:
+        sto vise idemo u jendom smeru, to se korak povecava, tj inercija 
+        nas 'vuce' na tu stranu (?)
+        Generalno ovaj metod je brzi od obicnog gradijentnog spusta
+    
+    nesterovljev algoritam:
+        vidi u implementaciji, samo se promenila linija
+            d = beta * d + alpha * gradient(x - beta*d) 
+        tj sada je:  gradient(x - beta*d) 
+        ta tacka x - beta*d nije bas toliko daleka u odnosu na samo x
+        ona je pomerena u odnosu na x u pravcu inercije
+        NOTE: vidi na snimku objasnjenje
+        
+    adam algoritam:
+        adma - adaptive moment estimation
+        k-ti momenat je E(X^k), ocekivanje od X^k
+        adam racuna prvi i drugi momenat i to ce biti m i v
+        i na osnovu ta 2 hoce da regulise korak prilikom spusta
+        kako m raste tako korak treba da raste, ali kako v raste tako 
+        korak treba da opada (? nisam bas razumeo)
+        ...(?)

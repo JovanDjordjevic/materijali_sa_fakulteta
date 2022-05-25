@@ -1,0 +1,81 @@
+(mozda nisam sve ispratio iz uvodnog dela (?))
+
+na ovom casu radimo linearno programiranje
+
+pored neke funkicje cilja f koju pokusavamo da optimizujemo (minimizujemo
+/maksimizijuemo) imamo i neka dodatna ogranicenja (mozmeo imati koliko god ogranicenja)
+(npr minimizujemo f(x) pri uslovu da g_i(x) <= b_i...)
+
+(svako <= ogranicenje mozemo da prikazemo i kao >= tako sto boe strane 
+mnozimo sa -1, takodje == mozemo da predstavimo kako uniju <= i >=)
+Iz ovog u zagradi vidimo da mzoemo svako ogranicenje da prikazemo 
+da je oblika <= (jer nam je tako lakse, a <= vec moze da obuhvati sve)
+
+linearno programiranje je kada su nam i f i ogranicenja linearne funkicje
+
+Ovo se razlikuje od constraint programiranja po tome sto kod njega nismo
+imali fuknciju cilja koju optimizujemo
+
+f(x) = c*x  (skalarno*) = c0*x0 + ... cn*xn
+g_i(x) = ai*x  (skalarno*)
+
+b je vektor koji dobijemo kada slozimos ve skalare b_i
+vektore ai mozemo da slozimo u matricu a
+
+dakle minimizujemo   c (skalarno*) x 
+pri uslovu da Ax <= b 
+
+Ako x pripada R^n to je linearno programiranje LP
+Ako x pripada Z^n to je celobrojno lin prog  (ILP - integer)
+
+obicno LP gde je x realan broj je NP tezak problem ali je
+laksi nego ILP (iako je mozda intuitivno da je obrnuto jer je kod ILP domen manji)
+
+
+PRIMER:
+neka imamo firmu koja proizvodi 2 vrste telefona, fikse i mobilne i 
+firma hoce da zaradi sto vise para. za fiksni telefon zarada je 12e, za
+mobilni zarada je 20e. 
+x je broj proizvedenih fiksnih, y je broj proizvedenih moblicnih
+Telefoni se proizvode u 2 faze
+U prvoj fazi:
+    za jedan fiksni telefon potrebno je 0.2 sata
+    za jedan mobilni potrebno je 0,4 sata
+U drugoj fazi:
+    za jedan fiksni telefon potrebno je 0.5 sati
+    za jedan moblicni treba 0.4 sata
+Ogranicenja:
+    cela prva faza mora da traje <= 400 sati
+    cela druga faza mora da traje <= 490 sati
+    x >= 100
+    y >= 100
+(Ako nemamo nikakva ogranicenja (ni za resurse ni bilo
+kakve druge), maksimizacija profita se desava kada proizvedemo beskonacno
+i jednih i drugih)
+
+0.2*x + 0.4*y <= 400
+0.5*x + 0.4*y <= 490
+
+Vidi sliku, nasa resenja ce se nalaziti negde unutar one figure
+za ovakve probleme ce uglavnom biti ili uz neku ivicu ili uz neko teme
+
+Ono sto mi maksimizujemo je 12*x + y*20 = c
+To je neka prava, a mi biramo c (i time je kao pomeramo gore/dole
+na crtezu dok se ne dodje do maksimuma, tj do poslednje tacke ili ivice 
+gde ta prava 'kaci' prostor pretrage)
+
+ovo  moze da se radi pomocu cplex resavaca (cplex - C simplex)
+On pretrazuje temena koja prave ogranicenja  i tu gleda neke kombinacije(?)
+ovaj simplex algoritam ima eksponencijalnu slozenost
+LP problemi mogu da se rade i nekim algoritmom iz grupe 'interior point'
+algoritama koji imaju polinomsku slozenost (?) ali mi se time ne bavimo
+ovde nego samo koristimo solvere
+
+cplex je closed source ibm program ali moze da se skine besplatno sa
+alas nalogom (?)
+
+na vezbama koristimo docplex biblitoeku (?) to je kao neki API prema 
+cplexu ali ne radi ako ne skinemo cplex (?)  (rekao je na trecem casu nesto nisam razumeo)
+
+kada koristimo cplex uvek sigurno dobijamo egzaktno optimalno resenje
+dok kod onih ancina sa preth. casa nemamo tu garanciju

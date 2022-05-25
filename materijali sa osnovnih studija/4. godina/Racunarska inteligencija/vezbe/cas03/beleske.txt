@@ -1,0 +1,95 @@
+Narednih nedelja radicemo S metaheurisike i P metaheurisike
+s je skraceno od single, p je skraceno od population (ovde je npr genetski alg)
+u S imamo jedno optimalno resenje do kog pokusavamo da dodjemo (?)
+u P imamo neku populaciju optimalnih resenja (?)
+
+Kada pricamo o optimizaciji, uglavnom pricamo o minimizaciji neke funkcije f, tj min(f)
+Naravno, mozemo se nekako i prilagoditi da trazimo maksimum
+max(-f) = min(f)
+
+optimizaciju ima smisla raditi na teskim problemima (npr NP teskim). Ponekad tu ne mozemo naci
+egzaktno minimalno resenje pa optimizacijom trazimo neko dovoljno dobro resenje
+
+Neke S metaheurisike:  (za nas su bitne ove prve 2-3)
+    - lokalna pretraga
+    - simulirano kaljenje
+    - VNS - variable neighbourhood search (metoda promenljivbih okolina)
+    - tabu pretraga
+    - iterativna lokalna pretraga
+    ...
+
+lokalna pretraga:
+    U opstem funkciju ne znamo nista o funkciji f, to je samo funkcija cilja
+    koju zelimo da minimizujemo
+    uzmemo neko random resenje x0, onda izmenimo x0 i dobijemo x1 i vidimo da li dobijamo
+    neko bolje resnje, tj da li je f(x1) < f(x0)
+    ponavljamo ovo dok nije ispunjen neki kriterijum zaustavljanja
+    Ova metoda moze vrlo lako da se zaglavi u nekom lokalnom minimumu jer ide 
+    pohlepno, tj pomera se u sledece resenje SAMO ako je bolje (manje) od prethodnog
+
+    neki pseudokod:
+        def localSearch():
+            solution = initialize()                     # pocetno resenje
+            currValue = calcSolutionValue(solution)     # ocena resenja u smislu funkcije cilja
+            bestValue = currValue
+
+            while not stopCondition():
+                newSolution = izmeni_malo_solution
+                newValue = calcSolutionValue(newSolution)
+                
+                if newValue < currValue:   # < jer minimizujemo, za maksimizaciju bi naravno bilo >
+                    solution = newSolution
+                    currValue = newValue
+                    if newValue < bestValue:
+                        bestValue = newValue
+                else:
+                    nastavi_sa_starim_soultion
+            
+            return bestValue
+
+
+hocemo da na ovom casu resimo neki problem pomocu localSearch:
+
+UFLP - uncapacitated facility location problem (prost lokacijski problem)
+
+Imamo I korisnika i J mogucih resursa (npr ljudi i bolnice)
+Sustina problema je naci lokacije npr lokacije bolnica tako da budus to blize ljudima
+Cij - cena pridruzivanja korisnika i resursu j
+Ne moramo da izgradimo sve bolnice ali treba da se nadje neki balans izmedju broja
+bolnice i Cij
+fj - cena uspostavljanja resursa j (cena izgradnje bolnice j)
+Pitanje je koje resurse uspostaviti
+
+
+
+VNS ima dosta varijacija, RVNS (reduced VNS), BVNS(basic VNS), 
+GVNS (generalized VNS)
+
+mi ovde radimo RVNS
+kod redukovanog uzimamo bilo koje radnom resenje iz okoline
+
+kod BVNS izaberemo neko novo resnje ali ga onda nekom lokalnom 
+pretragom prvo probamo da ga popravimo
+
+kod GVNS slicno, ali ga to novo resenje optimizujemo VNSom a ne 
+lokalnom pretragom
+
+pseudokod  rvns:
+
+solution = initialize()
+currValue = calcSolutionValue(solution)
+bestValue = currValue
+
+while not stop_condition():
+    k = 0
+    while k <= num_neighborhoods:       # testiramo okolone do kaksimalnog dozvoljenog broja
+        newSolution = getNeighbor(solution, k)   # neki random sused u k-toj okoloni
+        newValue = calcSolutionValue(newSolution)
+        if newValue < currValue:
+            currValue = newValue
+            solution = newSolution
+            break
+        else:
+            k += 1   # ako nismo nasli bolje resenje, sirimo okolinu
+
+return bestValue

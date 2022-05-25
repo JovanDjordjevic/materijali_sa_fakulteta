@@ -1,0 +1,19 @@
+genetsko programiranje:
+    ideja je da napravimo genetski algoritam koji pise programe (tj genetski alg gde su jedinke programi)
+Naravno odmah intuitivno vidimo da ovako ne mozemo da dobijemo proizvoljno komplikovane programe kakve bi covek mogao da pise
+Ovo se vise korsiti za neke krace stvari, npr za regexe ili krace matematicke izraze (?) (zato sto ce se ovde random dobiti neki izraz koji
+nam potencijalno nebi pao na pamet a koji ima dobar fitness)
+
+Koristi se AST - abstract syntax tree (guglaj)
+tj bilo koji program moze da se predstavi kao neko stablo (nemora biti binarno), a to stablo cemo koristiti kao genetski kod jedinke
+Ako pokusamo genetski kod da predstavimo na neki drugi nacin, npr listu linija koda, ili npr neku veliku nisku, imali bismo probleme 
+kod ukrstanja, tj moze da se desi da se taj genetski kod presece na mestu koje nema smisla (npr u sred reci)
+
+Sa AST, ukrstanje je zamena podstabla
+
+Mutaciju radimo takos to neki cvor u stablu malo izmenimo,
+samo tu moramo da pazimo na sledece, u listovima stabla moze da se nadje samo neka konstanta ili promenljiva, dakle mutacija bi njima menjala vrednsot,
+a u ostalim cvorovima moze da se nadje svasta. Npr ako je u nekom ne-list cvoru operator +, mutacija moze da ga promeni u - 
+Mutacija moze da se rati i tako sto izbacimo neko podstablo i zamenimo ga nekako random generisanim novim podstablom 
+
+pri selekciji samo gledamo fitness kao i do sada
