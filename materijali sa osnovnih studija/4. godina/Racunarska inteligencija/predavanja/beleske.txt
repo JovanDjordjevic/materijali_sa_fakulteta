@@ -1089,4 +1089,18 @@ nekakvih sablona. Ovakve mreze zovu se jos i asocijativna memorija ili asocijati
 Asocijativne neuronske mreze:
     Cilj je da ooguce stvaranje asocijacije 'bez ucitelja'...
 
-... ovde opet nisam pratio hebovo ucenje i SOM....
+... ovde opet nisam pratio hebovo ucenje....
+
+SOM:
+cilj je da neki visokodimenzioni ulaz preslikamo u nizu dimenziju pri cemu se odrzavaju
+neke osobine koje su postojale u velikoj dimenziji, tj npr ono sto je bilo blisko u visokoj, 
+treba da bude blisko i u niskoj dimenziji (po nekoj metrici slicnosti)
+obicno imamo 2D resetku neurona k*j dimenzije, a svakom neuronou je dodeljen vektor tezina 
+duzine I sto odgovara dimenziji ulaznog podatka 
+To je u sustini isto kao da smo ulazni vektor povezali sa svim neuronima
+Za svaki neuron iz resetke se moze odrediti koiko je slican ulazu npr po euklidnokm rastojanju
+Izracuna se koji neuron u mrezi je najblizi ulazu i to je 'pobednicki' neuron
+taj pobednik i neuroni u resetki koji su mu blizu (u nekoj okolini) se azuriraju tako sto se 
+vrsi za njih korekcija tezina proporcionalno tome koliko su udaljeni od pobednika
+tako se ojacava veza izmedju slicnih neuorna tokom vremena 
+u prevodu neuroni koji su bliski u resetki ce reagovati na slican input iz okoline

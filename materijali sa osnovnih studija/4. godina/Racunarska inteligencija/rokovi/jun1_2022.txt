@@ -1,0 +1,5 @@
+1) genetski algoritam
+
+2) fazi
+
+3) gradijentni spust iz jan2_2020

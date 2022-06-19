@@ -1,0 +1,6 @@
+1. neki naivan algoritam za razbijanje neke sume na sabirke koliko se sećam. 
+Malo je čudna postavka bila, ne znam kojoj grupi algoritama to pripada pošto se traži brute-force pristup
+
+2. Fazi sistem kao sa časa, skoro identičan, bez izmišljanja tople vode bilo gde
+
+3. Čini mi se fashion mnist skup podataka, da istreniramo mrežu i da nacrtamo neke od podataka iz tog skupa
